@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7F83DBC1110DA4E700CD9BED /* ContextACache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */; };
+		7F83DBC2110DA4E700CD9BED /* ContextACache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DBC0110DA4E700CD9BED /* ContextACache.h */; };
+		7F83DBFE110DA8F300CD9BED /* mshUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DBFC110DA8F300CD9BED /* mshUtil.cpp */; };
+		7F83DBFF110DA8F300CD9BED /* mshUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DBFD110DA8F300CD9BED /* mshUtil.h */; };
+		7F83DC34110DAD5700CD9BED /* DescACacheContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DC32110DAD5700CD9BED /* DescACacheContext.cpp */; };
+		7F83DC35110DAD5700CD9BED /* DescACacheContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DC33110DAD5700CD9BED /* DescACacheContext.h */; };
+		7F83DCAB110DD17C00CD9BED /* GLSLACache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DCA9110DD17C00CD9BED /* GLSLACache.cpp */; };
+		7F83DCAC110DD17C00CD9BED /* GLSLACache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DCAA110DD17C00CD9BED /* GLSLACache.h */; };
+		7F83DD6F110DED1800CD9BED /* ACacheMeshViz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DD6D110DED1800CD9BED /* ACacheMeshViz.cpp */; };
+		7F83DD70110DED1800CD9BED /* ACacheMeshViz.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DD6E110DED1800CD9BED /* ACacheMeshViz.h */; };
+		7F83DD81110DEFB500CD9BED /* ExportACacheCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DD7F110DEFB500CD9BED /* ExportACacheCmd.cpp */; };
+		7F83DD82110DEFB500CD9BED /* ExportACacheCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DD80110DEFB500CD9BED /* ExportACacheCmd.h */; };
+		7F83DD8A110DF0C600CD9BED /* AttribACacheExport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DD88110DF0C600CD9BED /* AttribACacheExport.cpp */; };
+		7F83DD8B110DF0C600CD9BED /* AttribACacheExport.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DD89110DF0C600CD9BED /* AttribACacheExport.h */; };
+		7F83DDA2110E287800CD9BED /* AttribACacheRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DDA0110E287800CD9BED /* AttribACacheRender.cpp */; };
+		7F83DDA3110E287800CD9BED /* AttribACacheRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DDA1110E287800CD9BED /* AttribACacheRender.h */; };
+		7F9E817B110CCFEE001A16D3 /* cacheTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */; };
+		7F9E817C110CCFEE001A16D3 /* importSceneCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */; };
+		7F9E81C7110CDFF8001A16D3 /* GHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F9E81C5110CDFF8001A16D3 /* GHelper.h */; };
+		7F9E81C8110CDFF8001A16D3 /* GHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */; };
+		7F9E8223110CF2A1001A16D3 /* RenderACache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F9E8221110CF2A1001A16D3 /* RenderACache.h */; };
+		7F9E8224110CF2A1001A16D3 /* RenderACache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */; };
+		7FB4B0540FC5079A001E629C /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB4B0530FC5079A001E629C /* libxml.framework */; };
+		7FE58BA10FB61F6700187112 /* pluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE58BA00FB61F6700187112 /* pluginMain.cpp */; };
+		7FEA3A2D110B12E50061D5DF /* AHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A2C110B12E50061D5DF /* AHelper.cpp */; };
+		7FEA3A35110B21BE0061D5DF /* SHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A34110B21BE0061D5DF /* SHelper.cpp */; };
+		7FEA3A69110B27180061D5DF /* FXMLMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */; };
+		7FEA3A6A110B27180061D5DF /* FXMLScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A68110B27180061D5DF /* FXMLScene.cpp */; };
+		7FEA3A74110B273D0061D5DF /* zXMLDoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A73110B273D0061D5DF /* zXMLDoc.cpp */; };
+		7FEA3A93110B28350061D5DF /* FColorSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A90110B28350061D5DF /* FColorSet.cpp */; };
+		7FEA3A94110B28350061D5DF /* FFloatSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A91110B28350061D5DF /* FFloatSet.cpp */; };
+		7FEA3A95110B28350061D5DF /* FUVSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A92110B28350061D5DF /* FUVSet.cpp */; };
+		7FEA3AB8110B29B00061D5DF /* XMLUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7FFA0954110F04DF0061F60E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "Users/jianzhang/Documents/anemone/module/plug-ins";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		7FFA096F110F05F60061F60E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FFA097D110F06970061F60E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /Users/jianzhang/Documents/anemone/aCache/build/Release/aCache.bundle;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		7FFA0984110F06EC0061F60E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = Users/jianzhang/Documents/anemone/aCache/build/Release/aCache.bundle;
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContextACache.cpp; sourceTree = "<group>"; };
+		7F83DBC0110DA4E700CD9BED /* ContextACache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextACache.h; sourceTree = "<group>"; };
+		7F83DBFC110DA8F300CD9BED /* mshUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mshUtil.cpp; sourceTree = "<group>"; };
+		7F83DBFD110DA8F300CD9BED /* mshUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mshUtil.h; sourceTree = "<group>"; };
+		7F83DC32110DAD5700CD9BED /* DescACacheContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DescACacheContext.cpp; sourceTree = "<group>"; };
+		7F83DC33110DAD5700CD9BED /* DescACacheContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DescACacheContext.h; sourceTree = "<group>"; };
+		7F83DCA9110DD17C00CD9BED /* GLSLACache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLACache.cpp; sourceTree = "<group>"; };
+		7F83DCAA110DD17C00CD9BED /* GLSLACache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSLACache.h; sourceTree = "<group>"; };
+		7F83DD6D110DED1800CD9BED /* ACacheMeshViz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACacheMeshViz.cpp; sourceTree = "<group>"; };
+		7F83DD6E110DED1800CD9BED /* ACacheMeshViz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACacheMeshViz.h; sourceTree = "<group>"; };
+		7F83DD7F110DEFB500CD9BED /* ExportACacheCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExportACacheCmd.cpp; sourceTree = "<group>"; };
+		7F83DD80110DEFB500CD9BED /* ExportACacheCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportACacheCmd.h; sourceTree = "<group>"; };
+		7F83DD88110DF0C600CD9BED /* AttribACacheExport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttribACacheExport.cpp; sourceTree = "<group>"; };
+		7F83DD89110DF0C600CD9BED /* AttribACacheExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttribACacheExport.h; sourceTree = "<group>"; };
+		7F83DDA0110E287800CD9BED /* AttribACacheRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttribACacheRender.cpp; sourceTree = "<group>"; };
+		7F83DDA1110E287800CD9BED /* AttribACacheRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttribACacheRender.h; sourceTree = "<group>"; };
+		7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cacheTransform.cpp; sourceTree = "<group>"; };
+		7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = importSceneCmd.cpp; sourceTree = "<group>"; };
+		7F9E81C5110CDFF8001A16D3 /* GHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GHelper.h; path = ../shared/GHelper.h; sourceTree = SOURCE_ROOT; };
+		7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GHelper.cpp; path = ../shared/GHelper.cpp; sourceTree = SOURCE_ROOT; };
+		7F9E8221110CF2A1001A16D3 /* RenderACache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderACache.h; sourceTree = "<group>"; };
+		7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderACache.cpp; sourceTree = "<group>"; };
+		7FB4B0530FC5079A001E629C /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = /Library/Frameworks/libxml.framework; sourceTree = "<absolute>"; };
+		7FE58BA00FB61F6700187112 /* pluginMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pluginMain.cpp; sourceTree = "<group>"; };
+		7FEA3A2C110B12E50061D5DF /* AHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AHelper.cpp; path = ../shared/AHelper.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A34110B21BE0061D5DF /* SHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SHelper.cpp; path = ../shared/SHelper.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FXMLMesh.cpp; path = ../shared/FXMLMesh.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A68110B27180061D5DF /* FXMLScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FXMLScene.cpp; path = ../shared/FXMLScene.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A73110B273D0061D5DF /* zXMLDoc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = zXMLDoc.cpp; path = ../shared/zXMLDoc.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A90110B28350061D5DF /* FColorSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FColorSet.cpp; path = ../shared/FColorSet.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A91110B28350061D5DF /* FFloatSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FFloatSet.cpp; path = ../shared/FFloatSet.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3A92110B28350061D5DF /* FUVSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FUVSet.cpp; path = ../shared/FUVSet.cpp; sourceTree = SOURCE_ROOT; };
+		7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLUtil.cpp; path = ../shared/XMLUtil.cpp; sourceTree = SOURCE_ROOT; };
+		D2AAC0630554660B00DB518D /* aCache.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = aCache.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289988505E68E00004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FB4B0540FC5079A001E629C /* libxml.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* footPrintNodePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				7FB4B0530FC5079A001E629C /* libxml.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				8A7F063208688F460064D097 /* Mel */,
+				8A7F063308688F580064D097 /* Resources */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = footPrintNodePlugin;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7F83DDA0110E287800CD9BED /* AttribACacheRender.cpp */,
+				7F83DDA1110E287800CD9BED /* AttribACacheRender.h */,
+				7F83DD88110DF0C600CD9BED /* AttribACacheExport.cpp */,
+				7F83DD89110DF0C600CD9BED /* AttribACacheExport.h */,
+				7F83DD7F110DEFB500CD9BED /* ExportACacheCmd.cpp */,
+				7F83DD80110DEFB500CD9BED /* ExportACacheCmd.h */,
+				7F83DD6D110DED1800CD9BED /* ACacheMeshViz.cpp */,
+				7F83DD6E110DED1800CD9BED /* ACacheMeshViz.h */,
+				7F83DCA9110DD17C00CD9BED /* GLSLACache.cpp */,
+				7F83DCAA110DD17C00CD9BED /* GLSLACache.h */,
+				7F83DC32110DAD5700CD9BED /* DescACacheContext.cpp */,
+				7F83DC33110DAD5700CD9BED /* DescACacheContext.h */,
+				7F83DBFC110DA8F300CD9BED /* mshUtil.cpp */,
+				7F83DBFD110DA8F300CD9BED /* mshUtil.h */,
+				7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */,
+				7F83DBC0110DA4E700CD9BED /* ContextACache.h */,
+				7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */,
+				7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */,
+				7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */,
+				7FEA3A90110B28350061D5DF /* FColorSet.cpp */,
+				7FEA3A91110B28350061D5DF /* FFloatSet.cpp */,
+				7FEA3A92110B28350061D5DF /* FUVSet.cpp */,
+				7FEA3A73110B273D0061D5DF /* zXMLDoc.cpp */,
+				7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */,
+				7FEA3A68110B27180061D5DF /* FXMLScene.cpp */,
+				7FEA3A34110B21BE0061D5DF /* SHelper.cpp */,
+				7FEA3A2C110B12E50061D5DF /* AHelper.cpp */,
+				7FE58BA00FB61F6700187112 /* pluginMain.cpp */,
+				7F9E81C5110CDFF8001A16D3 /* GHelper.h */,
+				7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */,
+				7F9E8221110CF2A1001A16D3 /* RenderACache.h */,
+				7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC0630554660B00DB518D /* aCache.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A7F063208688F460064D097 /* Mel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Mel;
+			sourceTree = "<group>";
+		};
+		8A7F063308688F580064D097 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC0600554660B00DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F9E81C7110CDFF8001A16D3 /* GHelper.h in Headers */,
+				7F9E8223110CF2A1001A16D3 /* RenderACache.h in Headers */,
+				7F83DBC2110DA4E700CD9BED /* ContextACache.h in Headers */,
+				7F83DBFF110DA8F300CD9BED /* mshUtil.h in Headers */,
+				7F83DC35110DAD5700CD9BED /* DescACacheContext.h in Headers */,
+				7F83DCAC110DD17C00CD9BED /* GLSLACache.h in Headers */,
+				7F83DD70110DED1800CD9BED /* ACacheMeshViz.h in Headers */,
+				7F83DD82110DEFB500CD9BED /* ExportACacheCmd.h in Headers */,
+				7F83DD8B110DF0C600CD9BED /* AttribACacheExport.h in Headers */,
+				7F83DDA3110E287800CD9BED /* AttribACacheRender.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC0620554660B00DB518D /* aCache */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache" */;
+			buildPhases = (
+				D2AAC0600554660B00DB518D /* Headers */,
+				D2AAC0610554660B00DB518D /* Sources */,
+				D289988505E68E00004EDB86 /* Frameworks */,
+				7FFA0954110F04DF0061F60E /* CopyFiles */,
+				7FFA096F110F05F60061F60E /* CopyFiles */,
+				7FFA0977110F062A0061F60E /* Resources */,
+				7FFA097D110F06970061F60E /* CopyFiles */,
+				7FFA0984110F06EC0061F60E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = aCache;
+			productName = footPrintNodePlugin;
+			productReference = D2AAC0630554660B00DB518D /* aCache.bundle */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 8A7F05F1086863A70064D097 /* Build configuration list for PBXProject "acache" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* footPrintNodePlugin */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC0620554660B00DB518D /* aCache */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7FFA0977110F062A0061F60E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC0610554660B00DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FE58BA10FB61F6700187112 /* pluginMain.cpp in Sources */,
+				7FEA3A2D110B12E50061D5DF /* AHelper.cpp in Sources */,
+				7FEA3A35110B21BE0061D5DF /* SHelper.cpp in Sources */,
+				7FEA3A69110B27180061D5DF /* FXMLMesh.cpp in Sources */,
+				7FEA3A6A110B27180061D5DF /* FXMLScene.cpp in Sources */,
+				7FEA3A74110B273D0061D5DF /* zXMLDoc.cpp in Sources */,
+				7FEA3A93110B28350061D5DF /* FColorSet.cpp in Sources */,
+				7FEA3A94110B28350061D5DF /* FFloatSet.cpp in Sources */,
+				7FEA3A95110B28350061D5DF /* FUVSet.cpp in Sources */,
+				7FEA3AB8110B29B00061D5DF /* XMLUtil.cpp in Sources */,
+				7F9E817B110CCFEE001A16D3 /* cacheTransform.cpp in Sources */,
+				7F9E817C110CCFEE001A16D3 /* importSceneCmd.cpp in Sources */,
+				7F9E81C8110CDFF8001A16D3 /* GHelper.cpp in Sources */,
+				7F9E8224110CF2A1001A16D3 /* RenderACache.cpp in Sources */,
+				7F83DBC1110DA4E700CD9BED /* ContextACache.cpp in Sources */,
+				7F83DBFE110DA8F300CD9BED /* mshUtil.cpp in Sources */,
+				7F83DC34110DAD5700CD9BED /* DescACacheContext.cpp in Sources */,
+				7F83DCAB110DD17C00CD9BED /* GLSLACache.cpp in Sources */,
+				7F83DD6F110DED1800CD9BED /* ACacheMeshViz.cpp in Sources */,
+				7F83DD81110DEFB500CD9BED /* ExportACacheCmd.cpp in Sources */,
+				7F83DD8A110DF0C600CD9BED /* AttribACacheExport.cpp in Sources */,
+				7F83DDA2110E287800CD9BED /* AttribACacheRender.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8A7F05EE086863A70064D097 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_EXTENSION = bundle;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				PREBINDING = NO;
+				PRODUCT_NAME = meshCache;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		8A7F05EF086863A70064D097 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DSTROOT = "$(HOME)/Documents/anemone";
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_EXTENSION = bundle;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				INSTALL_PATH = "/module/plug-ins/";
+				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				MACOSX_DEPLOYMENT_TARGET = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = aCache;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		8A7F05F0086863A70064D097 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_EXTENSION = bundle;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				PREBINDING = NO;
+				PRODUCT_NAME = footPrintNode;
+			};
+			name = Default;
+		};
+		8A7F05F2086863A70064D097 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(MAYA_DIRECTORY)/devkit/include/maya/OpenMayaMac.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC_PLUGIN,
+					_BOOL,
+					REQUIRE_IOSTREAM,
+				);
+				HEADER_SEARCH_PATHS = "$(MAYA_DIRECTORY)/devkit/include/";
+				LIBRARY_SEARCH_PATHS = "$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS";
+				LIBRARY_STYLE = BUNDLE;
+				MAYA_DIRECTORY = /Applications/Autodesk/maya2008;
+				OTHER_LDFLAGS = (
+					"-lOpenMaya",
+					"-lFoundation",
+					"-Wl,-executable_path,$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS",
+					"-lOpenMaya",
+					"-lOpenMayaUI",
+					"-lOpenMayaAnim",
+					"-lFoundation",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+				);
+			};
+			name = Debug;
+		};
+		8A7F05F3086863A70064D097 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(MAYA_DIRECTORY)/devkit/include/maya/OpenMayaMac.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC_PLUGIN,
+					_BOOL,
+					REQUIRE_IOSTREAM,
+				);
+				HEADER_SEARCH_PATHS = "$(MAYA_DIRECTORY)/devkit/include/";
+				INSTALL_PATH = "/Users/jianzhang/Documents/anemone/module/plug-ins";
+				LIBRARY_SEARCH_PATHS = "$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS";
+				LIBRARY_STYLE = BUNDLE;
+				MAYA_DIRECTORY = /Applications/Autodesk/maya2008;
+				OTHER_LDFLAGS = (
+					"-lOpenMaya",
+					"-lFoundation",
+					"-Wl,-executable_path,$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS",
+					"-lOpenMaya",
+					"-lOpenMayaUI",
+					"-lOpenMayaAnim",
+					"-lFoundation",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+				);
+			};
+			name = Release;
+		};
+		8A7F05F4086863A70064D097 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(MAYA_DIRECTORY)/devkit/include/maya/OpenMayaMac.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC_PLUGIN,
+					_BOOL,
+					REQUIRE_IOSTREAM,
+				);
+				HEADER_SEARCH_PATHS = "$(MAYA_DIRECTORY)/devkit/include/";
+				LIBRARY_SEARCH_PATHS = "$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS";
+				MAYA_DIRECTORY = /Applications/Autodesk/maya2008;
+				OTHER_LDFLAGS = (
+					"-lOpenMaya",
+					"-lFoundation",
+					"-Wl,-executable_path,$(MAYA_DIRECTORY)/Maya.app/Contents/MacOS",
+					"-lOpenMaya",
+					"-lOpenMayaUI",
+					"-lFoundation",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+				);
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A7F05EE086863A70064D097 /* Debug */,
+				8A7F05EF086863A70064D097 /* Release */,
+				8A7F05F0086863A70064D097 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		8A7F05F1086863A70064D097 /* Build configuration list for PBXProject "acache" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A7F05F2086863A70064D097 /* Debug */,
+				8A7F05F3086863A70064D097 /* Release */,
+				8A7F05F4086863A70064D097 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
