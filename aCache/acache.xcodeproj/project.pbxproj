@@ -25,7 +25,6 @@
 		7F83DDA3110E287800CD9BED /* AttribACacheRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DDA1110E287800CD9BED /* AttribACacheRender.h */; };
 		7F9E817B110CCFEE001A16D3 /* cacheTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */; };
 		7F9E817C110CCFEE001A16D3 /* importSceneCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */; };
-		7F9E81C7110CDFF8001A16D3 /* GHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F9E81C5110CDFF8001A16D3 /* GHelper.h */; };
 		7F9E81C8110CDFF8001A16D3 /* GHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */; };
 		7F9E8223110CF2A1001A16D3 /* RenderACache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F9E8221110CF2A1001A16D3 /* RenderACache.h */; };
 		7F9E8224110CF2A1001A16D3 /* RenderACache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */; };
@@ -100,7 +99,6 @@
 		7F83DDA1110E287800CD9BED /* AttribACacheRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttribACacheRender.h; sourceTree = "<group>"; };
 		7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cacheTransform.cpp; sourceTree = "<group>"; };
 		7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = importSceneCmd.cpp; sourceTree = "<group>"; };
-		7F9E81C5110CDFF8001A16D3 /* GHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GHelper.h; path = ../shared/GHelper.h; sourceTree = SOURCE_ROOT; };
 		7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GHelper.cpp; path = ../shared/GHelper.cpp; sourceTree = SOURCE_ROOT; };
 		7F9E8221110CF2A1001A16D3 /* RenderACache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderACache.h; sourceTree = "<group>"; };
 		7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderACache.cpp; sourceTree = "<group>"; };
@@ -134,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				7FB4B0530FC5079A001E629C /* libxml.framework */,
+				7FFA09F4110F431B0061F60E /* Shared */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				8A7F063208688F460064D097 /* Mel */,
 				8A7F063308688F580064D097 /* Resources */,
@@ -163,18 +162,7 @@
 				7F83DBC0110DA4E700CD9BED /* ContextACache.h */,
 				7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */,
 				7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */,
-				7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */,
-				7FEA3A90110B28350061D5DF /* FColorSet.cpp */,
-				7FEA3A91110B28350061D5DF /* FFloatSet.cpp */,
-				7FEA3A92110B28350061D5DF /* FUVSet.cpp */,
-				7FEA3A73110B273D0061D5DF /* zXMLDoc.cpp */,
-				7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */,
-				7FEA3A68110B27180061D5DF /* FXMLScene.cpp */,
-				7FEA3A34110B21BE0061D5DF /* SHelper.cpp */,
-				7FEA3A2C110B12E50061D5DF /* AHelper.cpp */,
 				7FE58BA00FB61F6700187112 /* pluginMain.cpp */,
-				7F9E81C5110CDFF8001A16D3 /* GHelper.h */,
-				7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */,
 				7F9E8221110CF2A1001A16D3 /* RenderACache.h */,
 				7F9E8222110CF2A1001A16D3 /* RenderACache.cpp */,
 			);
@@ -187,6 +175,23 @@
 				D2AAC0630554660B00DB518D /* aCache.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7FFA09F4110F431B0061F60E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */,
+				7FEA3A90110B28350061D5DF /* FColorSet.cpp */,
+				7FEA3A91110B28350061D5DF /* FFloatSet.cpp */,
+				7FEA3A92110B28350061D5DF /* FUVSet.cpp */,
+				7FEA3A73110B273D0061D5DF /* zXMLDoc.cpp */,
+				7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */,
+				7FEA3A68110B27180061D5DF /* FXMLScene.cpp */,
+				7FEA3A34110B21BE0061D5DF /* SHelper.cpp */,
+				7FEA3A2C110B12E50061D5DF /* AHelper.cpp */,
+				7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */,
+			);
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		8A7F063208688F460064D097 /* Mel */ = {
@@ -210,7 +215,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F9E81C7110CDFF8001A16D3 /* GHelper.h in Headers */,
 				7F9E8223110CF2A1001A16D3 /* RenderACache.h in Headers */,
 				7F83DBC2110DA4E700CD9BED /* ContextACache.h in Headers */,
 				7F83DBFF110DA8F300CD9BED /* mshUtil.h in Headers */,

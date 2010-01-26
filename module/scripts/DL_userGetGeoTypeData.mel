@@ -1,0 +1,21 @@
+global proc DL_userGetGeoTypeData( string $types[],
+			string $plugin_requirements[],
+			string $cache_commands[],
+			string $output_commands[])
+{
+	clear($types);
+	clear($plugin_requirements);
+	clear($cache_commands);
+	clear($output_commands);
+
+	$types[0] = "aCacheMesh";
+	$plugin_requirements[0] = "aCacheMeshRIBGenDL";
+	$cache_commands[0] = "aCacheMeshCacheGeo";
+	$output_commands[0] = "nil";
+}
+
+global proc int ZHANG_excludeUserGeoType( string $types )
+{
+	if( $types == "aCacheMesh" ) return 1;
+	return 0;
+}

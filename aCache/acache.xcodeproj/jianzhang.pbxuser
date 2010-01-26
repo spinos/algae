@@ -16,7 +16,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					244,
+					237,
 					20,
 					48,
 					43,
@@ -71,12 +71,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 286202003;
-			PBXWorkspaceStateSaveDate = 286202003;
-		};
-		perUserProjectItems = {
-			7FFA09D4110F12930061F60E /* PBXTextBookmark */ = 7FFA09D4110F12930061F60E /* PBXTextBookmark */;
-			7FFA09E5110F1AA30061F60E /* PBXTextBookmark */ = 7FFA09E5110F1AA30061F60E /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 286212771;
+			PBXWorkspaceStateSaveDate = 286212771;
 		};
 		sourceControlManager = 7FE58B990FB61EA800187112 /* Source Control */;
 		userBuildSettings = {
@@ -200,18 +196,10 @@
 	};
 	7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {734, 5040}}";
+			sepNavIntBoundsRect = "{{0, 0}, {734, 4984}}";
 			sepNavSelRange = "{7333, 0}";
 			sepNavVisRange = "{6929, 1074}";
 			sepNavWindowFrame = "{{15, 58}, {596, 715}}";
-		};
-	};
-	7F9E81C5110CDFF8001A16D3 /* GHelper.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {632, 587}}";
-			sepNavSelRange = "{316, 0}";
-			sepNavVisRange = "{0, 366}";
-			sepNavWindowFrame = "{{610, 38}, {596, 715}}";
 		};
 	};
 	7F9E81C6110CDFF8001A16D3 /* GHelper.cpp */ = {
@@ -297,26 +285,6 @@
 			sepNavVisRange = "{0, 773}";
 			sepNavWindowFrame = "{{15, 58}, {596, 715}}";
 		};
-	};
-	7FFA09D4110F12930061F60E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */;
-		name = "importSceneCmd.cpp: 286";
-		rLen = 0;
-		rLoc = 7333;
-		rType = 0;
-		vrLen = 1074;
-		vrLoc = 6929;
-	};
-	7FFA09E5110F1AA30061F60E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7F9E8179110CCFEE001A16D3 /* importSceneCmd.cpp */;
-		name = "importSceneCmd.cpp: 286";
-		rLen = 0;
-		rLoc = 7333;
-		rType = 0;
-		vrLen = 1074;
-		vrLoc = 6929;
 	};
 	D2AAC0620554660B00DB518D /* aCache */ = {
 		activeExec = 0;
