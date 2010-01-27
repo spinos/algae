@@ -10,7 +10,7 @@
 #include "FXMLMesh.h"
 
 #include "SHelper.h"
-#include <maya/MGlobal.h>
+//#include <maya/MGlobal.h>
 /*
 const float constantCoeff[16] = { 3.543211, 0.000605, 0.000152, -0.003217, 
 								0.000083, -0.002813, -0.000021, -0.001049,

@@ -1,6 +1,8 @@
 #ifndef _T_VECTORS_H
 #define _T_VECTORS_H
 
+#include <math.h>
+
 struct XYZ
 {
 	XYZ() {}
@@ -296,19 +298,6 @@ struct XYZ
 		axis = buf.cross(abuf);
 		axis.normalize();
 		return acos(abuf.dot(buf));
-	}
-	
-	void randRotate(const float size)
-	{
-		float leng = length();
-		normalize();
-		x += size*(rand( )%31/31.f - 0.5f);
-		y += size*(rand( )%41/41.f - 0.5f);
-		z += size*(rand( )%73/73.f - 0.5f);
-		normalize();
-		x *= leng;
-		y *= leng;
-		z *= leng;
 	}
 	
 	void setLength(const float val)
