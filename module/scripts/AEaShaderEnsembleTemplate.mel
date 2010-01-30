@@ -1,0 +1,118 @@
+/*
+drop to connect
+*/
+
+global proc anm_AEaShaderEnsembleDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+	print($node);
+	//string $cur[] = `ls -sl`;
+	//connectAttr -f ($node + ".output") ($cur[0]+".surfaceShader");
+}
+
+/*
+navigate to connected node
+*/
+
+global proc anm_AEaShaderEnsembleNaviConnected( string $attr )
+{
+	string $conn[] =`listConnections -scn on $attr`;
+	if(size($conn)>0) {
+		select -r $conn[0];
+		ShowAttributeEditorOrChannelBox;
+	}
+}
+
+/*
+get connected node
+*/
+
+global proc string anm_AEaShaderEnsembleGetConnected( string $attr )
+{
+	string $conn[] =`listConnections -scn on $attr`;
+	if(size($conn)>0) return $conn[0];
+	else return "nil";
+}
+
+
+/*
+parse surface
+*/
+
+global proc AEaShaderEnsembleSurfaceNew ( string $color )
+{
+	//string $conn = `anm_AEaShaderEnsembleGetConnected($color)`;
+	//textFieldButtonGrp -label "Surface" -ed false -text $conn 
+	//	-buttonLabel "->" 
+	//	-bc ("anm_AEaShaderEnsembleNaviConnected( \""+ $color +"\")")
+	//	-ann $color
+	//	-dpc anm_AEaShaderEnsembleDropcallback
+	//	surfaceControl;
+
+	attrNavigationControlGrp
+		-attribute $color
+        -label "Surface"
+		surfaceControl;
+
+
+}
+
+global proc AEaShaderEnsembleSurfaceReplace ( string $color )
+{
+	//string $conn = `anm_AEaShaderEnsembleGetConnected($color)`;
+	//textFieldButtonGrp -e -text $conn surfaceControl;
+	//textFieldButtonGrp -e -ann $conn surfaceControl;
+	attrNavigationControlGrp -edit
+		-attribute $color
+		surfaceControl;
+
+}
+
+/*
+parse displacement
+*/
+
+global proc AEaShaderEnsembleDisplacementNew ( string $color )
+{
+
+	attrNavigationControlGrp
+		-attribute $color
+        -label "Displacement"
+		displacementControl;
+
+
+}
+
+global proc AEaShaderEnsembleDisplacementReplace ( string $color )
+{
+
+	attrNavigationControlGrp -edit
+		-attribute $color
+		displacementControl;
+
+}
+
+global proc AEaShaderEnsembleTemplate( string $nodeName )
+{
+	AEswatchDisplay $nodeName;
+	editorTemplate -beginScrollLayout;
+
+	editorTemplate -beginLayout "Ensemble Shaders" -collapse 0;
+		
+		editorTemplate -callCustom "AEaShaderEnsembleSurfaceNew"
+					"AEaShaderEnsembleSurfaceReplace"
+					"surfaceShader";
+					
+		editorTemplate -callCustom "AEaShaderEnsembleDisplacementNew"
+					"AEaShaderEnsembleDisplacementReplace"
+					"displacementShader";
+					
+	editorTemplate -endLayout;
+
+	// include/call base class/node attributes
+	AEdependNodeTemplate $nodeName;
+	
+	editorTemplate -addExtraControls;
+	editorTemplate -suppress skipIndirect;
+	editorTemplate -endScrollLayout;
+}

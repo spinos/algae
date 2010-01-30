@@ -1,0 +1,560 @@
+/*
+init set
+*/
+
+global proc string anm_getMasterPath()
+{
+	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+}
+
+global proc string[] anm_getSurfaceFiles()
+{
+	string $res[];
+	$res[0] = "foo";
+	return $res;
+}
+
+/*
+string to xyz
+*/
+
+global proc string[] anm_splitbyspace(string $name)
+{
+string $buffer[];
+$numTokens = `tokenize $name " " $buffer`;
+return $buffer;
+}
+
+/*
+node name by attrib
+*/
+
+global proc string anm_cutByFirstDot(string $name)
+{
+string $buffer[];
+$numTokens = `tokenize $name "." $buffer`;
+return $buffer[0];
+}
+
+/*
+navigate to connected node
+*/
+
+global proc anm_aShaderNaviConnected( string $attr )
+{
+	string $conn[] =`listConnections -scn on $attr`;
+	if(size($conn)>0) {
+		select -r $conn[0];
+		anm_updateAttrib($conn[0]);
+	}
+}
+
+/*
+get connected node
+*/
+
+global proc string anm_aShaderGetConnected( string $attr )
+{
+	string $conn[] =`listConnections -scn on $attr`;
+	if(size($conn)>0) return $conn[0];
+	else return "nil";
+}
+
+/*
+select and list attrib
+*/
+
+global proc anm_shopieceinae(string $name)
+{
+	string $piece = `rowLayout -q -ann $name`;
+select -r $piece;
+//ShowAttributeEditorOrChannelBox;
+anm_updateAttrib($piece);
+}
+
+/*
+rename n record
+*/
+
+global proc anm_renameAPiece(string $name, string $text)
+{
+	string $a = `rowLayout -q -ann $name`;
+	string $b = `textField -q -text $text`;
+	rename $a $b;
+	rowLayout -e -ann $b $name;
+}
+
+/*
+drag and drop a piece
+*/
+
+global proc string[] anm_dragcallbackPiece(string $dragControl, int $x, int $y, int $mods)
+{
+	string $res[];
+	$res[0] = `iconTextButton -q -ann $dragControl`;
+	return $res;
+}
+
+global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+	if(`nodeType $node` == "aShaderEnsemble") {
+// disconnect all inflow
+		string $conn[] =`listConnections -scn on ($node+".surfaceShader")`;
+		if(size($conn)>0) {
+			disconnectAttr ($conn[0] + ".output") ($node+".surfaceShader");
+		}
+		$conn =`listConnections -scn on ($node+".displacementShader")`;
+		if(size($conn)>0) {
+			disconnectAttr ($conn[0] + ".output") ($node+".displacementShader");
+		}
+	}
+	else if(`nodeType $node` == "aShaderPiece") {
+		string $conn[] =`listConnections -scn on -p on ($node+".output")`;
+		string $aconn;
+		for($aconn in $conn ) {
+			disconnectAttr ($node + ".output") $aconn;
+		}
+	}
+	delete $node;
+// hide it not delete
+	rowLayout -e -vis false $msgs[0];
+}
+
+/*
+drop to connect
+*/
+
+global proc anm_aShaderConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+	if($dstnode != $node) {
+		connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+		textFieldButtonGrp -e -text $node $dropControl;
+	}
+	else print("self connection is not allowed");
+}
+
+/*
+attach ensemble to a node
+*/
+
+global proc anm_attachEnsemble(string $row)
+{
+	string $node = `rowLayout -q -ann $row`;
+	string $sel[] = `ls -sl`;
+	int $i;
+	for($i=0; $i<size($sel); $i++) {
+		select -r $sel[$i];
+		string $shape[] = `pickWalk -d down`;
+		if(!`attributeExists "aensembleMsg" $shape[0]`) addAttr -ln "aensembleMsg" -attributeType "float"  $shape[0];
+		connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
+	}
+// restore selection
+	for($i=0; $i<size($sel); $i++) {
+		if($i==0) select -r $sel[$i];
+		else select -tgl $sel[$i];
+	}
+}
+
+/*
+detach ensemble to a node
+*/
+
+global proc anm_detachEnsemble(string $row)
+{
+	string $node = `rowLayout -q -ann $row`;
+	string $sel[] = `ls -sl`;
+	int $i;
+	for($i=0; $i<size($sel); $i++) {
+		select -r $sel[$i];
+		string $shape[] = `pickWalk -d down`;
+		if(`attributeExists "aensembleMsg" $shape[0]`) {
+			string $conn[] =`listConnections -scn on ($shape[0]+".aensembleMsg")`;
+			if($conn[0] == $node) {
+				disconnectAttr ($node + ".output") ($shape[0]+".aensembleMsg");
+			}
+		}
+	}
+// restore selection
+	for($i=0; $i<size($sel); $i++) {
+		if($i==0) select -r $sel[$i];
+		else select -tgl $sel[$i];
+	}
+}
+
+/*
+get objects connected to ensemble
+*/
+
+global proc anm_affectbyEnsemble(string $row)
+{
+	string $node = `rowLayout -q -ann $row`;
+	string $conn[] =`listConnections -scn on ($node+".output")`;
+	string $sel[];
+	int $i;
+
+	for($i=0; $i<size($conn); $i++) {
+		if($i==0) select -r $conn[$i];
+		else select -tgl $conn[$i];
+	}
+}
+
+/*
+show ensemble line
+*/
+
+proc anm_shoEnsemble(string $name)
+{
+	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 5
+    -columnWidth5 50 50 40 40 40
+    -adjustableColumn 2
+    -columnAlign  1 "right"
+    -columnAttach 1 "both"     0
+    -columnAttach 2 "both"  0
+    -columnAttach 3 "both"  0
+    -columnAttach 4 "both"  0
+    -columnAttach 5 "both"  0
+    -ann $name`;
+    
+    iconTextButton -ann $anm_piecerow 
+    		-style "iconOnly" 
+    		-image1 "sphere.xpm" 
+    		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
+    		-dgc anm_dragcallbackPiece;
+    		
+    string $anm_piecetx = `textField -w 75 -text $name`;
+    button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
+    button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
+    button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
+    setParent..;
+    textField -e -cc ("anm_renameAPiece(\""+$anm_piecerow+"\", \""+$anm_piecetx+"\")") $anm_piecetx;
+}
+
+/*
+show piece line
+*/
+
+proc anm_shoPiece(string $name)
+{
+	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 5
+    -columnWidth5 50 50 40 40 40
+    -adjustableColumn 2
+    -columnAlign  1 "right"
+    -columnAttach 1 "both"     0
+    -columnAttach 2 "both"  0
+    -columnAttach 3 "both"  0
+    -columnAttach 4 "both"  0
+    -columnAttach 5 "both"  0
+    -ann $name`;
+    
+    iconTextButton -ann $anm_piecerow 
+    		-style "iconOnly" 
+    		-image1 "sphere.xpm" 
+    		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
+    		-dgc anm_dragcallbackPiece;
+    		
+    string $anm_piecetx = `textField -w 75 -text $name`;
+    //button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
+    //button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
+    
+    button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
+    text -l "";
+    text -l "";
+    setParent..;
+    textField -e -cc ("anm_renameAPiece(\""+$anm_piecerow+"\", \""+$anm_piecetx+"\")") $anm_piecetx;
+}
+
+/*
+list ensemble attrib
+*/
+
+proc anm_listEnsembleAttrib(string $name)
+{
+	string $theframe = `frameLayout -p anm_curattribclm
+		-label $name -labelAlign "bottom"
+                -borderStyle "in"
+                -collapsable 1`;
+        columnLayout;
+		textFieldButtonGrp
+			-ann ($name+".surfaceShader")
+			-label "Surface" -ed false 
+			-buttonLabel "->"
+			-cw3 115 75 50
+			-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
+			-text `anm_aShaderGetConnected( $name +".surfaceShader")`
+			-dpc anm_aShaderConnectDropcallback
+			;
+		textFieldButtonGrp
+			-ann ($name+".displacementShader")
+			-label "Displacement" -ed false 
+			-buttonLabel "->"
+			-cw3 115 75 50
+			-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
+			-text `anm_aShaderGetConnected( $name +".displacementShader")`
+			-dpc anm_aShaderConnectDropcallback
+			;
+		setParent..;
+	setParent..;
+}
+
+/*
+list piece attrib
+*/
+
+proc anm_listPieceAttrib(string $name)
+{
+	string $theframe = `frameLayout -p anm_curattribclm
+		-label $name -labelAlign "bottom"
+                -borderStyle "in"
+                -collapsable 1`;
+        columnLayout;
+        	string $diagsh[] = `aShaderDiagnose -n $name -nm 1 -t 1`;
+        	textFieldGrp -cw 1 50 -cw 2 100 -height 32 -l "name" -text $diagsh[0] -ed off;
+        	textFieldGrp -cw 1 50 -cw 2 100 -height 32 -l "type" -text $diagsh[1] -ed off;
+        	string $paramsh[] = `aShaderDiagnose -n $name -pl 1`;
+        	int $i;
+        	for($i=0; $i<size($paramsh); $i = $i+4) {
+
+// create non-exist attrib to node
+			if(!`attributeExists $paramsh[$i] $name`) {
+				
+				if($paramsh[$i+1]=="double3") {
+					addAttr -ln $paramsh[$i] -attributeType double3 $name;
+					addAttr -ln ($paramsh[$i]+"X") -attributeType double -p $paramsh[$i] $name;
+					addAttr -ln ($paramsh[$i]+"Y") -attributeType double -p $paramsh[$i] $name;
+					addAttr -ln ($paramsh[$i]+"Z") -attributeType double -p $paramsh[$i] $name;
+					string $xyz[] = `anm_splitbyspace($paramsh[$i+2])`;
+					string $cmd="setAttr "+$name+"."+$paramsh[$i]+" -type double3 "+$xyz[0]+" "+$xyz[1]+" "+$xyz[2];
+					
+					eval($cmd);
+				}
+				else if($paramsh[$i+1]=="double") {
+					addAttr -ln $paramsh[$i] -attributeType double $name;
+					string $xyz[] = `anm_splitbyspace($paramsh[$i+2])`;
+					string $cmd="setAttr "+$name+"."+$paramsh[$i]+" "+$xyz[0];
+					
+					eval($cmd);
+				}
+				else {
+					addAttr -ln $paramsh[$i] -dt "string" $name;
+					setAttr -type "string" ($name+"."+$paramsh[$i]) $paramsh[$i+2];
+				}
+			}
+// parse controls
+			textFieldButtonGrp -cw 1 80 -l $paramsh[$i];
+        	}
+		/*textFieldButtonGrp
+			-ann ($name+".surfaceShader")
+			-label "Surface" -ed false 
+			-buttonLabel "->"
+			-cw3 115 75 50
+			-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
+			-text `anm_aShaderGetConnected( $name +".surfaceShader")`
+			-dpc anm_aShaderConnectDropcallback
+			;
+		textFieldButtonGrp
+			-ann ($name+".displacementShader")
+			-label "Displacement" -ed false 
+			-buttonLabel "->"
+			-cw3 115 75 50
+			-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
+			-text `anm_aShaderGetConnected( $name +".displacementShader")`
+			-dpc anm_aShaderConnectDropcallback
+			;*/
+		setParent..;
+	setParent..;
+}
+
+/*
+create ensemble
+*/
+
+global proc anm_createEnsemble(int $type)
+{
+	createNode -n "ensemble" aShaderEnsemble;
+	anm_updateExisting;
+}
+
+/*
+create piece
+*/
+
+global proc anm_createPiece(string $name)
+{
+	string $node =`createNode -n $name aShaderPiece`;
+	string $rootpath = `anm_getMasterPath`;
+	setAttr -type "string" ($node + ".xslPath") ($rootpath+"/"+$name+".xrsl");
+	
+	string $dummy = "dummy";
+	if(!`objExists dummy`) $dummy = `createNode -n "dummy" transform`;
+	connectAttr -f ($node + ".output") ($dummy+".translateX");
+	anm_updateExisting;
+}
+
+/*
+update existing piece list
+*/
+
+global proc anm_updateExisting()
+{
+	string $node[] =`columnLayout -q -childArray anm_existingclm`;
+	string $an;
+	for($an in $node) {
+		deleteUI $an;
+	}
+// find pieces
+	text -p anm_existingclm -l "Existing";
+	$node = `ls -type aShaderEnsemble`;
+	
+	for($an in $node) {
+		
+		 anm_shoEnsemble($an);
+	}
+	
+	$node = `ls -type aShaderPiece`;
+	
+	for($an in $node) {
+		
+		 anm_shoPiece($an);
+	}
+}
+
+/*
+update existing piece list
+*/
+
+global proc anm_updateAttrib(string $name)
+{
+	string $node[] =`columnLayout -q -childArray anm_curattribclm`;
+	string $an;
+	for($an in $node) {
+		deleteUI $an;
+	}
+// find pieces
+	if(`nodeType $name` == "aShaderEnsemble") anm_listEnsembleAttrib($name);
+	else if(`nodeType $name` == "aShaderPiece") anm_listPieceAttrib($name);
+	
+}
+
+/*
+main window
+*/
+
+global proc anm_openAShaderManWin() 
+{
+
+//If such a window already exists, destory it.
+ if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;
+ 
+//Create the window.
+ window -title "anemone 4.1 - Shader Management" -wh 400 300  -mb false anm_AShaderManWin;
+
+//Layout
+string $form = `formLayout -numberOfDivisions 100`;
+string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+    
+//columnLayout -adjustableColumn true;
+
+//column begin
+     string $panel = `paneLayout -configuration "vertical3" -p $form`;
+
+    scrollLayout;
+    columnLayout -adjustableColumn true;
+    text -l "Create";
+     frameLayout -label "Ensemble" -labelAlign "center"
+                -borderStyle "in" -collapsable 1 ;
+                
+        columnLayout;
+        
+        iconTextButton -width 100 -style "iconAndTextHorizontal" -image1 "sphere.xpm" -l "Ensemble" -c "anm_createEnsemble(0)";
+        //iconTextButton -width 100  -style "iconAndTextHorizontal" -image1 "sphere.xpm" -l "def";
+        //iconTextButton -width 100  -style "iconAndTextHorizontal" -image1 "sphere.xpm" -l "ed";
+        
+        	setParent..;
+        setParent..;
+        
+        frameLayout -label "Surface" -labelAlign "center"
+                -borderStyle "in" -collapsable 1 ;
+                
+                string $surfs[] = `anm_getSurfaceFiles`;
+                string $asurf;
+                
+                
+        columnLayout;
+        
+        		for($asurf in $surfs) {
+        			iconTextButton -width 100 -style "iconAndTextHorizontal" -image1 "sphere.xpm" -l $asurf -c ("anm_createPiece(\""+$asurf+"\")");
+                	}
+        	setParent..;
+        setParent..;
+        
+        frameLayout -label "Displacement" -labelAlign "center"
+                -borderStyle "in" -collapsable 1 ;
+                
+        columnLayout;
+        
+        
+        	setParent..;
+        setParent..;
+        
+        frameLayout -label "Color" -labelAlign "center"
+                -borderStyle "in" -collapsable 1 ;
+                
+        columnLayout;
+        
+        
+        	setParent..;
+        setParent..;
+    setParent..;
+    
+   
+    setParent..;
+
+    scrollLayout;
+        columnLayout anm_existingclm;
+        text -l "Existing";
+        anm_updateExisting();
+        setParent..;
+    setParent..;    
+        
+	scrollLayout;
+        columnLayout anm_curattribclm;
+        
+        setParent..;
+    setParent..;
+	
+//row begin
+//button -l "Reload" -c "anm_openAShaderManWin"-p $row;
+//button -l "Apply" -c "doImportanemone" -p $row;
+//button -l "Close" -c "deleteUI anm_AShaderManWin" -p $row;
+text -p $row -l "";
+optionMenuGrp -p $row -label " " -columnWidth 1 40 -columnWidth 2 120 anm_shofilteropt;
+
+				menuItem -l "All";
+				menuItem -l "Ensemble";
+				menuItem -l "Surface";
+				menuItem -l "Displacement";
+				menuItem -l "Color";
+				menuItem -l "Selected";
+	setParent..; 		
+iconTextButton -dpc anm_dropcallbackPiece  
+	-c anm_updateExisting
+	-p $row -style "iconOnly" -image1 "sphere.xpm";
+
+formLayout -edit
+        -attachNone  $row     "top"
+        -attachForm     $row     "left"   2
+        -attachForm	$row     "bottom" 2
+        -attachForm 	$row     "right"  2
+
+        -attachForm     $panel "top"    2
+        -attachForm	$panel "left"   2
+        -attachControl	$panel "bottom" 2 $row
+        -attachForm     $panel "right"  2
+    $form;
+
+showWindow anm_AShaderManWin;
+}

@@ -229,7 +229,7 @@ void AHelper::getTypedNodeByName(MFn::Type type, MString& name, MObject& node)
         {
         	if(itdag.item().hasFn(type))
         	{
-        		node = itdag.item();
+        		node = itdag.currentItem();
 				
         		MFnDagNode pf(node);
 				//MGlobal::displayInfo(pf.fullPathName());
@@ -267,9 +267,9 @@ MStatus AHelper::createTypedArrayAttr(MObject& attr, const MString& nameLong, co
 	return status;
 }
 
-void AHelper::getNamedObject(const char* name, MObject& obj) 
+void AHelper::getNamedObject(MString& name, MObject& obj) 
 {
-	MGlobal::selectByName(MString(name), MGlobal::kReplaceList);
+	MGlobal::selectByName(name, MGlobal::kReplaceList);
 	
 	MSelectionList activeList;
 	MGlobal::getActiveSelectionList(activeList);
@@ -281,7 +281,7 @@ void AHelper::getNamedObject(const char* name, MObject& obj)
 	MItSelectionList iter(activeList);
 	iter.getDependNode(obj);
 	
-	MGlobal::unselectByName(name);
+//MGlobal::unselectByName(name);
 }
 
 MVectorArray AHelper::getVectorArrayAttr(MDataBlock& data, MObject& attr)

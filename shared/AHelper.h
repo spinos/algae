@@ -96,7 +96,7 @@ public:
 	static void getConnectedNode(MObject& val, const MPlug& plg);
 	static void getConnectedNodeName(MString& val, const MPlug& plg);
 	
-	static void getNamedObject(const char* name, MObject& obj);
+	static void getNamedObject(MString& name, MObject& obj);
 	
 	static MMatrix getMatrixAttr(const MObject& node, MObject& attr);
 	static MString getStringAttr(const MObject& node, MObject& attr);

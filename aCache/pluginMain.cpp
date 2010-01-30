@@ -14,22 +14,20 @@
 #include "AttribACacheRender.h"
 #include "importSceneCmd.h"
 #include "cacheTransform.h"
-#include "mshUtil.h"
 #include "ContextACache.h"
 #include "DescACacheContext.h"
+#include "EnsembleAShader.h"
+#include "PieceAShader.h"
+#include "CheckAShaderCmd.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
 MStatus status;
 MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
 
+/*
 	
-	status = plugin.registerCommand( "mshUtil", mshUtil::creator, mshUtil::newSyntax);
-		if (!status) {
-			status.perror("registerCommand");
-			return status;
-	}
-
+*/
 		status = plugin.registerCommand( "exportSceneCache", ExportACache::creator, ExportACache::newSyntax);
 		if (!status) {
 			status.perror("registerCommand");
@@ -90,6 +88,26 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
 		return status;
 	}
 	
+	status = plugin.registerNode( "aShaderEnsemble", EnsembleAShaderNode::id, EnsembleAShaderNode::creator,
+								  EnsembleAShaderNode::initialize );
+	if (!status) {
+		status.perror("registerNode");
+		return status;
+	}
+	
+	status = plugin.registerNode( "aShaderPiece", PieceAShaderNode::id, PieceAShaderNode::creator,
+								  PieceAShaderNode::initialize );
+	if (!status) {
+		status.perror("registerNode");
+		return status;
+	}
+	
+	status = plugin.registerCommand( "aShaderDiagnose", CheckAShader::creator, CheckAShader::newSyntax);
+		if (!status) {
+			status.perror("registerCommand");
+			return status;
+	}
+	
 	MGlobal::executeCommand ( "source aCacheMenus.mel;anemoneMakeMenus;" );
 
  return MS::kSuccess;
@@ -99,13 +117,9 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
  {
 MStatus status;
 MFnPlugin plugin( obj );
-		
-		status = plugin.deregisterCommand( "mshUtil" );
-		if (!status) {
-		      status.perror("deregisterCommand");
-		      return status;
-		}		
-
+/*		
+				
+*/
 		status = plugin.deregisterCommand( "exportSceneCache" );
 		if (!status) {
 		      status.perror("deregisterCommand");
@@ -153,6 +167,24 @@ MFnPlugin plugin( obj );
 		status.perror("deregisterNode");
 		return status;
 	}
+	
+	status = plugin.deregisterNode( EnsembleAShaderNode::id );
+	if (!status) {
+		status.perror("deregisterNode");
+		return status;
+	}
+	
+		status = plugin.deregisterNode( PieceAShaderNode::id );
+	if (!status) {
+		status.perror("deregisterNode");
+		return status;
+	}
+	
+	status = plugin.deregisterCommand( "aShaderDiagnose" );
+		if (!status) {
+		      status.perror("deregisterCommand");
+		      return status;
+		}
 	
 	MGlobal::executeCommand ( "anemoneRemoveMenus;" );
 
