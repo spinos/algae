@@ -22,8 +22,9 @@ public:
 
 public:
 	static  MObject		axslpath;
-	static  MObject		adisplacement;
 	static  MObject		output;        // The output value.
+	static  MObject		outputc;
+	static  MObject		outputs;
 	static	MTypeId		id;
 	
 	XRSLPiece* getPiece() const {return m_rsl;}

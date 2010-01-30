@@ -65,6 +65,7 @@ char XRSLPiece::load(const char* filename)
 						else if(strcmp(doc.getAttribByName("value"), "switch") == 0) aparam->detail = Switch;
 						else if(strcmp(doc.getAttribByName("value"), "connection") == 0) aparam->detail = Connection;
 						else if(strcmp(doc.getAttribByName("value"), "output") == 0) aparam->detail = Output;
+						else aparam->detail = Simple;
 					}
 					doc.nextNode();
 				}

@@ -37,6 +37,17 @@ return $buffer[0];
 }
 
 /*
+change string attr by text field
+*/
+
+global proc anm_connectTextFieldToStringAttr(string $textfield)
+{
+	string $attr = `textFieldGrp -q -ann $textfield`+"."+`textFieldGrp -q -l $textfield`;
+	string $val = `textFieldGrp -q -text $textfield`;
+	setAttr -type "string" $attr $val;
+}
+
+/*
 navigate to connected node
 */
 
@@ -110,10 +121,18 @@ global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, stri
 		}
 	}
 	else if(`nodeType $node` == "aShaderPiece") {
-		string $conn[] =`listConnections -scn on -p on ($node+".output")`;
+		string $conn[] = `listConnections -scn on -p on ($node+".output")`;
 		string $aconn;
 		for($aconn in $conn ) {
 			disconnectAttr ($node + ".output") $aconn;
+		}
+		$conn = `listConnections -scn on -p on ($node+".outputC")`;
+		for($aconn in $conn ) {
+			disconnectAttr ($node + ".outputC") $aconn;
+		}
+		$conn = `listConnections -scn on -p on ($node+".outputS")`;
+		for($aconn in $conn ) {
+			disconnectAttr ($node + ".outputS") $aconn;
 		}
 	}
 	delete $node;
@@ -122,7 +141,7 @@ global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, stri
 }
 
 /*
-drop to connect
+drop to connect peice to ensembel
 */
 
 global proc anm_aShaderConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
@@ -132,6 +151,26 @@ global proc anm_aShaderConnectDropcallback(string $dragControl, string $dropCont
 	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
 	if($dstnode != $node) {
 		connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+		textFieldButtonGrp -e -text $node $dropControl;
+	}
+	else print("self connection is not allowed");
+}
+
+/*
+drop to connect piece to attr
+*/
+
+global proc anm_aShaderConnectTypedAttrDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+	if($dstnode != $node) {
+		string $dstattrname = `textFieldButtonGrp -q -l $dropControl`;
+		string $paramsh[] = `aShaderDiagnose -n $node -pt $dstattrname`;
+		if($paramsh[0] == "string") connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+		else if($paramsh[0] == "double3") connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+		else connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
 		textFieldButtonGrp -e -text $node $dropControl;
 	}
 	else print("self connection is not allowed");
@@ -203,6 +242,34 @@ global proc anm_affectbyEnsemble(string $row)
 }
 
 /*
+get objects connected to piece
+*/
+
+global proc anm_affectbyPiece(string $row)
+{
+	string $node = `rowLayout -q -ann $row`;
+	
+	string $conn[] =`listConnections -scn on ($node+".output")`;
+	string $sel[];
+	int $i;
+
+	for($i=0; $i<size($conn); $i++) {
+		if($i==0) select -r $conn[$i];
+		else select -tgl $conn[$i];
+	}
+	
+	$conn =`listConnections -scn on ($node+".outputC")`;
+	for($i=0; $i<size($conn); $i++) {
+		select -tgl $conn[$i];
+	}
+	
+	$conn =`listConnections -scn on ($node+".outputS")`;
+	for($i=0; $i<size($conn); $i++) {
+		select -tgl $conn[$i];
+	}
+}
+
+/*
 show ensemble line
 */
 
@@ -260,7 +327,7 @@ proc anm_shoPiece(string $name)
     //button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     //button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
     
-    button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
+    button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_piecerow + "\")");
     text -l "";
     text -l "";
     setParent..;
@@ -344,26 +411,40 @@ proc anm_listPieceAttrib(string $name)
 				}
 			}
 // parse controls
-			textFieldButtonGrp -cw 1 80 -l $paramsh[$i];
+			if($paramsh[$i+3] == "connection") {
+				//textFieldButtonGrp -cw 1 80 -l $paramsh[$i];
+				textFieldButtonGrp
+					-ann ($name+"."+$paramsh[$i])
+					-label $paramsh[$i] -ed false 
+					-buttonLabel "->"
+					-cw3 115 75 50
+					-bc ("anm_aShaderNaviConnected( \""+ $name +"."+$paramsh[$i]+"\")")
+					-text `anm_aShaderGetConnected( $name +"."+$paramsh[$i] )`
+					-dpc anm_aShaderConnectTypedAttrDropcallback
+					;
+			}
+			else if($paramsh[$i+3] == "output") {}
+			else if($paramsh[$i+3] == "switch") {
+				
+				string $chkctr;
+				if(`getAttr ($name+"."+$paramsh[$i])` == 1.0) $chkctr = `checkBox -l $paramsh[$i] -v on`;
+				else $chkctr = `checkBox -l $paramsh[$i] -v off`;
+				connectControl $chkctr ($name+"."+$paramsh[$i]);
+			}
+			else if($paramsh[$i+3] == "slider") {
+				string $xyz[] = `anm_splitbyspace($paramsh[$i+2])`;
+				string $cmd= "attrFieldSliderGrp -cw 1 80 -min "+$xyz[1]+" -max "+$xyz[2]+" -at "+$name+"."+$paramsh[$i];
+				eval($cmd);
+			}
+			else {
+				if($paramsh[$i+1]=="double3") attrColorSliderGrp -cw 1 80 -l $paramsh[$i] -at ($name+"."+$paramsh[$i]);
+				else if($paramsh[$i+1]=="double") attrFieldGrp -cw 1 80 -l $paramsh[$i] -attribute ($name+"."+$paramsh[$i]);
+				else {
+					string $txctr = `textFieldGrp -cw 1 80 -l $paramsh[$i] -text $paramsh[$i+2] -ann $name`;
+					textFieldGrp -e -cc ("anm_connectTextFieldToStringAttr(\""+$txctr+"\")") $txctr;
+				}
+			}
         	}
-		/*textFieldButtonGrp
-			-ann ($name+".surfaceShader")
-			-label "Surface" -ed false 
-			-buttonLabel "->"
-			-cw3 115 75 50
-			-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
-			-text `anm_aShaderGetConnected( $name +".surfaceShader")`
-			-dpc anm_aShaderConnectDropcallback
-			;
-		textFieldButtonGrp
-			-ann ($name+".displacementShader")
-			-label "Displacement" -ed false 
-			-buttonLabel "->"
-			-cw3 115 75 50
-			-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
-			-text `anm_aShaderGetConnected( $name +".displacementShader")`
-			-dpc anm_aShaderConnectDropcallback
-			;*/
 		setParent..;
 	setParent..;
 }

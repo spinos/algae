@@ -40,7 +40,7 @@ MSyntax CheckAShader::newSyntax()
 	syntax.addFlag("-nm", "-name", MSyntax::kString);
 	syntax.addFlag("-t", "-type", MSyntax::kString);
 	syntax.addFlag("-pl", "-paramList", MSyntax::kString);
-	syntax.addFlag("-ec", "-eyecamera", MSyntax::kString);
+	syntax.addFlag("-pt", "-paramType", MSyntax::kString);
 	syntax.addFlag("-ej", "-externaljob", MSyntax::kString);
 	syntax.addFlag("-fs", "-framestart", MSyntax::kLong );
 	syntax.addFlag("-fe", "-frameend", MSyntax::kLong );
@@ -105,6 +105,18 @@ MStatus CheckAShader::doIt( const MArgList& args )
 					else if((*it)->detail == Switch) appendToResult("switch");
 					else if((*it)->detail == Connection) appendToResult("connection");
 					else appendToResult("output");
+				}
+			}
+			if(argData.isFlagSet("-pt")) {
+				MString paramName;
+				argData.getFlagArgument("-pt", 0, paramName);
+				ParamList params = ppiece->getAttrib();
+				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
+					if(strcmp((*it)->name.c_str(), paramName.asChar()) == 0) {
+						if((*it)->type == Float) appendToResult("double");
+						else if((*it)->type == Color) appendToResult("double3");
+						else appendToResult("string");
+					}
 				}
 			}
 		}

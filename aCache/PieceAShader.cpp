@@ -9,8 +9,9 @@
 
 MTypeId     PieceAShaderNode::id( 0x00026251 );
 MObject		PieceAShaderNode::axslpath;
-MObject		PieceAShaderNode::adisplacement;
-MObject     PieceAShaderNode::output;       
+MObject     PieceAShaderNode::output;  
+MObject     PieceAShaderNode::outputc;
+MObject     PieceAShaderNode::outputs;       
 
 PieceAShaderNode::PieceAShaderNode() 
 {
@@ -62,20 +63,25 @@ MStatus PieceAShaderNode::initialize()
 	numAttr.setInternal(true);
 	addAttribute( axslpath );
 	
-	adisplacement = numAttr.create( "displacementShader", "dls", MFnNumericData::kFloat, 0.0 );
-	numAttr.setStorable(true);
-	numAttr.setKeyable(true);
-	addAttribute( adisplacement );
-	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
 	numAttr.setStorable(false);
 	stat = addAttribute( output );
 		if (!stat) { stat.perror("addAttribute"); return stat;}
 		
-	attributeAffects( axslpath, output );
-	attributeAffects( adisplacement, output );
+	outputc = numAttr.createColor( "outputC", "outc");
+	numAttr.setWritable(false);
+	numAttr.setStorable(false);
+	addAttribute( outputc );
 	
+	outputs = tAttr.create( "outputS", "outs", MFnData::kString);
+	tAttr.setWritable(false);
+	tAttr.setStorable(false);
+	addAttribute( outputs );
+		
+	attributeAffects( axslpath, output );
+	attributeAffects( axslpath, outputc );
+	attributeAffects( axslpath, outputs );
 
 	return MS::kSuccess;
 }

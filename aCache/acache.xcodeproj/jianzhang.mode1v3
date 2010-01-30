@@ -202,46 +202,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>7FBC78A61114769A00C09FCA</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>CheckAShaderCmd.cpp</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>7FBC78A71114769A00C09FCA</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>CheckAShaderCmd.cpp</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>7FBC79B01114B6FA00C09FCA</string>
-						<key>history</key>
-						<array>
-							<string>7FBC7898111473A700C09FCA</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {600, 553}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>74 173 600 594 0 0 1280 778 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>7FBC799E1114B0C400C09FCA</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>XRSLPiece.h</string>
@@ -256,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7FBC79B11114B6FA00C09FCA</string>
+						<string>7FBC79CF1114EC4000C09FCA</string>
 						<key>history</key>
 						<array>
 							<string>7FBC799C1114AFFD00C09FCA</string>
@@ -360,13 +320,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>18</integer>
+									<integer>17</integer>
 									<integer>14</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 197}, {185, 239}}</string>
+							<string>{{0, 191}, {185, 239}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -602,10 +562,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>7FBC79C51114E87000C09FCA</string>
+		<string>7FBC79C21114E87000C09FCA</string>
 		<string>7FE58BA50FB61F9000187112</string>
-		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 		<string>7FBC799E1114B0C400C09FCA</string>
-		<string>7FBC78A61114769A00C09FCA</string>
+		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>531 471 683 298 0 0 1280 778 </string>
