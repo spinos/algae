@@ -1,3 +1,4 @@
+global string $ANM_ShoFilterMenu = "";
 /*
 init set
 */
@@ -1014,9 +1015,14 @@ global proc anm_updateExisting()
 	for($an in $node) {
 		deleteUI $an;
 	}
+// get filter option
+	int $flt = 1;
+	global string $ANM_ShoFilterMenu;
+	if($ANM_ShoFilterMenu != "") $flt = `optionMenu -q -sl $ANM_ShoFilterMenu`;
 // find pieces
-	text -p anm_existingclm -l "Existing";
 	
+	if($flt == 1) {	
+		text -p anm_existingclm -l "Existing Items";
 	$node = `ls -type aShaderAdaptEnsemble`;
 	
 	for($an in $node) {
@@ -1050,6 +1056,98 @@ global proc anm_updateExisting()
 	for($an in $node) {
 		
 		 anm_shoAdaptVariable($an);
+	}
+	}
+	else if($flt == 2) {
+		text -p anm_existingclm -l "Existing Ensemble";
+		$node = `ls -type aShaderAdaptEnsemble`;
+	
+		for($an in $node) anm_shoAdaptEnsemble($an);
+
+		$node = `ls -type aShaderEnsemble`;
+	
+		for($an in $node) anm_shoEnsemble($an);
+	}
+	else if($flt == 3) {
+		text -p anm_existingclm -l "Existing Surface";
+		$node = `ls -type aShaderPiece`;
+	
+		for($an in $node) {
+			string $diagsh[] = `aShaderDiagnose -n $an -t 1`;
+			if($diagsh[0] == "surface") anm_shoPiece($an);
+		}
+	}
+	else if($flt == 4) {
+		text -p anm_existingclm -l "Existing Displacement";
+		$node = `ls -type aShaderPiece`;
+	
+		for($an in $node) {
+			string $diagsh[] = `aShaderDiagnose -n $an -t 1`;
+			if($diagsh[0] == "displacement") anm_shoPiece($an);
+		}
+	}
+	else if($flt == 5) {
+		text -p anm_existingclm -l "Existing Color";
+		$node = `ls -type aShaderPiece`;
+	
+		for($an in $node) {
+			string $diagsh[] = `aShaderDiagnose -n $an -t 1`;
+			if($diagsh[0] == "color") anm_shoPiece($an);
+		}
+		
+		$node = `ls -type aShaderVariable`;
+	
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "color") anm_shoVariable($an);
+		}
+		
+		$node = `ls -type aShaderAdaptVariable`;
+		
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "color") anm_shoAdaptVariable($an);
+		}
+	}
+	else if($flt == 6) {
+		text -p anm_existingclm -l "Existing Float";
+		$node = `ls -type aShaderPiece`;
+	
+		for($an in $node) {
+			string $diagsh[] = `aShaderDiagnose -n $an -t 1`;
+			if($diagsh[0] == "float") anm_shoPiece($an);
+		}
+		
+		$node = `ls -type aShaderVariable`;
+	
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "float") anm_shoVariable($an);
+		}
+		
+		$node = `ls -type aShaderAdaptVariable`;
+		
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "float") anm_shoAdaptVariable($an);
+		}
+	}
+	else if($flt == 7) {
+		text -p anm_existingclm -l "Existing String";
+		$node = `ls -type aShaderPiece`;
+	
+		for($an in $node) {
+			string $diagsh[] = `aShaderDiagnose -n $an -t 1`;
+			if($diagsh[0] == "string") anm_shoPiece($an);
+		}
+		
+		$node = `ls -type aShaderVariable`;
+	
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "string") anm_shoVariable($an);
+		}
+		
+		$node = `ls -type aShaderAdaptVariable`;
+		
+		for($an in $node) {
+			if(`getAttr ($an+".handle")` == "string") anm_shoAdaptVariable($an);
+		}
 	}
 }
 
@@ -1096,7 +1194,6 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
 
     scrollLayout;
     columnLayout -adjustableColumn true;
-    text -l "Create";
      frameLayout -label "Ensemble" -labelAlign "center"
                 -borderStyle "in" -collapsable 1 ;
                 
@@ -1242,14 +1339,20 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
 //button -l "Reload" -c "anm_openAShaderManWin"-p $row;
 //button -l "Apply" -c "doImportanemone" -p $row;
 //button -l "Close" -c "deleteUI anm_AShaderManWin" -p $row;
-text -p $row -l "";
-optionMenuGrp -p $row -label " " -columnWidth 1 40 -columnWidth 2 120 anm_shofilteropt;
+	text -p $row -l "";
+	global string $ANM_ShoFilterMenu;
+	$ANM_ShoFilterMenu = `optionMenu 
+		-p $row 
+		-label " " //-columnWidth 1 40 -columnWidth 2 120 
+		-cc anm_updateExisting`;// anm_shofilteroptmenu;
 
 				menuItem -l "All";
 				menuItem -l "Ensemble";
 				menuItem -l "Surface";
 				menuItem -l "Displacement";
 				menuItem -l "Color";
+				menuItem -l "Float";
+				menuItem -l "String";
 				menuItem -l "Selected";
 	setParent..; 		
 iconTextButton -dpc anm_dropcallbackPiece  
