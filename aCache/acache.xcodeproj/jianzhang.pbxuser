@@ -218,7 +218,7 @@
 	7F93707C11133E5700B2962B /* XRSLPiece.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {541, 826}}";
-			sepNavSelRange = "{486, 6}";
+			sepNavSelRange = "{579, 0}";
 			sepNavVisRange = "{294, 655}";
 			sepNavWindowFrame = "{{613, 103}, {600, 650}}";
 		};
@@ -283,18 +283,18 @@
 	};
 	7FBC79D611150FF700C09FCA /* AdaptEnsembleAShader.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {541, 1022}}";
-			sepNavSelRange = "{1504, 0}";
-			sepNavVisRange = "{72, 962}";
+			sepNavIntBoundsRect = "{{0, 0}, {541, 1092}}";
+			sepNavSelRange = "{1678, 6}";
+			sepNavVisRange = "{1039, 1060}";
 			sepNavWindowFrame = "{{15, 123}, {600, 650}}";
 		};
 	};
 	7FBC79D711150FF700C09FCA /* AdaptEnsembleAShader.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {541, 522}}";
-			sepNavSelRange = "{385, 0}";
-			sepNavVisRange = "{0, 464}";
-			sepNavWindowFrame = "{{38, 102}, {600, 650}}";
+			sepNavSelRange = "{309, 20}";
+			sepNavVisRange = "{0, 493}";
+			sepNavWindowFrame = "{{94, 102}, {600, 650}}";
 		};
 	};
 	7FBC79EC1115158100C09FCA /* PBXTextBookmark */ = {
@@ -321,8 +321,8 @@
 	7FE58BA00FB61F6700187112 /* pluginMain.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {764, 2926}}";
-			sepNavSelRange = "{4830, 0}";
-			sepNavVisRange = "{4376, 884}";
+			sepNavSelRange = "{2734, 20}";
+			sepNavVisRange = "{2409, 1067}";
 			sepNavWindowFrame = "{{74, 119}, {600, 650}}";
 		};
 	};

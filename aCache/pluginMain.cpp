@@ -20,6 +20,7 @@
 #include "AdaptEnsembleAShader.h"
 #include "PieceAShader.h"
 #include "CheckAShaderCmd.h"
+#include "VariableAShader.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
@@ -98,6 +99,13 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
 	
 		status = plugin.registerNode( "aShaderAdaptEnsemble", AdaptEnsembleAShaderNode::id, AdaptEnsembleAShaderNode::creator,
 								  AdaptEnsembleAShaderNode::initialize );
+	if (!status) {
+		status.perror("registerNode");
+		return status;
+	}
+	
+	status = plugin.registerNode( "aShaderVariable", VariableAShaderNode::id, VariableAShaderNode::creator,
+								  VariableAShaderNode::initialize );
 	if (!status) {
 		status.perror("registerNode");
 		return status;
@@ -183,6 +191,12 @@ MFnPlugin plugin( obj );
 	}
 	
 	status = plugin.deregisterNode( AdaptEnsembleAShaderNode::id );
+	if (!status) {
+		status.perror("deregisterNode");
+		return status;
+	}
+	
+	status = plugin.deregisterNode( VariableAShaderNode::id );
 	if (!status) {
 		status.perror("deregisterNode");
 		return status;
