@@ -71,12 +71,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 286551905;
-			PBXWorkspaceStateSaveDate = 286551905;
+			PBXPerProjectTemplateStateSaveDate = 286615245;
+			PBXWorkspaceStateSaveDate = 286615245;
 		};
 		perUserProjectItems = {
-			7FBC799C1114AFFD00C09FCA /* PBXBookmark */ = 7FBC799C1114AFFD00C09FCA /* PBXBookmark */;
-			7FBC79CF1114EC4000C09FCA /* PBXTextBookmark */ = 7FBC79CF1114EC4000C09FCA /* PBXTextBookmark */;
+			7FBC79CF1114EC4000C09FCA = 7FBC79CF1114EC4000C09FCA /* PBXTextBookmark */;
+			7FBC79EC1115158100C09FCA = 7FBC79EC1115158100C09FCA /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7FE58B990FB61EA800187112 /* Source Control */;
 		userBuildSettings = {
@@ -271,11 +271,33 @@
 			sepNavWindowFrame = "{{74, 117}, {600, 650}}";
 		};
 	};
-	7FBC799C1114AFFD00C09FCA /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7F93707C11133E5700B2962B /* XRSLPiece.h */;
-	};
 	7FBC79CF1114EC4000C09FCA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F93707C11133E5700B2962B /* XRSLPiece.h */;
+		name = "XRSLPiece.h: 35";
+		rLen = 6;
+		rLoc = 486;
+		rType = 0;
+		vrLen = 655;
+		vrLoc = 294;
+	};
+	7FBC79D611150FF700C09FCA /* AdaptEnsembleAShader.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {541, 1022}}";
+			sepNavSelRange = "{1504, 0}";
+			sepNavVisRange = "{72, 962}";
+			sepNavWindowFrame = "{{15, 123}, {600, 650}}";
+		};
+	};
+	7FBC79D711150FF700C09FCA /* AdaptEnsembleAShader.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {541, 522}}";
+			sepNavSelRange = "{385, 0}";
+			sepNavVisRange = "{0, 464}";
+			sepNavWindowFrame = "{{38, 102}, {600, 650}}";
+		};
+	};
+	7FBC79EC1115158100C09FCA /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 7F93707C11133E5700B2962B /* XRSLPiece.h */;
 		name = "XRSLPiece.h: 35";
@@ -298,9 +320,9 @@
 	};
 	7FE58BA00FB61F6700187112 /* pluginMain.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {728, 2730}}";
-			sepNavSelRange = "{4684, 15}";
-			sepNavVisRange = "{2246, 1003}";
+			sepNavIntBoundsRect = "{{0, 0}, {764, 2926}}";
+			sepNavSelRange = "{4830, 0}";
+			sepNavVisRange = "{4376, 884}";
 			sepNavWindowFrame = "{{74, 119}, {600, 650}}";
 		};
 	};
@@ -308,7 +330,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {986, 8512}}";
 			sepNavSelRange = "{7217, 0}";
-			sepNavVisRange = "{6376, 1129}";
+			sepNavVisRange = "{6475, 1183}";
 			sepNavWindowFrame = "{{434, 63}, {596, 715}}";
 		};
 	};

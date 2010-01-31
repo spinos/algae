@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7FBC79CF1114EC4000C09FCA</string>
+						<string>7FBC79EC1115158100C09FCA</string>
 						<key>history</key>
 						<array>
-							<string>7FBC799C1114AFFD00C09FCA</string>
+							<string>7FBC79CF1114EC4000C09FCA</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -320,13 +320,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>17</integer>
-									<integer>14</integer>
+									<integer>12</integer>
+									<integer>3</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 191}, {185, 239}}</string>
+							<string>{{0, 0}, {185, 239}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -345,7 +345,7 @@
 							<real>185</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>531 471 683 298 0 0 1280 778 </string>
+						<string>477 458 683 298 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -382,7 +382,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {476, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>531 471 683 298 0 0 1280 778 </string>
+								<string>477 458 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -402,7 +402,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {476, 252}}</string>
 								<key>RubberWindowFrame</key>
-								<string>531 471 683 298 0 0 1280 778 </string>
+								<string>477 458 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -426,9 +426,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7FBC787A11146F6300C09FCA</string>
+				<string>7FBC79EA1115158100C09FCA</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>7FBC787B11146F6300C09FCA</string>
+				<string>7FBC79EB1115158100C09FCA</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -562,14 +562,12 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FBC79C51114E87000C09FCA</string>
-		<string>7FBC79C21114E87000C09FCA</string>
 		<string>7FE58BA50FB61F9000187112</string>
 		<string>7FBC799E1114B0C400C09FCA</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>531 471 683 298 0 0 1280 778 </string>
+	<string>477 458 683 298 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -590,7 +588,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>CheckAShaderCmd.cpp</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -607,8 +605,6 @@
 							<string>218pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -648,7 +644,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7FE58BA50FB61F9000187112</string>
-				<string>7FBC7897111473A000C09FCA</string>
+				<string>7FBC79ED1115158100C09FCA</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

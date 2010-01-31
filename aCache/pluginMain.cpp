@@ -17,6 +17,7 @@
 #include "ContextACache.h"
 #include "DescACacheContext.h"
 #include "EnsembleAShader.h"
+#include "AdaptEnsembleAShader.h"
 #include "PieceAShader.h"
 #include "CheckAShaderCmd.h"
  
@@ -90,6 +91,13 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
 	
 	status = plugin.registerNode( "aShaderEnsemble", EnsembleAShaderNode::id, EnsembleAShaderNode::creator,
 								  EnsembleAShaderNode::initialize );
+	if (!status) {
+		status.perror("registerNode");
+		return status;
+	}
+	
+		status = plugin.registerNode( "aShaderAdaptEnsemble", AdaptEnsembleAShaderNode::id, AdaptEnsembleAShaderNode::creator,
+								  AdaptEnsembleAShaderNode::initialize );
 	if (!status) {
 		status.perror("registerNode");
 		return status;
@@ -169,6 +177,12 @@ MFnPlugin plugin( obj );
 	}
 	
 	status = plugin.deregisterNode( EnsembleAShaderNode::id );
+	if (!status) {
+		status.perror("deregisterNode");
+		return status;
+	}
+	
+	status = plugin.deregisterNode( AdaptEnsembleAShaderNode::id );
 	if (!status) {
 		status.perror("deregisterNode");
 		return status;
