@@ -21,11 +21,12 @@
 #include "PieceAShader.h"
 #include "CheckAShaderCmd.h"
 #include "VariableAShader.h"
+#include "AdaptVariableAShader.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
 MStatus status;
-MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
+MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.3 Mon Fed 1 2010", "Any" );
 
 /*
 	
@@ -106,6 +107,13 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.1 Mon Jan 25 2010", "Any" );
 	
 	status = plugin.registerNode( "aShaderVariable", VariableAShaderNode::id, VariableAShaderNode::creator,
 								  VariableAShaderNode::initialize );
+	if (!status) {
+		status.perror("registerNode");
+		return status;
+	}
+	
+	status = plugin.registerNode( "aShaderAdaptVariable", AdaptVariableAShaderNode::id, AdaptVariableAShaderNode::creator,
+								  AdaptVariableAShaderNode::initialize );
 	if (!status) {
 		status.perror("registerNode");
 		return status;
@@ -197,6 +205,12 @@ MFnPlugin plugin( obj );
 	}
 	
 	status = plugin.deregisterNode( VariableAShaderNode::id );
+	if (!status) {
+		status.perror("deregisterNode");
+		return status;
+	}
+	
+	status = plugin.deregisterNode( AdaptVariableAShaderNode::id );
 	if (!status) {
 		status.perror("deregisterNode");
 		return status;

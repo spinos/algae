@@ -221,6 +221,42 @@ global proc anm_adaptEnsembleConnectDropcallback(string $dragControl, string $dr
 }
 
 /*
+drop to connect piece or variable to adapt varible
+*/
+
+global proc anm_adaptVaribleConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+	if($dstnode != $node) {
+		if(`nodeType $node` == "aShaderPiece") {
+			string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+			string $handle = $diagsh[0];
+			if($handle == "float")
+				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "color" || $handle == "surface")
+				connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "string")
+				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+		}
+		else if(`nodeType $node` == "aShaderVariable") {
+			string $handle = `getAttr ($dstnode+".handle")`;
+			if($handle == "float")
+				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "color")
+				connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "string")
+				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+		}
+		else print("no ensemble can be connected");
+	}
+	else print("self connection is not allowed");
+}
+
+/*
 drop to connect piece or variable to attr
 */
 
@@ -235,7 +271,7 @@ global proc anm_aShaderConnectTypedAttrDropcallback(string $dragControl, string 
 		if(`nodeType $node` == "aShaderPiece") {
 			$paramsh = `aShaderDiagnose -n $node -pt $dstattrname`;
 		}
-		else if(`nodeType $node` == "aShaderVariable") {
+		else if(`nodeType $node` == "aShaderVariable" || `nodeType $node` == "aShaderAdaptVariable") {
 			$paramsh[0] = `getAttr ($node+".handle")`;
 		}
 
@@ -469,6 +505,37 @@ proc anm_shoVariable(string $name)
 }
 
 /*
+add variable line
+*/
+
+proc anm_shoAdaptVariable(string $name)
+{
+	string $anm_varrow = `rowLayout -p anm_existingclm -numberOfColumns 5
+    -columnWidth5 50 50 40 40 40
+    -adjustableColumn 2
+    -columnAlign  1 "right"
+    -columnAttach 1 "both"     0
+    -columnAttach 2 "both"  0
+    -columnAttach 3 "both"  0
+    -columnAttach 4 "both"  0
+    -columnAttach 5 "both"  0
+    -ann $name`;
+    
+    iconTextButton -ann $anm_varrow 
+    		-style "iconOnly" 
+    		-image1 "sphere.xpm" 
+    		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
+    		-dgc anm_dragcallbackPiece;
+    		
+    string $anm_vartx = `textField -w 75 -text $name`;
+    button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
+    text -l "";
+    text -l "";
+    setParent..;
+    textField -e -cc ("anm_renameAPiece(\""+$anm_varrow+"\", \""+$anm_vartx+"\")") $anm_vartx;
+}
+
+/*
 adapt ensemble add
 */
 
@@ -517,14 +584,14 @@ proc anm_listAdaptEnsembleAttrib(string $name)
         		-text `getAttr ($name+".handle")`;
         	
         	int $num_line = `getAttr ($name+".numCondition")`;
-        	button -l "Create Context" -c ("anm_adaptEnsembleAdd(\""+$name+"\")");
-        	button -l "Delete Context" -c ("anm_adaptEnsembleMinus(\""+$name+"\")");
+        	button -l "Create Ensemble" -c ("anm_adaptEnsembleAdd(\""+$name+"\")");
+        	button -l "Delete Ensemble" -c ("anm_adaptEnsembleMinus(\""+$name+"\")");
         	int $i;
         	for($i=0; $i<$num_line; $i++) {
         		string $acondition = `getAttr ($name+".condition["+$i+"]")`;
         		string $tfb=`textFieldButtonGrp
         			-cw3 75 175 50
-        			-l ("Context["+$i+"]")
+        			-l "Condition"
         			-ann ($name+".condition["+$i+"]")
         			-buttonLabel "Get Select"
         			-text $acondition
@@ -542,6 +609,46 @@ proc anm_listAdaptEnsembleAttrib(string $name)
         	}
 		setParent..;
 	setParent..;
+}
+
+/*
+adapt variable add
+*/
+
+global proc anm_adaptVariableAdd(string $name)
+{
+	int $n = `getAttr ($name+".numCondition")`;
+	setAttr ($name+".numCondition") ($n+1);
+	anm_updateAttrib($name);
+}
+
+/*
+adapt variable minus
+*/
+
+global proc anm_adaptVariableMinus(string $name)
+{
+	int $n = `getAttr ($name+".numCondition")`;
+	if($n > 1) {
+// disconnect last line
+		$n--;
+		string $conn[] =`listConnections -p on -scn on ($name+".input["+ $n +"]")`;
+		if(size($conn)>0) {
+			disconnectAttr $conn[0] ($name+".input["+ $n +"]");
+		}
+		
+		$conn =`listConnections -p on -scn on ($name+".inputC["+ $n +"]")`;
+		if(size($conn)>0) {
+			disconnectAttr $conn[0] ($name+".inputC["+ $n +"]");
+		}
+		
+		$conn =`listConnections -p on -scn on ($name+".inputS["+ $n +"]")`;
+		if(size($conn)>0) {
+			disconnectAttr $conn[0] ($name+".inputS["+ $n +"]");
+		}
+		setAttr ($name+".numCondition")  $n ;
+		anm_updateAttrib($name);
+	}
 }
 
 /*
@@ -607,6 +714,106 @@ global proc anm_listVariableAttrib(string $name)
 			textFieldGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
 		}
         		
+		setParent..;
+	setParent..;
+}
+
+/*
+list adapt variable attrib
+*/
+
+proc anm_listAdaptVariableAttrib(string $name)
+{
+	string $theframe = `frameLayout -p anm_curattribclm
+		-label $name -labelAlign "bottom"
+                -borderStyle "in"
+                -collapsable 1`;
+        columnLayout;
+        	
+        	string $operation = `getAttr ($name+".opt")`;
+        	string $handle = `getAttr ($name+".handle")`;
+        	
+        	textFieldGrp 
+        		-ed off
+        		-l "handle"
+        		-cw 1 70
+        		-cw 2 70
+        		-text $handle;
+        		
+        	if($operation == "context")
+        		textFieldGrp 
+        		-ed off
+        		-l ""
+        		-cw 1 20
+        		-cw 2 120
+        		-text "switch by context";
+        	else if($operation == "objname")
+        		textFieldGrp 
+        		-ed off
+        		-l ""
+        		-cw 1 20
+        		-cw 2 120
+        		-text "switch by objname";
+        	else
+        		textFieldGrp 
+        		-ed off
+        		-l ""
+        		-cw 1 20
+        		-cw 2 120
+        		-text "combine";
+        	
+        	int $unconditional = 0;
+        	if($operation != "context" && $operation != "objname") $unconditional = 1;
+        	
+        	int $num_line = `getAttr ($name+".numCondition")`;
+        	button -l "Create Variable" -c ("anm_adaptVariableAdd(\""+$name+"\")");
+        	button -l "Delete Variable" -c ("anm_adaptVariableMinus(\""+$name+"\")");
+        	int $i;
+        	for($i=0; $i<$num_line; $i++) {
+        		if($unconditional == 0) {
+				string $acondition = `getAttr ($name+".condition["+$i+"]")`;
+				string $tfb=`textFieldButtonGrp
+					-cw3 75 175 50
+					-l "Condition"
+					-ann ($name+".condition["+$i+"]")
+					-buttonLabel "Get Select"
+					-text $acondition
+					`;
+				textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$tfb+"\")") $tfb;
+				textFieldButtonGrp -e -bc ("anm_setTextFieldButtonTextBySelection(\""+$tfb+"\")") $tfb;
+			}
+			
+			if($handle == "float") {
+				textFieldButtonGrp
+					-cw3 75 115 50
+					-l ("Float["+$i+"]")
+					-ann ($name+".input["+$i+"]")
+					-buttonLabel "->"
+					-text `anm_aShaderGetConnected($name+".input["+$i+"]")`
+					-dpc anm_adaptVaribleConnectDropcallback
+					-bc ("anm_aShaderNaviConnected( \""+ $name +".input["+$i+"]\")");
+        		}
+        		else if($handle == "color") {
+				textFieldButtonGrp
+					-cw3 75 115 50
+					-l ("Color["+$i+"]")
+					-ann ($name+".inputC["+$i+"]")
+					-buttonLabel "->"
+					-text `anm_aShaderGetConnected($name+".inputC["+$i+"]")`
+					-dpc anm_adaptVaribleConnectDropcallback
+					-bc ("anm_aShaderNaviConnected( \""+ $name +".inputC["+$i+"]\")");
+        		}
+        		else if($handle == "string") {
+				textFieldButtonGrp
+					-cw3 75 115 50
+					-l ("String["+$i+"]")
+					-ann ($name+".inputS["+$i+"]")
+					-buttonLabel "->"
+					-text `anm_aShaderGetConnected($name+".inputS["+$i+"]")`
+					-dpc anm_adaptVaribleConnectDropcallback
+					-bc ("anm_aShaderNaviConnected( \""+ $name +".inputS["+$i+"]\")");
+        		}
+        	}
 		setParent..;
 	setParent..;
 }
@@ -753,6 +960,46 @@ global proc anm_createVariable(int $handle)
 		setAttr -type "string" ($node+".handle") "string";
 		addAttr -ln "value" -dt "string" $node;
 	}
+	else if($handle==3) {
+		string $node =`createNode -n "cvarbyctx" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "color";
+		setAttr -type "string" ($node+".opt") "context";
+	}
+	else if($handle==4) {
+		string $node =`createNode -n "cvarbyobj" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "color";
+		setAttr -type "string" ($node+".opt") "objname";
+	}
+	else if($handle==5) {
+		string $node =`createNode -n "fvarbyctx" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "float";
+		setAttr -type "string" ($node+".opt") "context";
+	}
+	else if($handle==6) {
+		string $node =`createNode -n "fvarbyobj" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "float";
+		setAttr -type "string" ($node+".opt") "objname";
+	}
+	else if($handle==7) {
+		string $node =`createNode -n "svarbyctx" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "string";
+		setAttr -type "string" ($node+".opt") "context";
+	}
+	else if($handle==8) {
+		string $node =`createNode -n "svarbyobj" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "string";
+		setAttr -type "string" ($node+".opt") "objname";
+	}
+	else if($handle==9) {
+		string $node =`createNode -n "cmbcvar" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "color";
+		setAttr -type "string" ($node+".opt") "combine";
+	}
+	else if($handle==10) {
+		string $node =`createNode -n "cmbfvar" aShaderAdaptVariable`;
+		setAttr -type "string" ($node+".handle") "float";
+		setAttr -type "string" ($node+".opt") "combine";
+	}
 	anm_updateExisting;
 }
 
@@ -797,6 +1044,13 @@ global proc anm_updateExisting()
 		
 		 anm_shoVariable($an);
 	}
+	
+	$node = `ls -type aShaderAdaptVariable`;
+	
+	for($an in $node) {
+		
+		 anm_shoAdaptVariable($an);
+	}
 }
 
 /*
@@ -815,6 +1069,7 @@ global proc anm_updateAttrib(string $name)
 	else if(`nodeType $name` == "aShaderEnsemble") anm_listEnsembleAttrib($name);
 	else if(`nodeType $name` == "aShaderPiece") anm_listPieceAttrib($name);
 	else if(`nodeType $name` == "aShaderVariable") anm_listVariableAttrib($name);
+	else if(`nodeType $name` == "aShaderAdaptVariable") anm_listAdaptVariableAttrib($name);
 }
 
 /*
@@ -896,6 +1151,21 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
         		-image1 "sphere.xpm" 
         		-l "Variable"
         		-c "anm_createVariable(1)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byContext"
+        		-c "anm_createVariable(3)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byObjname"
+        		-c "anm_createVariable(4)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "Combine"
+        		-c "anm_createVariable(9)";
         
         	setParent..;
         setParent..;
@@ -909,6 +1179,21 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
         		-image1 "sphere.xpm" 
         		-l "Variable"
         		-c "anm_createVariable(0)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byContext"
+        		-c "anm_createVariable(5)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byObjname"
+        		-c "anm_createVariable(6)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "Combine"
+        		-c "anm_createVariable(10)";
         
         	setParent..;
         setParent..;
@@ -922,6 +1207,16 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
         		-image1 "sphere.xpm" 
         		-l "Variable"
         		-c "anm_createVariable(2)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byContext"
+        		-c "anm_createVariable(7)";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "sphere.xpm" 
+        		-l "byObjname"
+        		-c "anm_createVariable(8)";
         
         	setParent..;
         setParent..;
