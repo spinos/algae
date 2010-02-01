@@ -60,6 +60,18 @@ global proc anm_connectTextFieldButtonToStringAttr(string $textfield)
 }
 
 /*
+pick a file as string var
+*/
+
+global proc anm_pickupFileAsStringAttr(string $textfield)
+{
+	string $attr = `textFieldButtonGrp -q -ann $textfield`;
+	string $val = `fileDialog`;
+	setAttr -type "string" $attr $val;
+	textFieldButtonGrp -e -text $val $textfield;
+}
+
+/*
 set to selection
 */
 
@@ -742,8 +754,14 @@ global proc anm_listVariableAttrib(string $name)
 		}
 		else if($handle == "string") {
 			string $scur =`getAttr ($name+".value")`;
-			string $txctr = `textFieldButtonGrp -cw 1 80 -cw 2 200 -l "Value" -text $scur -ann ($name+".value")`;
-			textFieldGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
+			string $txctr = `textFieldButtonGrp -cw 1 50 -cw 2 200 -cw 3 40
+						-l "Value" 
+						-bl "<...>"
+						-text $scur 
+						-ann ($name+".value")`;
+			textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
+// pick up a file
+			textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
 		}
         		
 		setParent..;
