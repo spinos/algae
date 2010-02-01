@@ -177,7 +177,7 @@ global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, stri
 			disconnectAttr ($conn[0] + ".output") ($node+".displacementShader");
 		}
 	}
-	else if(`nodeType $node` == "aShaderPiece" || `nodeType $node` == "aShaderVariable") {
+	else if(`nodeType $node` == "aShaderPiece" || `nodeType $node` == "aShaderVariable" || `nodeType $node` == "aShaderAdaptVariable") {
 		string $conn[] = `listConnections -scn on -p on ($node+".output")`;
 		string $aconn;
 		for($aconn in $conn ) {
@@ -224,11 +224,11 @@ global proc anm_adaptEnsembleConnectDropcallback(string $dragControl, string $dr
 // avoid self connection
 	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
 	if($dstnode != $node) {
-		if(`nodeType $node` == "aShaderEnsemble") {
+		if(`nodeType $node` == "aShaderEnsemble" || `nodeType $node` == "aShaderAdaptEnsemble") {
 			connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
 			textFieldButtonGrp -e -text $node $dropControl;
 		}
-		else print("only ensemble can be connected");
+		else print("only ensemble and adaptensemble can be connected");
 	}
 	else print("self connection is not allowed");
 }
@@ -309,8 +309,11 @@ global proc anm_attachEnsemble(string $row)
 	for($i=0; $i<size($sel); $i++) {
 		select -r $sel[$i];
 		string $shape[] = `pickWalk -d down`;
-		if(!`attributeExists "aensembleMsg" $shape[0]`) addAttr -ln "aensembleMsg" -attributeType "float"  $shape[0];
-		connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
+		if(`nodeType $shape[0]`=="aCacheMesh") {
+			if(!`attributeExists "aensembleMsg" $shape[0]`) addAttr -ln "aensembleMsg" -attributeType "float"  $shape[0];
+			connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
+			print("attached " + $node+ " to "+$shape[0]);
+		}
 	}
 // restore selection
 	for($i=0; $i<size($sel); $i++) {
@@ -634,7 +637,7 @@ proc anm_listAdaptEnsembleAttrib(string $name)
         	for($i=0; $i<$num_line; $i++) {
         		string $acondition = `getAttr ($name+".condition["+$i+"]")`;
         		string $tfb=`textFieldButtonGrp
-        			-cw3 75 175 50
+        			-cw3 105 175 50
         			-l "Condition"
         			-ann ($name+".condition["+$i+"]")
         			-buttonLabel "Get Select"

@@ -41,6 +41,8 @@
 		7FBC78801114705B00C09FCA /* CheckAShaderCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FBC787E1114705B00C09FCA /* CheckAShaderCmd.h */; };
 		7FBC79D811150FF700C09FCA /* AdaptEnsembleAShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBC79D611150FF700C09FCA /* AdaptEnsembleAShader.cpp */; };
 		7FBC79D911150FF700C09FCA /* AdaptEnsembleAShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FBC79D711150FF700C09FCA /* AdaptEnsembleAShader.h */; };
+		7FCD1DDE11172FE90036E3C6 /* ParseACacheCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */; };
+		7FCD1DDF11172FE90036E3C6 /* ParseACacheCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FCD1DDD11172FE90036E3C6 /* ParseACacheCmd.h */; };
 		7FE58BA10FB61F6700187112 /* pluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE58BA00FB61F6700187112 /* pluginMain.cpp */; };
 		7FEA3A2D110B12E50061D5DF /* AHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A2C110B12E50061D5DF /* AHelper.cpp */; };
 		7FEA3A35110B21BE0061D5DF /* SHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA3A34110B21BE0061D5DF /* SHelper.cpp */; };
@@ -127,6 +129,8 @@
 		7FBC787E1114705B00C09FCA /* CheckAShaderCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckAShaderCmd.h; sourceTree = "<group>"; };
 		7FBC79D611150FF700C09FCA /* AdaptEnsembleAShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptEnsembleAShader.cpp; sourceTree = "<group>"; };
 		7FBC79D711150FF700C09FCA /* AdaptEnsembleAShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdaptEnsembleAShader.h; sourceTree = "<group>"; };
+		7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseACacheCmd.cpp; sourceTree = "<group>"; };
+		7FCD1DDD11172FE90036E3C6 /* ParseACacheCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseACacheCmd.h; sourceTree = "<group>"; };
 		7FE58BA00FB61F6700187112 /* pluginMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pluginMain.cpp; sourceTree = "<group>"; };
 		7FEA3A2C110B12E50061D5DF /* AHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AHelper.cpp; path = ../shared/AHelper.cpp; sourceTree = SOURCE_ROOT; };
 		7FEA3A34110B21BE0061D5DF /* SHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SHelper.cpp; path = ../shared/SHelper.cpp; sourceTree = SOURCE_ROOT; };
@@ -169,6 +173,8 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */,
+				7FCD1DDD11172FE90036E3C6 /* ParseACacheCmd.h */,
 				7F7F90781116036F00E1A2F9 /* AdaptVariableAShader.cpp */,
 				7F7F90791116036F00E1A2F9 /* AdaptVariableAShader.h */,
 				7F7F905B11158E9000E1A2F9 /* VariableAShader.cpp */,
@@ -266,6 +272,7 @@
 				7FBC79D911150FF700C09FCA /* AdaptEnsembleAShader.h in Headers */,
 				7F7F905E11158E9000E1A2F9 /* VariableAShader.h in Headers */,
 				7F7F907B1116036F00E1A2F9 /* AdaptVariableAShader.h in Headers */,
+				7FCD1DDF11172FE90036E3C6 /* ParseACacheCmd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +361,7 @@
 				7FBC79D811150FF700C09FCA /* AdaptEnsembleAShader.cpp in Sources */,
 				7F7F905D11158E9000E1A2F9 /* VariableAShader.cpp in Sources */,
 				7F7F907A1116036F00E1A2F9 /* AdaptVariableAShader.cpp in Sources */,
+				7FCD1DDE11172FE90036E3C6 /* ParseACacheCmd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

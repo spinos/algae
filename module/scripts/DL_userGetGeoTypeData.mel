@@ -9,7 +9,7 @@ global proc DL_userGetGeoTypeData( string $types[],
 	clear($output_commands);
 
 	$types[0] = "aCacheMesh";
-	$plugin_requirements[0] = "aCacheMeshRIBGenDL";
+	$plugin_requirements[0] = "aCache";
 	$cache_commands[0] = "aCacheMeshCacheGeo";
 	$output_commands[0] = "nil";
 }

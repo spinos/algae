@@ -659,7 +659,7 @@ global proc doImportSceneCache()
 string $path = `textFieldGrp -q -text importSceneCachePath`;
 string $meshc[] = `importSceneCache -m 1 -p $path`;
 	for($i = 0; $i < size($meshc); $i++) {
-		string $node = `createNode aCacheMesh`;
+		string $node = `createNode -n $meshc[$i] aCacheMesh`;
 		setAttr -type "string" ($node + ".meshName") $meshc[$i];
 		setAttr -type "string" ($node + ".cachePath") $path;
 
@@ -674,8 +674,8 @@ string $meshc[] = `importSceneCache -m 1 -p $path`;
 // attach ctx
 		connectAttr -f ($est_ctx[0]+".outval") ($node + ".inDesc");
 		
-		string $p[] =`listRelatives -p $node`;
-		rename $p[0] $meshc[$i];
+		//string $p[] =`listRelatives -p $node`;
+		//rename $p[0] $meshc[$i];
 		
 		parent $dummy $dummyGrp;
 	}

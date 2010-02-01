@@ -266,4 +266,29 @@ void SHelper::changeFrameNumberFistDot4Digit(std::string& res, int frame)
 	res.erase(first, 6);
 	res.insert(first, mid);
 }
+
+//#include <maya/MGlobal.h>
+
+char SHelper::isInArrayDividedBySpace(const char* handle, const char* array)
+{
+	std::string full = array;
+	int start = 0;
+	int end = full.find(' ', start);
+	std::string frag;
+	while(end > start) {
+		frag = full.substr(start, end - start);
+		
+		//MGlobal::displayInfo(MString(frag.c_str())+MString("start ")+start+ " end" + end);
+		
+		if(frag.compare(handle) == 0) return 1;
+		start = end+1;
+		end = full.find(' ', start);
+		
+		if(end < 0) {// last one
+			frag = full.substr(start);
+			if(frag.compare(handle) == 0) return 1;
+		}
+	}
+	return 0;
+}
 //:~

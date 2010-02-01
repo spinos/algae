@@ -22,11 +22,12 @@
 #include "CheckAShaderCmd.h"
 #include "VariableAShader.h"
 #include "AdaptVariableAShader.h"
+#include "ParseACacheCmd.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
 MStatus status;
-MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.3 Mon Fed 1 2010", "Any" );
+MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.1.0 Mon Fed 1 2010", "Any" );
 
 /*
 	
@@ -132,6 +133,12 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.3 Mon Fed 1 2010", "Any" );
 			return status;
 	}
 	
+	status = plugin.registerCommand( "aCacheMeshCacheGeo", ParseACache::creator, ParseACache::newSyntax);
+		if (!status) {
+			status.perror("registerCommand");
+			return status;
+		}
+	
 	MGlobal::executeCommand ( "source aCacheMenus.mel;anemoneMakeMenus;" );
 
  return MS::kSuccess;
@@ -141,9 +148,7 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.0.3 Mon Fed 1 2010", "Any" );
  {
 MStatus status;
 MFnPlugin plugin( obj );
-/*		
-				
-*/
+
 		status = plugin.deregisterCommand( "exportSceneCache" );
 		if (!status) {
 		      status.perror("deregisterCommand");
@@ -228,6 +233,11 @@ MFnPlugin plugin( obj );
 		      return status;
 		}
 	
+	status = plugin.deregisterCommand( "aCacheMeshCacheGeo" );
+		if (!status) {
+		      status.perror("deregisterCommand");
+		      return status;
+		}
 	MGlobal::executeCommand ( "anemoneRemoveMenus;" );
 
  return MS::kSuccess;
