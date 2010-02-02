@@ -735,6 +735,50 @@ global proc anm_adaptVariableMinus(string $name)
 }
 
 /*
+drop to connect surface
+*/
+
+global proc anm_surfaceConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+		
+	if(`nodeType $node` == "aShaderPiece") {
+		string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+		if($diagsh[0]=="surface") {
+			connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+			print("\nconnect "+$node+" to "+$dstnode);
+		}
+		else print("only surface can be connected");
+	}
+	else print("only surface can be connected");
+}
+
+/*
+drop to connect displacement
+*/
+
+global proc anm_displacementConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+		
+	if(`nodeType $node` == "aShaderPiece") {
+		string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+		if($diagsh[0]=="displacement") {
+			connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+			print("\nconnect "+$node+" to "+$dstnode);
+		}
+		else print("only displacement can be connected");
+	}
+	else print("only displacement can be connected");
+}
+
+/*
 list ensemble attrib
 */
 
@@ -752,7 +796,7 @@ proc anm_listEnsembleAttrib(string $name)
 			-cw3 115 115 50
 			-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
 			-text `anm_aShaderGetConnected( $name +".surfaceShader")`
-			-dpc anm_aShaderConnectDropcallback
+			-dpc anm_surfaceConnectDropcallback
 			;
 		textFieldButtonGrp
 			-ann ($name+".displacementShader")
@@ -761,7 +805,7 @@ proc anm_listEnsembleAttrib(string $name)
 			-cw3 115 115 50
 			-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
 			-text `anm_aShaderGetConnected( $name +".displacementShader")`
-			-dpc anm_aShaderConnectDropcallback
+			-dpc anm_displacementConnectDropcallback
 			;
 		setParent..;
 	setParent..;
