@@ -1,4 +1,34 @@
 global string $ANM_ShoFilterMenu = "";
+
+/*
+check loop back
+b-->a-x->b
+*/
+
+global proc int anm_checkAnyLoopBack(string $a, string $b)
+{
+	if($a == $b) return 1;
+	string $tb = `nodeType $b`;
+// end when read mesh
+if($tb == "aCacheMesh"||$tb == "transform") {
+	return 0;
+}	
+	string $outattr = $b + ".output";
+	
+	string $conn[] =`listConnections -scn on -d on -s off $outattr`;
+	if(size($conn)==0) {
+		return 0;
+	}
+	string $aconn;
+	int $res = 0;
+	for($aconn in $conn) {
+		$res = anm_checkAnyLoopBack($a, $aconn);
+		if($res == 1) return 1;
+	}
+
+	return 0;
+}
+
 /*
 init set
 */
@@ -223,14 +253,19 @@ global proc anm_adaptEnsembleConnectDropcallback(string $dragControl, string $dr
 	string $node = `rowLayout -q -ann $msgs[0]`;
 // avoid self connection
 	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
-	if($dstnode != $node) {
+	if( anm_checkAnyLoopBack($node, $dstnode)  == 1) {
+		print("loop back is not allowed\n");
+		return;
+	}
+	//if($dstnode != $node) {
+		
 		if(`nodeType $node` == "aShaderEnsemble" || `nodeType $node` == "aShaderAdaptEnsemble") {
 			connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
 			textFieldButtonGrp -e -text $node $dropControl;
 		}
 		else print("only ensemble and adaptensemble can be connected");
-	}
-	else print("self connection is not allowed");
+	//}
+	//else print("self connection is not allowed");
 }
 
 /*
@@ -314,6 +349,7 @@ global proc anm_attachEnsemble(string $row)
 			connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
 			print("attached " + $node+ " to "+$shape[0]);
 		}
+		else print("\nonly mesh cache can be attached");
 	}
 // restore selection
 	for($i=0; $i<size($sel); $i++) {
@@ -420,7 +456,7 @@ proc anm_shoAdaptEnsemble(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
-    string $anm_piecetx = `textField -w 75 -text $name`;
+    string $anm_piecetx = `textField -w 125 -text $name`;
     button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
     button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
@@ -452,7 +488,7 @@ proc anm_shoEnsemble(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
-    string $anm_piecetx = `textField -w 75 -text $name`;
+    string $anm_piecetx = `textField -w 125 -text $name`;
     button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
     button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
@@ -486,7 +522,7 @@ proc anm_shoPiece(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
-    string $anm_piecetx = `textField -w 75 -text $name`;
+    string $anm_piecetx = `textField -w 125 -text $name`;
     //button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     //button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
     
@@ -525,7 +561,7 @@ proc anm_shoVariable(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
-    string $anm_vartx = `textField -w 75 -text $name`;
+    string $anm_vartx = `textField -w 125 -text $name`;
     button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
     text -l "";
     text -l "";
@@ -574,7 +610,7 @@ proc anm_shoAdaptVariable(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
-    string $anm_vartx = `textField -w 75 -text $name`;
+    string $anm_vartx = `textField -w 125 -text $name`;
     button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
     text -l "";
     text -l "";

@@ -202,46 +202,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>7FCD1E7A1117819F0036E3C6</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>SHelper.cpp</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>7FCD1E7B1117819F0036E3C6</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>SHelper.cpp</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>7FCD1F1411178C0C0036E3C6</string>
-						<key>history</key>
-						<array>
-							<string>7FCD1E7C1117819F0036E3C6</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {552, 572}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>63 165 552 613 0 0 1280 778 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>7FCD1E841117819F0036E3C6</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>ParseACacheCmd.cpp</string>
@@ -256,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7FCD1F1511178C0C0036E3C6</string>
+						<string>7FCD1F17111790330036E3C6</string>
 						<key>history</key>
 						<array>
 							<string>7FCD1DE8111752DF0036E3C6</string>
@@ -296,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7FCD1F1611178C0C0036E3C6</string>
+						<string>7FCD1F18111790330036E3C6</string>
 						<key>history</key>
 						<array>
 							<string>7FCD1E8D111782670036E3C6</string>
@@ -316,6 +276,46 @@
 				<false/>
 				<key>RubberWindowFrame</key>
 				<string>15 179 600 594 0 0 1280 778 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>7FCD1E7A1117819F0036E3C6</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>SHelper.cpp</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>7FCD1E7B1117819F0036E3C6</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>SHelper.cpp</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>7FCD1F1A111790330036E3C6</string>
+						<key>history</key>
+						<array>
+							<string>7FCD1E7C1117819F0036E3C6</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {552, 572}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>63 165 552 613 0 0 1280 778 </string>
 			</dict>
 		</dict>
 	</array>
@@ -643,10 +643,10 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>7FE58BA50FB61F9000187112</string>
-		<string>7FCD1E7E1117819F0036E3C6</string>
-		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
-		<string>7FCD1E841117819F0036E3C6</string>
 		<string>7FCD1E7A1117819F0036E3C6</string>
+		<string>7FCD1E7E1117819F0036E3C6</string>
+		<string>7FCD1E841117819F0036E3C6</string>
+		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>467 443 683 298 0 0 1280 778 </string>
