@@ -26,6 +26,9 @@ global controls
 */
 
 global string $ANM_ShoFilterMenu = "";
+global int $ANM_NUMItem = 0;
+global int $ANM_CURItem = 0;
+global string $ANM_PreservedItems[];
 
 /*
 check loop back
@@ -1449,17 +1452,67 @@ global proc anm_updateExisting()
 }
 
 /*
-update existing piece list
+update attr list
 */
 
 global proc anm_updateAttrib(string $name)
 {
+// cleanup
 	string $node[] =`columnLayout -q -childArray anm_curattribclm`;
 	string $an;
 	for($an in $node) {
 		deleteUI $an;
 	}
-// find pieces
+
+	if(`nodeType $name` == "aShaderAdaptEnsemble") anm_listAdaptEnsembleAttrib($name);
+	else if(`nodeType $name` == "aShaderEnsemble") anm_listEnsembleAttrib($name);
+	else if(`nodeType $name` == "aShaderPiece") anm_listPieceAttrib($name);
+	else if(`nodeType $name` == "aShaderVariable") anm_listVariableAttrib($name);
+	else if(`nodeType $name` == "aShaderAdaptVariable") anm_listAdaptVariableAttrib($name);
+
+// history of select	
+	global int $ANM_NUMItem;
+	global int $ANM_CURItem;
+	global string $ANM_PreservedItems[];
+	
+	if($ANM_NUMItem < 16) {	
+		$ANM_PreservedItems[$ANM_NUMItem] = $name;
+		$ANM_CURItem = $ANM_NUMItem;
+		$ANM_NUMItem++;
+	}
+	else {
+		int $i;
+		for($i=0; $i<16; $i++) {
+			$ANM_PreservedItems[$i] = $ANM_PreservedItems[$i+1];
+		}
+		$ANM_PreservedItems[16] = $name;
+		$ANM_CURItem = 16;
+	}
+}
+
+/*
+update attr by hisory
+*/
+
+global proc anm_updateHistoryAttrib(int $offset)
+{
+	global int $ANM_NUMItem;
+	global int $ANM_CURItem;
+	global string $ANM_PreservedItems[];
+	int $oldcur = $ANM_CURItem;
+	$ANM_CURItem += $offset;
+	if($ANM_CURItem <0) $ANM_CURItem =0;
+	else if($ANM_CURItem >16) $ANM_CURItem = 16;
+	if($ANM_CURItem == $oldcur) return;
+	
+	string $name = $ANM_PreservedItems[$ANM_CURItem];
+	if($name == "") return;
+
+// cleanup
+	string $node[] =`columnLayout -q -childArray anm_curattribclm`;
+	string $an;
+	for($an in $node) deleteUI $an;
+	
 	if(`nodeType $name` == "aShaderAdaptEnsemble") anm_listAdaptEnsembleAttrib($name);
 	else if(`nodeType $name` == "aShaderEnsemble") anm_listEnsembleAttrib($name);
 	else if(`nodeType $name` == "aShaderPiece") anm_listPieceAttrib($name);
@@ -1486,7 +1539,14 @@ global proc anm_openAShaderManWin()
 
 //Layout
 string $form = `formLayout -numberOfDivisions 100`;
-string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+string $row = `rowColumnLayout -numberOfColumns 5 
+			-columnWidth 1 120 
+			-columnWidth 2 160 
+			-columnWidth 3 160 
+			-columnWidth 4 80
+			-columnWidth 5 80  
+			//-columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0
+			`;
     
 //columnLayout -adjustableColumn true;
 
@@ -1667,7 +1727,13 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
 //button -l "Reload" -c "anm_openAShaderManWin"-p $row;
 //button -l "Apply" -c "doImportanemone" -p $row;
 //button -l "Close" -c "deleteUI anm_AShaderManWin" -p $row;
-	text -p $row -l "";
+	global int $ANM_NUMItem;
+	$ANM_NUMItem = 0;
+	
+	iconTextButton -height 36
+		-c "global string $ANM_ShoFilterMenu; $ANM_ShoFilterMenu = \"\";anm_openAShaderManWin"
+		-p $row -style "iconOnly" -image1 "anm_reload.xpm";
+	
 	global string $ANM_ShoFilterMenu;
 	$ANM_ShoFilterMenu = `optionMenu 
 		-p $row 
@@ -1683,9 +1749,18 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
 				menuItem -l "String";
 				menuItem -l "Selected";
 	setParent..; 		
-iconTextButton -dpc anm_dropcallbackPiece  
+iconTextButton -dpc anm_dropcallbackPiece  -height 36
 	-c anm_updateExisting
 	-p $row -style "iconOnly" -image1 "anm_trashBin.xpm";
+	
+	iconTextButton -height 36
+	-c "anm_updateHistoryAttrib(-1)"
+	-p $row -style "iconOnly" -image1 "anm_backward.xpm";
+	
+	iconTextButton -height 36
+	-c "anm_updateHistoryAttrib(1)"
+	-p $row -style "iconOnly" -image1 "anm_forward.xpm";
+
 
 formLayout -edit
         -attachNone  $row     "top"
