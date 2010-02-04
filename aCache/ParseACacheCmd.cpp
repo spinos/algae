@@ -576,7 +576,7 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 // update external vars
 			dwnextvars = block->_extns;
 		}
-		else if(tadp == "objname") {
+		/*else if(tadp == "objname") {
 // adapt by objname should parse all vars with switch 
 			SLBlock *block = new SLBlock();
 			block->name = fnode.name().asChar();
@@ -659,64 +659,39 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 			
 // update external vars
 			dwnextvars = block->_extns;
-		}
+		}*/
 		else {
-// single var still need block
-			SLBlock *block = new SLBlock();
-			block->name = fnode.name().asChar();
-			block->type = tvar;
+// context or objname var select as single external var
 			
 			MString sattr("input");
 			if(tvar == "color") sattr = "inputC";
 			else if(tvar == "string") sattr = "inputS";
 			
 			char byobj = 0; 
+			if( tadp == "objname" ) byobj = 1; 
 			
 			int match_sit = 0;
 			
-			match_sit = getMatchedCondition(node, byobj, passname);
+			if( tadp != "objname" ) match_sit = getMatchedCondition(node, byobj, passname);
+			else match_sit = getMatchedCondition(node, byobj, objname);
 			
+			SLVariable *var = new SLVariable();
+			var->name = fnode.name().asChar();
+			var->type = tvar;
+			var->setDefault();
+			
+			res = fnode.name();
+
 			MPlug plgvar = fnode.findPlug(sattr).elementByLogicalIndex( match_sit, &status);
 			if(status) {
 				MObject oconn;
 				AHelper::getConnectedNode(oconn, plgvar);
 				if(oconn != MObject::kNullObj) { // only when it is connected
-					VariableList extvars;
-					MString funcname = funcOrVarNode(oconn, objname, passname, extvars);
-					
-					SLVariable * var = new SLVariable();
-					var->type = block->type;
-					var->value = funcname.asChar();
-					var->name = MFnDependencyNode(oconn).name().asChar();
-// no standard or extern var//block->_extns.push_back(var);
-					
-					string sbody = " return ";
-					sbody += var->value;
-					sbody += " ;\n";
-			
-					block->body = sbody;
-					
-// only have external vars	
-					for(VariableList::iterator varit= extvars.begin(); varit != extvars.end(); ++varit) {
-						if(!block->checkExistingExternal((*varit)->name)) block->_extns.push_back(*varit);
-					}
+					var->value = valueVarNode(oconn).asChar();
 				}
 			}
-// return func	
-			if(!_sl->checkExistingBlock(block->name)) _sl->addBlock(block);
-
-// output func
-			res = fnode.name() + " ( ";
-			int i = 0;
-			for(VariableList::iterator varit= block->_extns.begin(); varit != block->_extns.end(); ++varit) {
-				res = res + (*varit)->name.c_str();
-				i++;
-				if(i < block->_extns.size()) res = res + ", ";
-			}
-			res = res + " )";
-			
 // update external vars
-			dwnextvars = block->_extns;
+			dwnextvars.push_back(var);
 		}
 	}
 	
@@ -745,7 +720,7 @@ int ParseACache::getMatchedCondition(MObject& node, char byobj, MString& name)
 			
 			if(!byobj) { // adapt by context
 				if(scondition == name) {
-					//found_sit = 1;
+					
 					match_sit = i;
 					return match_sit;
 				}
@@ -753,7 +728,6 @@ int ParseACache::getMatchedCondition(MObject& node, char byobj, MString& name)
 			else { // adapt by objname
 				if(SHelper::isInArrayDividedBySpace(name.asChar(), scondition.asChar())) {
 				
-					//found_sit = 1;
 					match_sit = i;
 					return match_sit;
 				}
@@ -765,7 +739,27 @@ int ParseACache::getMatchedCondition(MObject& node, char byobj, MString& name)
 		}
 	}
 // use default if no match is found				
-	//if(!found_sit) match_sit = default_sit;
 	return default_sit;
+}
+
+MString ParseACache::valueVarNode(MObject& node)
+{
+	MFnDependencyNode fnode(node);
+	char valbuf[256];
+	MString handle = fnode.findPlug("handle").asString();
+	if(handle == "float") {
+		float x =  fnode.findPlug("value").asFloat();
+		sprintf(valbuf, "%f", x);
+	}
+	else if(handle == "color") {
+		float x = fnode.findPlug("valueX").asFloat();
+		float y = fnode.findPlug("valueY").asFloat();
+		float z = fnode.findPlug("valueZ").asFloat();
+		sprintf(valbuf, "color( %f, %f, %f )", x, y, z);				
+	}
+	else {
+		sprintf(valbuf, "\"%s\"", fnode.findPlug("value").asString().asChar());
+	}
+	return MString(valbuf);
 }
 //:~

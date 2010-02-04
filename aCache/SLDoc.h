@@ -16,6 +16,13 @@ struct SLVariable
 	string name;
 	string value;
 	string type;
+	
+	void setDefault() 
+	{
+		if(type == "float") value = "0.0";
+		else if(type == "color") value = "color( 0.0, 0.0, 0.0 )";
+		else value = "nil";
+	}
 };
 
 typedef vector<SLVariable*>VariableList;

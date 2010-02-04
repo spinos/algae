@@ -197,7 +197,94 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>7F7C0E3E111AE81200AC0C99</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>ParseACacheCmd.cpp</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>7F7C0E58111AF10100AC0C99</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>ParseACacheCmd.cpp</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>7F7C0E6D111AF32E00AC0C99</string>
+						<key>history</key>
+						<array>
+							<string>7F7C0E59111AF10100AC0C99</string>
+							<string>7F7C0E5A111AF10100AC0C99</string>
+						</array>
+						<key>prevStack</key>
+						<array>
+							<string>7F7C0E5B111AF10100AC0C99</string>
+							<string>7F7C0E5C111AF10100AC0C99</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {600, 553}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>466 162 600 594 0 0 1280 778 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>7F7C0E5E111AF10100AC0C99</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>SLDoc.h</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>7F7C0E5F111AF10100AC0C99</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>SLDoc.h</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>7F7C0E6E111AF32E00AC0C99</string>
+						<key>history</key>
+						<array>
+							<string>7F7C0E45111AEC3000AC0C99</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {552, 572}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>38 139 552 613 0 0 1280 778 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -279,13 +366,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>16</integer>
+									<integer>15</integer>
 									<integer>14</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 185}, {267, 239}}</string>
+							<string>{{0, 197}, {267, 239}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -385,9 +472,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7F473AAA111A488700D04B77</string>
+				<string>7F7C0E56111AF10100AC0C99</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>7F473AAB111A488700D04B77</string>
+				<string>7F7C0E57111AF10100AC0C99</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -499,8 +586,6 @@
 	</array>
 	<key>PerspectivesBarVisible</key>
 	<false/>
-	<key>PinnedNavigatorIdentifier</key>
-	<string>7F473AB3111A49B900D04B77</string>
 	<key>ShelfIsVisible</key>
 	<false/>
 	<key>SourceDescription</key>
@@ -524,7 +609,10 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>7FE58BA50FB61F9000187112</string>
+		<string>7F473A44111A074400D04B77</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
+		<string>7F7C0E5E111AF10100AC0C99</string>
+		<string>7F7C0E3E111AE81200AC0C99</string>
 	</array>
 	<key>WindowString</key>
 	<string>179 446 683 298 0 0 1280 778 </string>
@@ -543,12 +631,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>SLDoc.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -604,7 +694,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7FE58BA50FB61F9000187112</string>
-				<string>7F473AAD111A488700D04B77</string>
+				<string>7F7C0E4D111AECFC00AC0C99</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -1213,7 +1303,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7F473A44111A074400D04B77</string>
-				<string>7F473A45111A074400D04B77</string>
+				<string>7F7C0E4E111AECFC00AC0C99</string>
 				<string>7F473A43111A074400D04B77</string>
 			</array>
 			<key>WindowString</key>

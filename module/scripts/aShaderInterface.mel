@@ -51,22 +51,25 @@ global proc int anm_checkAnyLoopBack(string $a, string $b)
 		if($res == 1) return 1;
 	}
 	
-	$outattr = $b + ".outputC";
-	
-	$conn =`listConnections -scn on -d on -s off $outattr`;
-	
-	for($aconn in $conn) {
-		$res = anm_checkAnyLoopBack($a, $aconn);
-		if($res == 1) return 1;
-	}
-	
-	$outattr = $b + ".outputS";
-	
-	$conn =`listConnections -scn on -d on -s off $outattr`;
-	
-	for($aconn in $conn) {
-		$res = anm_checkAnyLoopBack($a, $aconn);
-		if($res == 1) return 1;
+	if($tb == "aShaderVariable" || $tb == "aShaderAdaptVariable") {
+		
+		$outattr = $b + ".outputC";
+		
+		$conn =`listConnections -scn on -d on -s off $outattr`;
+		
+		for($aconn in $conn) {
+			$res = anm_checkAnyLoopBack($a, $aconn);
+			if($res == 1) return 1;
+		}
+		
+		$outattr = $b + ".outputS";
+		
+		$conn =`listConnections -scn on -d on -s off $outattr`;
+		
+		for($aconn in $conn) {
+			$res = anm_checkAnyLoopBack($a, $aconn);
+			if($res == 1) return 1;
+		}
 	}
 
 	return 0;

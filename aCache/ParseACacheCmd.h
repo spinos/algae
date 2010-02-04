@@ -33,6 +33,7 @@ private:
 	MObject getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname);
 	void injectSurfaceStatement(MObject& node, MString& objname, MString& passname);
 	MString funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& dwnextvars);
+	MString valueVarNode(MObject& node);
 	int getMatchedCondition(MObject& node, char byobj, MString& name);
 	
 	SLDoc* _sl;
