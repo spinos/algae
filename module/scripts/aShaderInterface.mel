@@ -165,6 +165,21 @@ global proc anm_aShaderNaviConnected( string $attr )
 }
 
 /*
+disconnect attr
+*/
+
+global proc anm_disconnectAttrAny( string $field )
+{
+	string $attr = `textFieldButtonGrp -q -ann $field`;
+	string $conn[] =`listConnections -scn on -p on $attr`;
+	if(size($conn)>0) {
+		disconnectAttr $conn[0] $attr;
+		string $dstnode = anm_cutByFirstDot($attr);
+		textFieldButtonGrp -e -text "nil" $field;
+	}
+}
+
+/*
 get connected node
 */
 
@@ -685,12 +700,12 @@ proc anm_shoAdaptVariable(string $name)
     if(`getAttr ($name+".handle")`=="float") {
     	    if(`getAttr ($name+".opt")`=="context") $img = "anm_variableCtxF.xpm";
     	    else if(`getAttr ($name+".opt")`=="objname") $img = "anm_variableObjF.xpm";
-    	    else $img = "anm_variableF.xpm";
+    	    else $img = "anm_variableCmbF.xpm";
     }
     else if(`getAttr ($name+".handle")`=="color") {
     	    if(`getAttr ($name+".opt")`=="context") $img = "anm_variableCtxC.xpm";
     	    else if(`getAttr ($name+".opt")`=="objname") $img = "anm_variableObjC.xpm";
-    	    else $img = "anm_variableC.xpm";
+    	    else $img = "anm_variableCmbC.xpm";
     }
     else if(`getAttr ($name+".handle")`=="string") {
     	    if(`getAttr ($name+".opt")`=="context") $img = "anm_variableCtxS.xpm";
@@ -776,14 +791,22 @@ proc anm_listAdaptEnsembleAttrib(string $name)
         			`;
         		textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$tfb+"\")") $tfb;
         		textFieldButtonGrp -e -bc ("anm_setTextFieldButtonTextBySelection(\""+$tfb+"\")") $tfb;
-        		textFieldButtonGrp
+        		
+        		string $attrens = $name+".ensemble["+$i+"]";
+        		string $tfbens = `textFieldButtonGrp
         			-cw3 75 115 50
         			-l ("Ensemble["+$i+"]")
-        			-ann ($name+".ensemble["+$i+"]")
+        			-ann $attrens
         			-buttonLabel "->"
-        			-text `anm_aShaderGetConnected($name+".ensemble["+$i+"]")`
+        			//-text `anm_aShaderGetConnected($name+".ensemble["+$i+"]")`
         			-dpc anm_adaptEnsembleConnectDropcallback
-        			-bc ("anm_aShaderNaviConnected( \""+ $name +".ensemble["+$i+"]\")");
+        			//-bc ("anm_aShaderNaviConnected( \""+ $name +".ensemble["+$i+"]\")")
+        			`;
+        			
+				textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrens)` $tfbens;
+				textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrens +"\")") $tfbens;
+				popupMenu;
+					menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbens+"\")");
         	}
 		setParent..;
 	setParent..;
@@ -884,24 +907,35 @@ proc anm_listEnsembleAttrib(string $name)
                 -borderStyle "in"
                 -collapsable 1`;
         columnLayout;
-		textFieldButtonGrp
-			-ann ($name+".surfaceShader")
+        	string $attrsurf = $name+".surfaceShader";
+		string $tfbsurf = `textFieldButtonGrp
+			-ann $attrsurf
 			-label "Surface" -ed false 
 			-buttonLabel "->"
 			-cw3 115 115 50
-			-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
-			-text `anm_aShaderGetConnected( $name +".surfaceShader")`
+			//-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
+			//-text `anm_aShaderGetConnected( $name +".surfaceShader")`
 			-dpc anm_surfaceConnectDropcallback
-			;
-		textFieldButtonGrp
-			-ann ($name+".displacementShader")
+			`;
+			textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrsurf)` $tfbsurf;
+			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrsurf +"\")") $tfbsurf;
+			popupMenu;
+				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbsurf+"\")");
+				
+		string $attrdisp = $name+".displacementShader";		
+		string $tfbdisp = `textFieldButtonGrp
+			-ann $attrdisp
 			-label "Displacement" -ed false 
 			-buttonLabel "->"
 			-cw3 115 115 50
-			-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
-			-text `anm_aShaderGetConnected( $name +".displacementShader")`
+			//-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
+			//-text `anm_aShaderGetConnected( $name +".displacementShader")`
 			-dpc anm_displacementConnectDropcallback
-			;
+			`;
+			textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrdisp)` $tfbdisp;
+			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrdisp +"\")") $tfbdisp;
+			popupMenu;
+				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbdisp+"\")");
 		setParent..;
 	setParent..;
 }
@@ -1011,36 +1045,56 @@ proc anm_listAdaptVariableAttrib(string $name)
 				textFieldButtonGrp -e -bc ("anm_setTextFieldButtonTextBySelection(\""+$tfb+"\")") $tfb;
 			}
 			
+			string $sattr;
+			string $tfbattr;
+			
 			if($handle == "float") {
-				textFieldButtonGrp
+				
+				$sattr = $name+".input["+$i+"]";
+				
+				$tfbattr = `textFieldButtonGrp
 					-cw3 75 115 50
 					-l ("Float["+$i+"]")
-					-ann ($name+".input["+$i+"]")
+					-ann $sattr
 					-buttonLabel "->"
-					-text `anm_aShaderGetConnected($name+".input["+$i+"]")`
+					//-text `anm_aShaderGetConnected($sattr)`
 					-dpc anm_adaptVaribleConnectDropcallback
-					-bc ("anm_aShaderNaviConnected( \""+ $name +".input["+$i+"]\")");
+					//-bc ("anm_aShaderNaviConnected( \""+ $sattr + "\")")
+					`;
         		}
         		else if($handle == "color") {
-				textFieldButtonGrp
+        			
+        			$sattr = $name+".inputC["+$i+"]";
+        			
+				$tfbattr = `textFieldButtonGrp
 					-cw3 75 115 50
 					-l ("Color["+$i+"]")
-					-ann ($name+".inputC["+$i+"]")
+					-ann $sattr
 					-buttonLabel "->"
-					-text `anm_aShaderGetConnected($name+".inputC["+$i+"]")`
+					//-text `anm_aShaderGetConnected($sattr)`
 					-dpc anm_adaptVaribleConnectDropcallback
-					-bc ("anm_aShaderNaviConnected( \""+ $name +".inputC["+$i+"]\")");
+					//-bc ("anm_aShaderNaviConnected( \""+ $sattr +"\")")
+					`;
         		}
         		else if($handle == "string") {
-				textFieldButtonGrp
+        			
+        			$sattr = $name+".inputS["+$i+"]";
+        			
+				$tfbattr = `textFieldButtonGrp
 					-cw3 75 115 50
 					-l ("String["+$i+"]")
-					-ann ($name+".inputS["+$i+"]")
+					-ann $sattr
 					-buttonLabel "->"
-					-text `anm_aShaderGetConnected($name+".inputS["+$i+"]")`
+					//-text `anm_aShaderGetConnected($sattr)`
 					-dpc anm_adaptVaribleConnectDropcallback
-					-bc ("anm_aShaderNaviConnected( \""+ $name +".inputS["+$i+"]\")");
+					//-bc ("anm_aShaderNaviConnected( \""+ $sattr +"\")")
+					`;
         		}
+        		
+        		textFieldButtonGrp -e -text `anm_aShaderGetConnected($sattr)` $tfbattr;
+			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+$sattr+"\")") $tfbattr;
+			popupMenu;
+				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbattr+"\")");
         	}
 		setParent..;
 	setParent..;
@@ -1091,16 +1145,25 @@ proc anm_listPieceAttrib(string $name)
 			}
 // parse controls
 			if($paramsh[$i+3] == "connection") {
-				//textFieldButtonGrp -cw 1 80 -l $paramsh[$i];
-				textFieldButtonGrp
-					-ann ($name+"."+$paramsh[$i])
+				
+				string $sattr = $name+"."+$paramsh[$i];
+				
+				string $tfbattr = `textFieldButtonGrp
+					-ann $sattr
 					-label $paramsh[$i] -ed false 
 					-buttonLabel "->"
 					-cw3 115 115 50
-					-bc ("anm_aShaderNaviConnected( \""+ $name +"."+$paramsh[$i]+"\")")
-					-text `anm_aShaderGetConnected( $name +"."+$paramsh[$i] )`
+					//-bc ("anm_aShaderNaviConnected( \""+ $sattr +"\")")
+					//-text `anm_aShaderGetConnected( $sattr )`
 					-dpc anm_pieceConnectDropcallback
-					;
+					`;
+					
+				textFieldButtonGrp -e -text `anm_aShaderGetConnected($sattr)` $tfbattr;
+				textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+$sattr+"\")") $tfbattr;
+// popup menus
+					popupMenu;
+						menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbattr+"\")");
+						
 			}
 			else if($paramsh[$i+3] == "output") {}
 			else if($paramsh[$i+3] == "switch") {
@@ -1517,7 +1580,7 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
         		-c "anm_createVariable(4)";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
-        		-image1 "anm_variableC.xpm" 
+        		-image1 "anm_variableCmbC.xpm" 
         		-height 36 
         		-l "Combine"
         		-c "anm_createVariable(9)";
@@ -1549,7 +1612,7 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
         		-c "anm_createVariable(6)";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
-        		-image1 "anm_variableF.xpm" 
+        		-image1 "anm_variableCmbF.xpm" 
         		-height 36
         		-l "Combine"
         		-c "anm_createVariable(10)";

@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7F7C0E6D111AF32E00AC0C99</string>
+						<string>7F7C0E6F111B144E00AC0C99</string>
 						<key>history</key>
 						<array>
 							<string>7F7C0E59111AF10100AC0C99</string>
@@ -262,7 +262,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7F7C0E6E111AF32E00AC0C99</string>
+						<string>7F7C0E70111B144E00AC0C99</string>
 						<key>history</key>
 						<array>
 							<string>7F7C0E45111AEC3000AC0C99</string>
@@ -610,9 +610,9 @@
 	<array>
 		<string>7FE58BA50FB61F9000187112</string>
 		<string>7F473A44111A074400D04B77</string>
-		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 		<string>7F7C0E5E111AF10100AC0C99</string>
 		<string>7F7C0E3E111AE81200AC0C99</string>
+		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>179 446 683 298 0 0 1280 778 </string>
