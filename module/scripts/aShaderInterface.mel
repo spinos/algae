@@ -37,17 +37,33 @@ global proc int anm_checkAnyLoopBack(string $a, string $b)
 	if($a == $b) return 1;
 	string $tb = `nodeType $b`;
 // end when read mesh
-if($tb == "aCacheMesh"||$tb == "transform") {
-	return 0;
-}	
+	if($tb == "aCacheMesh"||$tb == "transform") {
+		return 0;
+	}	
 	string $outattr = $b + ".output";
 	
 	string $conn[] =`listConnections -scn on -d on -s off $outattr`;
-	if(size($conn)==0) {
-		return 0;
-	}
+	
 	string $aconn;
 	int $res = 0;
+	for($aconn in $conn) {
+		$res = anm_checkAnyLoopBack($a, $aconn);
+		if($res == 1) return 1;
+	}
+	
+	$outattr = $b + ".outputC";
+	
+	$conn =`listConnections -scn on -d on -s off $outattr`;
+	
+	for($aconn in $conn) {
+		$res = anm_checkAnyLoopBack($a, $aconn);
+		if($res == 1) return 1;
+	}
+	
+	$outattr = $b + ".outputS";
+	
+	$conn =`listConnections -scn on -d on -s off $outattr`;
+	
 	for($aconn in $conn) {
 		$res = anm_checkAnyLoopBack($a, $aconn);
 		if($res == 1) return 1;
@@ -287,6 +303,43 @@ global proc anm_adaptEnsembleConnectDropcallback(string $dragControl, string $dr
 }
 
 /*
+drop to connect piece or variable or adapt varible to piece attr
+*/
+
+global proc anm_pieceConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+	if( anm_checkAnyLoopBack($node, $dstnode)  == 1) {
+		print("loop back is not allowed\n");
+		return;
+	}
+		if(`nodeType $node` == "aShaderPiece") {
+			string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+			string $handle = $diagsh[0];
+			if($handle == "float")
+				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "color" || $handle == "surface")
+				connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "string")
+				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+		}
+		else if(`nodeType $node` == "aShaderVariable" || `nodeType $node` == "aShaderAdaptVariable") {
+			string $handle = `getAttr ($node+".handle")`;
+			if($handle == "float")
+				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "color")
+				connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "string")
+				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+		}
+		else print("no ensemble can be connected");
+}
+
+/*
 drop to connect piece or variable to adapt varible
 */
 
@@ -295,7 +348,12 @@ global proc anm_adaptVaribleConnectDropcallback(string $dragControl, string $dro
 	string $node = `rowLayout -q -ann $msgs[0]`;
 // avoid self connection
 	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
-	if($dstnode != $node) {
+	if( anm_checkAnyLoopBack($node, $dstnode)  == 1) {
+		print("loop back is not allowed\n");
+		return;
+	}
+	string $operation = `getAttr ($dstnode+".opt")`;
+	if($operation == "combine") {
 		if(`nodeType $node` == "aShaderPiece") {
 			string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
 			string $handle = $diagsh[0];
@@ -319,7 +377,19 @@ global proc anm_adaptVaribleConnectDropcallback(string $dragControl, string $dro
 		}
 		else print("no ensemble can be connected");
 	}
-	else print("self connection is not allowed");
+	else {
+		if(`nodeType $node` == "aShaderVariable") {
+			string $handle = `getAttr ($node+".handle")`;
+			if($handle == "float")
+				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "color")
+				connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+			else if($handle == "string")
+				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+		}
+		else print("only variable can be connected here");
+	}
 }
 
 /*
@@ -1026,7 +1096,7 @@ proc anm_listPieceAttrib(string $name)
 					-cw3 115 115 50
 					-bc ("anm_aShaderNaviConnected( \""+ $name +"."+$paramsh[$i]+"\")")
 					-text `anm_aShaderGetConnected( $name +"."+$paramsh[$i] )`
-					-dpc anm_adaptVaribleConnectDropcallback
+					-dpc anm_pieceConnectDropcallback
 					;
 			}
 			else if($paramsh[$i+3] == "output") {}
