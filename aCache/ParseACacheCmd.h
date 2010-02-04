@@ -17,6 +17,7 @@
 #include <maya/MArgDatabase.h>
 #include <maya/MDagPath.h>
 #include <maya/MDagPathArray.h>
+#include "SLDoc.h"
 
 class ParseACache : public MPxCommand
  {
@@ -30,5 +31,10 @@ class ParseACache : public MPxCommand
 private:
 	MStatus parseArgs ( const MArgList& args );
 	MObject getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname);
+	void injectSurfaceStatement(MObject& node, MString& objname, MString& passname);
+	MString funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& dwnextvars);
+	int getMatchedCondition(MObject& node, char byobj, MString& name);
+	
+	SLDoc* _sl;
  };
 

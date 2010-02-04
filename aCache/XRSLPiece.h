@@ -16,7 +16,8 @@ enum XRSLParameterDetail {
 	Slider = 1,
 	Switch = 2,
 	Connection = 3,
-	Output = 4
+	Output = 4,
+	Varying = 5
 };
 
 enum XRSLParameterType {
@@ -49,6 +50,7 @@ public:
 	const char* getName() const {return m_name.c_str();}
 	const char* getType() const {return m_type.c_str();}
 	ParamList& getAttrib() {return m_param;}
+	const char* getBody() const {return m_source.c_str();}
 private:
 	string m_sl_path;
 	string m_name;

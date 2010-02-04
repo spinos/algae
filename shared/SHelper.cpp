@@ -291,4 +291,23 @@ char SHelper::isInArrayDividedBySpace(const char* handle, const char* array)
 	}
 	return 0;
 }
+
+void SHelper::filenameWithoutPath(std::string& res)
+{
+	cutByLastDot(res);
+	int found = res.rfind('\\', res.size());
+	if(found > 1) 
+	{
+		found++;
+		res = res.substr(found);
+		return;
+	}	
+	
+	found = res.rfind('/', res.size());
+	if(found > 1) 
+	{
+		found++;
+		res = res.substr(found);
+	}
+}
 //:~

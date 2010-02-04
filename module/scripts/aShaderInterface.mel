@@ -1,3 +1,30 @@
+/*
+init set
+*/
+
+global proc string anm_getMasterPath()
+{
+	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+}
+
+global proc string[] anm_getSurfaceFiles()
+{
+	string $res[];
+	$res[0] = "foo";
+	return $res;
+}
+
+global proc string[] anm_getColorFiles()
+{
+	string $res[];
+	$res[0] = "mixColor";
+	return $res;
+}
+
+/*
+global controls
+*/
+
 global string $ANM_ShoFilterMenu = "";
 
 /*
@@ -27,22 +54,6 @@ if($tb == "aCacheMesh"||$tb == "transform") {
 	}
 
 	return 0;
-}
-
-/*
-init set
-*/
-
-global proc string anm_getMasterPath()
-{
-	return "/Users/jianzhang/Documents/anemone/module/xrsl";
-}
-
-global proc string[] anm_getSurfaceFiles()
-{
-	string $res[];
-	$res[0] = "foo";
-	return $res;
 }
 
 /*
@@ -189,12 +200,16 @@ global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, stri
 	if(`nodeType $node` == "aShaderAdaptEnsemble") {
 		int $num_line = `getAttr ($node+".numCondition")`;
         	int $i;
+        	string $conn[];
         	for($i=0; $i<$num_line; $i++) {
-        		string $conn[] =`listConnections -scn on ($node+".ensemble["+$i+"]")`;
+        		$conn =`listConnections -scn on ($node+".ensemble["+$i+"]")`;
 			if(size($conn)>0) {
 				disconnectAttr ($conn[0] + ".output") ($node+".ensemble["+$i+"]");
 			}
         	}
+        	$conn =`listConnections -scn on -s off -p on ($node+".output")`;
+        	string $aconn;
+        	for($aconn in $conn) disconnectAttr ($node+".output") $aconn;
 	}
 	else if(`nodeType $node` == "aShaderEnsemble") {
 // disconnect all inflow
@@ -206,6 +221,9 @@ global proc anm_dropcallbackPiece(string $dragControl, string $dropControl, stri
 		if(size($conn)>0) {
 			disconnectAttr ($conn[0] + ".output") ($node+".displacementShader");
 		}
+		$conn =`listConnections -scn on -s off -p on ($node+".output")`;
+        	string $aconn;
+        	for($aconn in $conn) disconnectAttr ($node+".output") $aconn;
 	}
 	else if(`nodeType $node` == "aShaderPiece" || `nodeType $node` == "aShaderVariable" || `nodeType $node` == "aShaderAdaptVariable") {
 		string $conn[] = `listConnections -scn on -p on ($node+".output")`;
@@ -289,8 +307,8 @@ global proc anm_adaptVaribleConnectDropcallback(string $dragControl, string $dro
 				connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
 			textFieldButtonGrp -e -text $node $dropControl;
 		}
-		else if(`nodeType $node` == "aShaderVariable") {
-			string $handle = `getAttr ($dstnode+".handle")`;
+		else if(`nodeType $node` == "aShaderVariable" || `nodeType $node` == "aShaderAdaptVariable") {
+			string $handle = `getAttr ($node+".handle")`;
 			if($handle == "float")
 				connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
 			else if($handle == "color")
@@ -324,7 +342,7 @@ global proc anm_aShaderConnectTypedAttrDropcallback(string $dragControl, string 
 		}
 
 		if($paramsh[0] == "string") connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
-		else if($paramsh[0] == "double3") connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
+		else if($paramsh[0] == "double3" || $paramsh[0] == "color") connectAttr -f ($node + ".outputC") `textFieldButtonGrp -q -ann $dropControl`;
 		else connectAttr -f ($node + ".output") `textFieldButtonGrp -q -ann $dropControl`;
 		
 		textFieldButtonGrp -e -text $node $dropControl;
@@ -514,6 +532,10 @@ proc anm_shoPiece(string $name)
     -ann $name`;
     
     string $img = "anm_surface.xpm";
+    string $node =`rowLayout -q -ann $anm_piecerow`;
+    string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+		
+    if($diagsh[0]=="color") $img = "anm_color.xpm";
     
     iconTextButton -ann $anm_piecerow 
     		-style "iconOnly" 
@@ -570,7 +592,7 @@ proc anm_shoVariable(string $name)
 }
 
 /*
-add variable line
+add adapt variable line
 */
 
 proc anm_shoAdaptVariable(string $name)
@@ -1001,10 +1023,10 @@ proc anm_listPieceAttrib(string $name)
 					-ann ($name+"."+$paramsh[$i])
 					-label $paramsh[$i] -ed false 
 					-buttonLabel "->"
-					-cw3 115 75 50
+					-cw3 115 115 50
 					-bc ("anm_aShaderNaviConnected( \""+ $name +"."+$paramsh[$i]+"\")")
 					-text `anm_aShaderGetConnected( $name +"."+$paramsh[$i] )`
-					-dpc anm_aShaderConnectTypedAttrDropcallback
+					-dpc anm_adaptVaribleConnectDropcallback
 					;
 			}
 			else if($paramsh[$i+3] == "output") {}
@@ -1039,15 +1061,20 @@ create ensemble
 
 global proc anm_createEnsemble(int $type)
 {
-	if($type==0) createNode -n "ensemble" aShaderEnsemble;
+	string $dummy = `createNode -n "dummy" transform`;
+	string $node;
+	if($type==0) {
+		$node =`createNode -n "ensemble" aShaderEnsemble`;
+	}
 	else if($type==1) {
-		string $node =`createNode -n "ctxensemble" aShaderAdaptEnsemble`;
+		$node =`createNode -n "ctxensemble" aShaderAdaptEnsemble`;
 		setAttr -type "string" ($node+".handle") "context";
 	}
 	else if($type==2) {
-		string $node =`createNode -n "objensemble" aShaderAdaptEnsemble`;
+		$node =`createNode -n "objensemble" aShaderAdaptEnsemble`;
 		setAttr -type "string" ($node+".handle") "objname";
 	}
+	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
 }
 
@@ -1061,8 +1088,7 @@ global proc anm_createPiece(string $name)
 	string $rootpath = `anm_getMasterPath`;
 	setAttr -type "string" ($node + ".xslPath") ($rootpath+"/"+$name+".xrsl");
 	
-	string $dummy = "dummy";
-	if(!`objExists dummy`) $dummy = `createNode -n "dummy" transform`;
+	string $dummy = `createNode -n "dummy" transform`;
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
 }
@@ -1073,14 +1099,16 @@ create variable
 
 global proc anm_createVariable(int $handle)
 {
+	string $dummy = `createNode -n "dummy" transform`;
+	string $node;
 	if($handle==0) {
-		string $node =`createNode -n "fvariable" aShaderVariable`;
+		$node =`createNode -n "fvariable" aShaderVariable`;
 		setAttr -type "string" ($node+".handle") "float";
 		addAttr -ln "value" -attributeType double $node;
 		setAttr ($node +".value") 1.0;
 	}
 	else if($handle==1) {
-		string $node =`createNode -n "cvariable" aShaderVariable`;
+		$node =`createNode -n "cvariable" aShaderVariable`;
 		setAttr -type "string" ($node+".handle") "color";
 		addAttr -ln "value" -attributeType double3 $node;
 		addAttr -ln ("valueX") -attributeType double -p "value" $node;
@@ -1089,7 +1117,7 @@ global proc anm_createVariable(int $handle)
 		setAttr ($node+".value") -type double3 1.0 1.0 1.0;
 	}
 	else if($handle==2) {
-		string $node =`createNode -n "svariable" aShaderVariable`;
+		$node =`createNode -n "svariable" aShaderVariable`;
 		setAttr -type "string" ($node+".handle") "string";
 		addAttr -ln "value" -dt "string" $node;
 	}
@@ -1104,35 +1132,36 @@ global proc anm_createVariable(int $handle)
 		setAttr -type "string" ($node+".opt") "objname";
 	}
 	else if($handle==5) {
-		string $node =`createNode -n "fvarbyctx" aShaderAdaptVariable`;
+		$node =`createNode -n "fvarbyctx" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "float";
 		setAttr -type "string" ($node+".opt") "context";
 	}
 	else if($handle==6) {
-		string $node =`createNode -n "fvarbyobj" aShaderAdaptVariable`;
+		$node =`createNode -n "fvarbyobj" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "float";
 		setAttr -type "string" ($node+".opt") "objname";
 	}
 	else if($handle==7) {
-		string $node =`createNode -n "svarbyctx" aShaderAdaptVariable`;
+		$node =`createNode -n "svarbyctx" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "string";
 		setAttr -type "string" ($node+".opt") "context";
 	}
 	else if($handle==8) {
-		string $node =`createNode -n "svarbyobj" aShaderAdaptVariable`;
+		$node =`createNode -n "svarbyobj" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "string";
 		setAttr -type "string" ($node+".opt") "objname";
 	}
 	else if($handle==9) {
-		string $node =`createNode -n "cmbcvar" aShaderAdaptVariable`;
+		$node =`createNode -n "cmbcvar" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "color";
 		setAttr -type "string" ($node+".opt") "combine";
 	}
 	else if($handle==10) {
-		string $node =`createNode -n "cmbfvar" aShaderAdaptVariable`;
+		$node =`createNode -n "cmbfvar" aShaderAdaptVariable`;
 		setAttr -type "string" ($node+".handle") "float";
 		setAttr -type "string" ($node+".opt") "combine";
 	}
+	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
 }
 
@@ -1308,6 +1337,10 @@ main window
 
 global proc anm_openAShaderManWin() 
 {
+//create shader path
+	string $shader_path = `workspace -q -fn`+"/rmanshaders/";
+	
+	system("mkdir "+$shader_path);
 
 //If such a window already exists, destory it.
  if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;
@@ -1382,6 +1415,16 @@ string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 160 120 -columnAtt
                 -borderStyle "in" -collapsable 1 ;
                 
         columnLayout;
+        
+        	string $colrs[] = `anm_getColorFiles`;
+                string $acolr;
+                for($acolr in $colrs) {
+			iconTextButton -width 100 -height 36
+				-style "iconAndTextHorizontal" 
+				-image1 "anm_color.xpm" 
+				-l $acolr 
+				-c ("anm_createPiece(\""+$acolr+"\")");
+		}
         
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableC.xpm" 
