@@ -29,6 +29,8 @@ public:
 		static void changeFrameNumberFistDot4Digit(std::string& res, int frame);
 		static char isInArrayDividedBySpace(const char* handle, const char* array);
 		static void filenameWithoutPath(std::string& res);
+		static void protectComma(std::string& res);
+		static void ribthree(std::string& res);
 };
 #endif
 //:~

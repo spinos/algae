@@ -310,4 +310,21 @@ void SHelper::filenameWithoutPath(std::string& res)
 		res = res.substr(found);
 	}
 }
+
+void SHelper::protectComma(std::string& res)
+{
+	res.insert(res.size()-1, "\\");
+	res.insert(0, "\\");
+}
+
+void SHelper::ribthree(std::string& res)
+{
+	res.erase(0, 6);
+	res.erase(res.size()-1, 1);
+	int found = res.find(',', 0);
+	while(found>-1) {
+		res[found] = ' ';
+		found = res.find(',', found);
+	}
+}
 //:~

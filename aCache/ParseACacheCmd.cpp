@@ -391,7 +391,32 @@ void ParseACache::injectSurfaceStatement(MObject& node, MString& objname, MStrin
 // rib statement
 			MString slog;
 		// Surface "/Users/jianzhang/Documents/maya/projects/default/3delight/untitled/shaders/OBJ/lambert1"			
-			slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Surface \\\"") + shader_path + fnode.name() + "\\\"\\n\"";
+			slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Surface \\\"") + shader_path + fnode.name() + "\\\"\"";
+			MGlobal::executeCommand(slog);
+// parameter list
+			MString paramlist = " ";
+			for(VariableList::iterator varit= _sl->_extns.begin(); varit != _sl->_extns.end(); ++varit) {
+					paramlist = paramlist + "\\\"";
+					paramlist = paramlist + (*varit)->type.c_str();
+					paramlist = paramlist + " ";
+					paramlist = paramlist + (*varit)->name.c_str();
+					paramlist = paramlist + "\\\" ";
+					
+					string sval = (*varit)->value;
+
+					if( (*varit)->type == "color") SHelper::ribthree(sval);
+					else if( (*varit)->type == "string" ) SHelper::protectComma(sval);
+						
+					paramlist = paramlist + "[" + sval.c_str() + "]";
+					
+					paramlist = paramlist + " ";
+			}
+			
+			slog = MString("RiArchiveRecord -m \"verbatim\" -t \" ") + paramlist + "\\n\"";
+			MGlobal::executeCommand(slog);
+// compile sl
+			slog = MString("system(\"shaderdl -o "+shader_path + fnode.name()+".sdl "+shader_path + fnode.name()+".sl\")");
+			MGlobal::displayInfo(slog);
 			MGlobal::executeCommand(slog);
 		}
 	}
