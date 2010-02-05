@@ -74,7 +74,8 @@ global proc anemoneAppendMenuItems()
 	//menuItem -l "Load MCF Mesh Cache" -c "openImportanemoneWin";
 	//menuItem -l "Add Cache Deformer" -c "openAddCacheDeformerWin";
 	//menuItem -l "Snap To Second" -c "mfc_UtilSnap";
-	//menuItem -divider true;
+	menuItem -l "SLMan" -c "source aShaderInterface.mel;anm_openAShaderManWin;";
+	menuItem -divider true;
 	menuItem -l "Export Attribute" -subMenu true;
 		menuItem -l "Attach" -c "mcf_addAttr";
 		menuItem -l "Edit" -c "mcf_editAttr";

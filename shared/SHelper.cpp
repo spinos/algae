@@ -275,6 +275,14 @@ char SHelper::isInArrayDividedBySpace(const char* handle, const char* array)
 	int start = 0;
 	int end = full.find(' ', start);
 	std::string frag;
+	// no space
+	if(end < 0) {
+		frag = array;
+		if(frag.compare(handle)==0) return 1;
+		else return 0;
+	}
+
+	
 	while(end > start) {
 		frag = full.substr(start, end - start);
 		

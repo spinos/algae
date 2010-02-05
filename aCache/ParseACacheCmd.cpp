@@ -154,55 +154,32 @@ MStatus ParseACache::doIt( const MArgList& args )
 		MString scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
 		MGlobal::executeCommand(scmd);
 	}
-/*	
-	if(fnNode.typeName() == "aShaderPiece") {
-	
-		PieceAShaderNode* pnode = (PieceAShaderNode*) fnNode.userNode();
-		XRSLPiece *ppiece = pnode->getPiece();
-		if(ppiece) {
-			if(argData.isFlagSet("-nm")) appendToResult(ppiece->getName());
-			if(argData.isFlagSet("-t")) appendToResult(ppiece->getType());
-			if(argData.isFlagSet("-pl")) {
-				char valbuf[32];
-				ParamList params = ppiece->getAttrib();
-				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
-//4 strings - name type value (float with min max) detail
-					appendToResult((*it)->name.c_str());
-					if((*it)->type == Float) {
-						appendToResult("double");
-						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->min, (*it)->max);
-						appendToResult(valbuf);
-					}
-					else if((*it)->type == Color) {
-						appendToResult("double3");
-						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
-						appendToResult(valbuf);
-					}
-					else {
-						appendToResult("string");
-						appendToResult((*it)->v.c_str());
-					}
-					if((*it)->detail == Simple) appendToResult("simple");
-					else if((*it)->detail == Slider) appendToResult("slider");
-					else if((*it)->detail == Switch) appendToResult("switch");
-					else if((*it)->detail == Connection) appendToResult("connection");
-					else appendToResult("output");
-				}
-			}
-			if(argData.isFlagSet("-pt")) {
-				MString paramName;
-				argData.getFlagArgument("-pt", 0, paramName);
-				ParamList params = ppiece->getAttrib();
-				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
-					if(strcmp((*it)->name.c_str(), paramName.asChar()) == 0) {
-						if((*it)->type == Float) appendToResult("double");
-						else if((*it)->type == Color) appendToResult("double3");
-						else appendToResult("string");
-					}
-				}
-			}
+	if (argData.isFlagSet("-f")) {
+		//MString scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"# flush here \\n\"");
+		//MGlobal::executeCommand(scmd);
+		
+		MString proj;
+		MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
+		MString scn;
+		MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
+		string sscn = scn.asChar();
+		SHelper::filenameWithoutPath(sscn);
+		MString shader_path = proj+"/rmanshaders/"+sscn.c_str();
+		
+		MString scmd = MString("getFileList -folder \"") + shader_path + "\" -filespec \"*.sl\"";
+		string srcname;
+		MStringArray srcs;
+		MGlobal::executeCommand (scmd, srcs);
+		for(int i=0; i<srcs.length(); i++) {
+			srcname = srcs[i].asChar();
+			SHelper::cutByLastDot(srcname);
+// compile sl
+			scmd = MString("system(\"shaderdl -o "+ shader_path + "/" + srcname.c_str() + ".sdl "+shader_path + "/" + srcname.c_str() +".sl\")");
+			MGlobal::displayInfo(MString("compile ")+srcs[i]);
+			MGlobal::executeCommand(scmd);
 		}
-	}*/
+	}
+
  return MS::kSuccess;
  }
 
@@ -236,56 +213,7 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 			
 			if(byobj) match_sit = getMatchedCondition(oconn, byobj, objname);
 			else match_sit = getMatchedCondition(oconn, byobj, passname);
-/*
-			int nsit = fnode.findPlug("numCondition").asInt();
-			char found_sit = 0;
-			int default_sit = 0;
-			int match_sit = 0;
-			MStringArray ctxlist;
-			
-			for(int i=0; i<nsit; i++) {
-				
-				MPlug plgcondition = fnode.findPlug("condition").elementByLogicalIndex( i, &status);
-				if(status) {
-					MString scondition = plgcondition.asString();
-					ctxlist.append(scondition);
-// empty as default situation
-					if(scondition == "") default_sit = i;
-					
-					if(!byobj) { // adapt by context
-						if(scondition == passname) {
-							found_sit = 1;
-							match_sit = i;
-						}
-					}
-					else { // adapt by objname
-						if(SHelper::isInArrayDividedBySpace(objname.asChar(), scondition.asChar())) {
-						
-							found_sit = 1;
-							match_sit = i;
-						}
-					}
-				}
-				else {
-					MGlobal::displayInfo("error on get condition");
-					return MObject::kNullObj;
-				}
-			}
-// use default if no match is found				
-			if(!found_sit) match_sit = default_sit;
-			
-// log context 	
-			MString slog;
-			if(!byobj) {
-				slog = MString("RiArchiveRecord -m \"verbatim\" -t \"# use context ") + ctxlist[match_sit] + "\\n\"";
-				MGlobal::executeCommand(slog);
-			}
-			else {
-				if(found_sit) slog = MString("RiArchiveRecord -m \"verbatim\" -t \"# found ") + objname + "\\n\"";
-				else slog = MString("RiArchiveRecord -m \"verbatim\" -t \"# not found ") + objname + ", use default\\n\"";
-				MGlobal::executeCommand(slog);
-			}
-*/
+
 // get matched plug
 			MPlug plgens = fnode.findPlug("ensemble").elementByLogicalIndex( match_sit, &status);
 			if(status) {
@@ -391,12 +319,12 @@ void ParseACache::injectSurfaceStatement(MObject& node, MString& objname, MStrin
 // rib statement
 			MString slog;
 		// Surface "/Users/jianzhang/Documents/maya/projects/default/3delight/untitled/shaders/OBJ/lambert1"			
-			slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Surface \\\"") + shader_path + fnode.name() + "\\\"\"";
-			MGlobal::executeCommand(slog);
+			slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Surface \\\"") + shader_path + fnode.name() + "\\\" ";
+			//MGlobal::executeCommand(slog);
 // parameter list
 			MString paramlist = " ";
 			for(VariableList::iterator varit= _sl->_extns.begin(); varit != _sl->_extns.end(); ++varit) {
-					paramlist = paramlist + "\\\"";
+					paramlist = paramlist + "\\\" ";
 					paramlist = paramlist + (*varit)->type.c_str();
 					paramlist = paramlist + " ";
 					paramlist = paramlist + (*varit)->name.c_str();
@@ -411,13 +339,10 @@ void ParseACache::injectSurfaceStatement(MObject& node, MString& objname, MStrin
 					
 					paramlist = paramlist + " ";
 			}
-			
-			slog = MString("RiArchiveRecord -m \"verbatim\" -t \" ") + paramlist + "\\n\"";
+			//MGlobal::displayInfo(paramlist);
+			slog = slog + paramlist + "\\n\"";
 			MGlobal::executeCommand(slog);
-// compile sl
-			slog = MString("system(\"shaderdl -o "+shader_path + fnode.name()+".sdl "+shader_path + fnode.name()+".sl\")");
-			MGlobal::displayInfo(slog);
-			MGlobal::executeCommand(slog);
+
 		}
 	}
 }
