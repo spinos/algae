@@ -41,7 +41,7 @@ MSyntax CheckAShader::newSyntax()
 	syntax.addFlag("-t", "-type", MSyntax::kString);
 	syntax.addFlag("-pl", "-paramList", MSyntax::kString);
 	syntax.addFlag("-pt", "-paramType", MSyntax::kString);
-	syntax.addFlag("-ej", "-externaljob", MSyntax::kString);
+	syntax.addFlag("-ic", "-icon", MSyntax::kString);
 	syntax.addFlag("-fs", "-framestart", MSyntax::kLong );
 	syntax.addFlag("-fe", "-frameend", MSyntax::kLong );
 	
@@ -80,6 +80,7 @@ MStatus CheckAShader::doIt( const MArgList& args )
 		if(ppiece) {
 			if(argData.isFlagSet("-nm")) appendToResult(ppiece->getName());
 			if(argData.isFlagSet("-t")) appendToResult(ppiece->getType());
+			if(argData.isFlagSet("-ic")) appendToResult(ppiece->getIcon());
 			if(argData.isFlagSet("-pl")) {
 				char valbuf[32];
 				ParamList params = ppiece->getAttrib();

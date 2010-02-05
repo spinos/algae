@@ -10,7 +10,8 @@ global proc string anm_getMasterPath()
 global proc string[] anm_getSurfaceFiles()
 {
 	string $res[];
-	$res[0] = "foo";
+	$res[0] = "Constant"; $res[1] = "anm_Constant.xpm";
+	$res[2] = "foo"; $res[3] = "";
 	return $res;
 }
 
@@ -31,7 +32,29 @@ global int $ANM_CURItem = 0;
 global string $ANM_PreservedItems[];
 
 /*
-get upstream connections
+get dowstream connect attrs
+*/
+
+global proc anm_downstreamConnAttrs( string $connected[], string $nodedotattr)
+{
+	clear($connected);
+	int $i = 0;
+	
+	string $conn[] =`listConnections -p on -scn on -d on -s off $nodedotattr`;
+	
+	string $aconn;
+	string $nt;
+	for($aconn in $conn) {
+		$nt = `nodeType $aconn`;
+		if($nt != "transform" && $nt != "aCacheMesh") {
+			$connected[$i] = $aconn;
+			$i++;
+		}
+	}
+}
+
+/*
+get downstream connections
 */
 
 global proc anm_downstreamConn( string $connected[], string $node)
@@ -688,16 +711,18 @@ proc anm_shoPiece(string $name)
     -columnAttach 5 "both"  0
     -ann $name`;
     
-    string $img = "anm_surface.xpm";
+    //string $img = "anm_surface.xpm";
     string $node =`rowLayout -q -ann $anm_piecerow`;
-    string $diagsh[] = `aShaderDiagnose -n $node -t 1`;
+    string $diagsh[] = `aShaderDiagnose -n $node -ic 1`;
 		
-    if($diagsh[0]=="color") $img = "anm_color.xpm";
+    //if($diagsh[0]=="color") $img = "anm_color.xpm";
+    //else if($diagsh[0]=="float") $img = "anm_float.xpm";
+    //else $img = "anm_string.xpm";
     
     iconTextButton -ann $anm_piecerow 
     		-style "iconOnly" 
     		-height 36
-    		-image1 $img 
+    		-image1 $diagsh[0] 
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
@@ -1655,19 +1680,20 @@ string $row = `rowColumnLayout -numberOfColumns 5
         
         frameLayout -label "Surface" -labelAlign "center"
                 -borderStyle "in" -collapsable 1 ;
-                
-                string $surfs[] = `anm_getSurfaceFiles`;
-                string $asurf;
-                
-                
+
         columnLayout;
         
-		for($asurf in $surfs) {
+        	string $surfs[] = `anm_getSurfaceFiles`;
+                int $surfit;
+                string $surfimg;
+		for($surfit = 0; $surfit<size($surfs); $surfit += 2) {
+			$surfimg = "anm_surface.xpm";
+			if($surfs[$surfit+1] != "") $surfimg = $surfs[$surfit+1];
 			iconTextButton -width 100 -height 36
 				-style "iconAndTextHorizontal" 
-				-image1 "anm_surface.xpm" 
-				-l $asurf 
-				-c ("anm_createPiece(\""+$asurf+"\")");
+				-image1 $surfimg
+				-l $surfs[$surfit] 
+				-c ("anm_createPiece(\""+$surfs[$surfit]+"\")");
 		}
         	setParent..;
         setParent..;

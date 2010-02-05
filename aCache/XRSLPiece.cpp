@@ -16,6 +16,7 @@ XRSLPiece::~XRSLPiece() {}
 
 char XRSLPiece::load(const char* filename)
 {
+	m_icon = "anm_default.xpm";
 	m_sl_path = filename;
 	
 	ZXMLDoc doc;
@@ -27,7 +28,10 @@ char XRSLPiece::load(const char* filename)
 	doc.setChildren();
 	
 	while(doc.isLastNode() != 1) {
-		if(doc.checkNodeName("source") == 1) {
+		if(doc.checkNodeName("icon") == 1) {
+			m_icon = doc.getNodeContent();
+		}
+		else if(doc.checkNodeName("source") == 1) {
 			m_source = doc.getNodeContent();
 			//printf(m_source.c_str());
 		}
