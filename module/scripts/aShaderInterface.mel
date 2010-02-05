@@ -31,6 +31,68 @@ global int $ANM_CURItem = 0;
 global string $ANM_PreservedItems[];
 
 /*
+get upstream connections
+*/
+
+global proc anm_downstreamConn( string $connected[], string $node)
+{
+	clear($connected);
+	int $i = 0;
+	string $outattr = $node + ".output";
+	
+	string $conn[] =`listConnections -scn on -d on -s off $outattr`;
+	
+	string $aconn;
+	string $nt;
+	for($aconn in $conn) {
+		$nt = `nodeType $aconn`;
+		if($nt != "transform" && $nt != "aCacheMesh") {
+			$connected[$i] = $aconn;
+			$i++;
+		}
+	}
+
+	if(`attributeExists "outputC" $node`) {
+		$outattr = $node + ".outputC";
+		$conn =`listConnections -scn on -d on -s off $outattr`;
+	
+		for($aconn in $conn) {
+			$nt = `nodeType $aconn`;
+			if($nt != "transform" && $nt != "aCacheMesh") {
+				$connected[$i] = $aconn;
+				$i++;
+			}
+		}
+	}
+	
+	if(`attributeExists "outputS" $node`) {
+		$outattr = $node + ".outputS";
+		$conn =`listConnections -scn on -d on -s off $outattr`;
+	
+		for($aconn in $conn) {
+			$nt = `nodeType $aconn`;
+			if($nt != "transform" && $nt != "aCacheMesh") {
+				$connected[$i] = $aconn;
+				$i++;
+			}
+		}
+	}
+}
+
+/*
+go up stream popup
+*/
+global proc anm_popupGoUpMenu(string $name)
+{
+	string $conn[];
+	anm_downstreamConn($conn, $name);
+	string $aconn;
+popupMenu;
+	for($aconn in $conn) menuItem -l $aconn -c ("anm_updateAttrib(\"" + $aconn + "\")") ;
+			
+}
+
+/*
 check loop back
 b-->a-x->b
 */
@@ -54,7 +116,7 @@ global proc int anm_checkAnyLoopBack(string $a, string $b)
 		if($res == 1) return 1;
 	}
 	
-	if($tb == "aShaderVariable" || $tb == "aShaderAdaptVariable") {
+	if($tb == "aShaderPiece" || $tb == "aShaderVariable" || $tb == "aShaderAdaptVariable") {
 		
 		$outattr = $b + ".outputC";
 		
@@ -565,6 +627,8 @@ proc anm_shoAdaptEnsemble(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
+    		anm_popupGoUpMenu($name);
+    		
     string $anm_piecetx = `textField -w 125 -text $name`;
     button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
@@ -596,6 +660,8 @@ proc anm_shoEnsemble(string $name)
     		-image1 "anm_ensemble.xpm" 
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
+    		
+    		anm_popupGoUpMenu($name);
     		
     string $anm_piecetx = `textField -w 125 -text $name`;
     button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
@@ -635,6 +701,8 @@ proc anm_shoPiece(string $name)
     		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
     		-dgc anm_dragcallbackPiece;
     		
+    		 anm_popupGoUpMenu($name);
+    		
     string $anm_piecetx = `textField -w 125 -text $name`;
     //button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
     //button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
@@ -673,6 +741,8 @@ proc anm_shoVariable(string $name)
     		-image1 $img
     		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
     		-dgc anm_dragcallbackPiece;
+    		
+    		anm_popupGoUpMenu($name);
     		
     string $anm_vartx = `textField -w 125 -text $name`;
     button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
@@ -722,6 +792,8 @@ proc anm_shoAdaptVariable(string $name)
     		-image1 $img 
     		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
     		-dgc anm_dragcallbackPiece;
+    		
+    		anm_popupGoUpMenu($name);
     		
     string $anm_vartx = `textField -w 125 -text $name`;
     button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
@@ -1110,9 +1182,11 @@ list piece attrib
 proc anm_listPieceAttrib(string $name)
 {
 	string $theframe = `frameLayout -p anm_curattribclm
-		-label $name -labelAlign "bottom"
+		-label $name 
+		-labelAlign "bottom"
                 -borderStyle "in"
                 -collapsable 1`;
+			
         columnLayout;
         	string $diagsh[] = `aShaderDiagnose -n $name -nm 1 -t 1`;
         	textFieldGrp -cw 1 50 -cw 2 100 -height 32 -l "name" -text $diagsh[0] -ed off;
@@ -1716,11 +1790,9 @@ string $row = `rowColumnLayout -numberOfColumns 5
         anm_updateExisting();
         setParent..;
     setParent..;    
-        
 	scrollLayout;
         columnLayout anm_curattribclm;
-        
-        setParent..;
+        	setParent..;
     setParent..;
 	
 //row begin
