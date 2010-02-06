@@ -11,7 +11,7 @@ global proc string[] anm_getSurfaceFiles()
 {
 	string $res[];
 	$res[0] = "Constant"; $res[1] = "anm_Constant.xpm";
-	$res[2] = "foo"; $res[3] = "";
+	$res[2] = "ImageFile"; $res[3] = "anm_SImageFile.xpm";
 	return $res;
 }
 
@@ -279,14 +279,13 @@ global proc string anm_aShaderGetConnected( string $attr )
 }
 
 /*
-select and list attrib
+select item and list attrib
 */
 
-global proc anm_shopieceinae(string $name)
+global proc anm_SelnListItem(string $name)
 {
-	string $piece = `rowLayout -q -ann $name`;
-	select -r $piece;
-	anm_updateAttrib($piece);
+	select -r $name;
+	anm_updateAttrib($name);
 }
 
 /*
@@ -647,7 +646,7 @@ proc anm_shoAdaptEnsemble(string $name)
     		-style "iconOnly" 
     		-image1 $img
     		-height 36
-    		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
+    		-c ("anm_SelnListItem(\"" + $name + "\")")
     		-dgc anm_dragcallbackPiece;
     		
     		anm_popupGoUpMenu($name);
@@ -681,7 +680,7 @@ proc anm_shoEnsemble(string $name)
     		-height 36
     		-style "iconOnly" 
     		-image1 "anm_ensemble.xpm" 
-    		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
+    		-c ("anm_SelnListItem(\"" + $name + "\")")
     		-dgc anm_dragcallbackPiece;
     		
     		anm_popupGoUpMenu($name);
@@ -723,7 +722,7 @@ proc anm_shoPiece(string $name)
     		-style "iconOnly" 
     		-height 36
     		-image1 $diagsh[0] 
-    		-c ("anm_shopieceinae(\"" + $anm_piecerow + "\")")
+    		-c ("anm_SelnListItem(\"" + $name + "\")")
     		-dgc anm_dragcallbackPiece;
     		
     		 anm_popupGoUpMenu($name);
@@ -740,7 +739,7 @@ proc anm_shoPiece(string $name)
 }
 
 /*
-add variable line
+sho variable line
 */
 
 proc anm_shoVariable(string $name)
@@ -764,7 +763,7 @@ proc anm_shoVariable(string $name)
     		-style "iconOnly" 
     		-height 36
     		-image1 $img
-    		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
+    		-c ("anm_SelnListItem(\"" + $name + "\")")
     		-dgc anm_dragcallbackPiece;
     		
     		anm_popupGoUpMenu($name);
@@ -778,7 +777,7 @@ proc anm_shoVariable(string $name)
 }
 
 /*
-add adapt variable line
+sho adapt variable line
 */
 
 proc anm_shoAdaptVariable(string $name)
@@ -815,7 +814,7 @@ proc anm_shoAdaptVariable(string $name)
     		-style "iconOnly"
     		-height 36
     		-image1 $img 
-    		-c ("anm_shopieceinae(\"" + $anm_varrow + "\")")
+    		-c ("anm_SelnListItem(\"" + $name + "\")")
     		-dgc anm_dragcallbackPiece;
     		
     		anm_popupGoUpMenu($name);
@@ -1058,6 +1057,22 @@ global proc anm_listVariableAttrib(string $name)
         		-cw 1 70
         		-cw 2 70
         		-text $handle;
+        		
+        	textFieldGrp 
+        		-ed off
+        		-l " "
+        		-cw 1 10
+        		-cw 2 70
+        		-text `getAttr ($name+".access")`;
+        	
+        	string $dtl = `getAttr ($name+".detail")`;
+        	if($dtl != "nil") textFieldGrp 
+        		-ed off
+        		-l " "
+        		-cw 1 10
+        		-cw 2 70
+        		-text $dtl;
+        		
 		if($handle == "float") {
 			 attrControlGrp -attribute ($name+".value");
 		}
@@ -1332,73 +1347,61 @@ global proc anm_createPiece(string $name)
 }
 
 /*
-create variable
+create variable with handle, acess, and detail
 */
 
-global proc anm_createVariable(int $handle)
+global proc anm_createVariable(string $handle, string $access, string $detail)
 {
 	string $dummy = `createNode -n "dummy" transform`;
-	string $node;
-	if($handle==0) {
-		$node =`createNode -n "fvariable" aShaderVariable`;
-		setAttr -type "string" ($node+".handle") "float";
+	
+	string $defnm = "fvar";
+	if($handle == "color") $defnm = "cvar";
+	else if($handle == "string") $defnm = "svar";
+	
+	string $node = `createNode -n $defnm aShaderVariable`;
+	setAttr -type "string" ($node+".handle") $handle;
+	setAttr -type "string" ($node+".access") $access;
+	setAttr -type "string" ($node+".detail") $detail;
+	
+	if($handle == "float") {
 		addAttr -ln "value" -attributeType double $node;
 		setAttr ($node +".value") 1.0;
 	}
-	else if($handle==1) {
-		$node =`createNode -n "cvariable" aShaderVariable`;
-		setAttr -type "string" ($node+".handle") "color";
+	else if($handle == "color") {
 		addAttr -ln "value" -attributeType double3 $node;
 		addAttr -ln ("valueX") -attributeType double -p "value" $node;
 		addAttr -ln ("valueY") -attributeType double -p "value" $node;
 		addAttr -ln ("valueZ") -attributeType double -p "value" $node;
 		setAttr ($node+".value") -type double3 1.0 1.0 1.0;
 	}
-	else if($handle==2) {
-		$node =`createNode -n "svariable" aShaderVariable`;
-		setAttr -type "string" ($node+".handle") "string";
+	else {
 		addAttr -ln "value" -dt "string" $node;
 	}
-	else if($handle==3) {
-		string $node =`createNode -n "cvarbyctx" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "color";
-		setAttr -type "string" ($node+".opt") "context";
-	}
-	else if($handle==4) {
-		string $node =`createNode -n "cvarbyobj" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "color";
-		setAttr -type "string" ($node+".opt") "objname";
-	}
-	else if($handle==5) {
-		$node =`createNode -n "fvarbyctx" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "float";
-		setAttr -type "string" ($node+".opt") "context";
-	}
-	else if($handle==6) {
-		$node =`createNode -n "fvarbyobj" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "float";
-		setAttr -type "string" ($node+".opt") "objname";
-	}
-	else if($handle==7) {
-		$node =`createNode -n "svarbyctx" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "string";
-		setAttr -type "string" ($node+".opt") "context";
-	}
-	else if($handle==8) {
-		$node =`createNode -n "svarbyobj" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "string";
-		setAttr -type "string" ($node+".opt") "objname";
-	}
-	else if($handle==9) {
-		$node =`createNode -n "cmbcvar" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "color";
-		setAttr -type "string" ($node+".opt") "combine";
-	}
-	else if($handle==10) {
-		$node =`createNode -n "cmbfvar" aShaderAdaptVariable`;
-		setAttr -type "string" ($node+".handle") "float";
-		setAttr -type "string" ($node+".opt") "combine";
-	}
+	
+	connectAttr -f ($node + ".output") ($dummy+".translateX");
+	anm_updateExisting;
+}
+
+/*
+create adapt variable with handle and operation
+*/
+
+global proc anm_createAdaptVariable(string $handle, string $operation)
+{
+	string $dummy = `createNode -n "dummy" transform`;
+	string $defnm;
+	if($handle=="float") $defnm = "fvar";
+	else if($handle == "color") $defnm = "cvar";
+	else $defnm = "svar";
+	
+	if($operation=="context") $defnm += "bctx";
+	else if($operation == "objname") $defnm += "bobj";
+	else $defnm += "comb";
+	
+	string $node = `createNode -n $defnm aShaderAdaptVariable`;
+	setAttr -type "string" ($node+".handle") $handle;
+	setAttr -type "string" ($node+".opt") $operation;
+
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
 }
@@ -1725,25 +1728,25 @@ string $row = `rowColumnLayout -numberOfColumns 5
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableC.xpm" 
         		-l "Variable"
-        		-c "anm_createVariable(1)";
+        		-c "anm_createVariable(\"color\",\"uniform\",\"nil\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCtxC.xpm" 
         		-height 36 
         		-l "byContext"
-        		-c "anm_createVariable(3)";
+        		-c "anm_createAdaptVariable(\"color\",\"context\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableObjC.xpm" 
         		-height 36
         		-l "byObjname"
-        		-c "anm_createVariable(4)";
+        		-c "anm_createAdaptVariable(\"color\",\"objname\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCmbC.xpm" 
         		-height 36 
         		-l "Combine"
-        		-c "anm_createVariable(9)";
+        		-c "anm_createAdaptVariable(\"color\",\"combine\")";
         
         	setParent..;
         setParent..;
@@ -1757,25 +1760,25 @@ string $row = `rowColumnLayout -numberOfColumns 5
         		-image1 "anm_variableF.xpm" 
         		-height 36
         		-l "Variable"
-        		-c "anm_createVariable(0)";
+        		-c "anm_createVariable(\"float\",\"uniform\",\"nil\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCtxF.xpm" 
         		-height 36
         		-l "byContext"
-        		-c "anm_createVariable(5)";
+        		-c "anm_createAdaptVariable(\"float\",\"context\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableObjF.xpm" 
         		-height 36 
         		-l "byObjname"
-        		-c "anm_createVariable(6)";
+        		-c "anm_createAdaptVariable(\"float\",\"objname\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCmbF.xpm" 
         		-height 36
         		-l "Combine"
-        		-c "anm_createVariable(10)";
+        		-c "anm_createAdaptVariable(\"float\",\"combine\")";
         
         	setParent..;
         setParent..;
@@ -1789,19 +1792,19 @@ string $row = `rowColumnLayout -numberOfColumns 5
         		-image1 "anm_variableS.xpm" 
         		-height 36 
         		-l "Variable"
-        		-c "anm_createVariable(2)";
+        		-c "anm_createVariable(\"string\",\"uniform\",\"nil\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCtxS.xpm" 
         		-height 36
         		-l "byContext"
-        		-c "anm_createVariable(7)";
+        		-c "anm_createAdaptVariable(\"string\",\"context\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableObjS.xpm" 
         		-height 36
         		-l "byObjname"
-        		-c "anm_createVariable(8)";
+        		-c "anm_createAdaptVariable(\"string\",\"objname\")";
         
         	setParent..;
         setParent..;

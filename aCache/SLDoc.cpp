@@ -25,6 +25,11 @@ char SLDoc::checkExistingBlock(string& name)
 	return 0;
 }
 
+void SLDoc::addVariable(SLVariable* var)
+{
+	_vars.push_back(var);
+}
+
 void SLDoc::addVariable(const char* type, const char* name, const char* value)
 {
 	SLVariable* var = new SLVariable();
@@ -32,16 +37,6 @@ void SLDoc::addVariable(const char* type, const char* name, const char* value)
 	var->name = name;
 	var->value = value;
 	_vars.push_back(var);
-}
-
-void SLDoc::addOutput(const char* type, const char* name)
-{
-	SLVariable* var = new SLVariable();
-	var->type = type;
-	var->name = name;
-	if(type == "float") var->value = "0.0";
-	else var->value = "color( 0.0, 0.0, 0.0 )";
-	_outputs.push_back(var);
 }
 
 void SLDoc::addBlock(SLBlock* blk)

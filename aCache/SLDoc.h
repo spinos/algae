@@ -21,7 +21,9 @@ struct SLVariable
 	{
 		if(type == "float") value = "0.0";
 		else if(type == "color") value = "color( 0.0, 0.0, 0.0 )";
-		else value = "nil";
+		else if(type == "string") value = "nil";
+		else if(type == "vector") value = "vector( 0.0, 0.0, 0.0 )";
+		else if(type == "point") value = "point( 0.0, 0.0, 0.0 )";
 	}
 };
 
@@ -60,11 +62,12 @@ public:
 	void setMain(const char* name) {_main = name;}
 
 	void addVariable(const char* type, const char* name, const char* value);
-	void addOutput(const char* type, const char* name);
+	void addVariable(SLVariable* var);
 	void addBlock(SLBlock* blk);
 	void save();
 	
 	VariableList _extns;
+	VariableList _outputs;
 	
 	char checkExistingExternal(string& name);
 	char checkExistingBlock(string& name);
@@ -84,6 +87,6 @@ private:
 	void separate();
 	
 	VariableList _vars;
-	VariableList _outputs;
+	
 	BlockList _blocks;
 };

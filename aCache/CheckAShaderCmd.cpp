@@ -87,20 +87,31 @@ MStatus CheckAShader::doIt( const MArgList& args )
 				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
 //4 strings - name type value (float with min max) detail
 					appendToResult((*it)->name.c_str());
-					if((*it)->type == Float) {
+					if((*it)->type == RSLFloat) {
 						appendToResult("double");
 						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->min, (*it)->max);
 						appendToResult(valbuf);
 					}
-					else if((*it)->type == Color) {
+					else if((*it)->type == RSLColor) {
 						appendToResult("double3");
 						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
 						appendToResult(valbuf);
 					}
-					else {
+					else if((*it)->type == RSLString) {
 						appendToResult("string");
 						appendToResult((*it)->v.c_str());
 					}
+					else if((*it)->type == RSLVector) {
+						appendToResult("double3");
+						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
+						appendToResult(valbuf);
+					}
+					else if((*it)->type == RSLPoint) {
+						appendToResult("double3");
+						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
+						appendToResult(valbuf);
+					}
+					
 					if((*it)->detail == Simple) appendToResult("simple");
 					else if((*it)->detail == Slider) appendToResult("slider");
 					else if((*it)->detail == Switch) appendToResult("switch");
@@ -114,9 +125,11 @@ MStatus CheckAShader::doIt( const MArgList& args )
 				ParamList params = ppiece->getAttrib();
 				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
 					if(strcmp((*it)->name.c_str(), paramName.asChar()) == 0) {
-						if((*it)->type == Float) appendToResult("double");
-						else if((*it)->type == Color) appendToResult("double3");
-						else appendToResult("string");
+						if((*it)->type == RSLFloat) appendToResult("double");
+						else if((*it)->type == RSLColor) appendToResult("double3");
+						else if((*it)->type == RSLString) appendToResult("string");
+						else if((*it)->type == RSLVector) appendToResult("double3");
+						else if((*it)->type == RSLPoint) appendToResult("double3");
 					}
 				}
 			}

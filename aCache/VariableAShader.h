@@ -15,6 +15,8 @@ public:
 
 public:
 	static  MObject		ahandle;
+	static  MObject		adetail;
+	static  MObject		aaccess;
 	static  MObject		output;
 	static  MObject		outputC;
 	static  MObject		outputS;        // The output value.

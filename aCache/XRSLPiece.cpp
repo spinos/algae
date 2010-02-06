@@ -41,18 +41,27 @@ char XRSLPiece::load(const char* filename)
 			aparam->min = 0.f;
 			aparam->max = 1.f;
 			aparam->name = doc.getAttribByName("name");
-			//printf(aparam->name.c_str());
-			if(strcmp(doc.getAttribByName("type"), "float") == 0) {
-				aparam->type = Float;
+			
+			const char* typestr = doc.getAttribByName("type");
+			if(strcmp(typestr, "float") == 0) {
+				aparam->type = RSLFloat;
 				aparam->r = doc.getFloatAttribByName("value");
 			}
-			else if(strcmp(doc.getAttribByName("type"), "color") == 0) {
-				aparam->type = Color;
+			else if(strcmp(typestr, "color") == 0) {
+				aparam->type = RSLColor;
 				doc.getFloat3AttribByName("value", aparam->r, aparam->g, aparam->b);
 			}
-			else {
-				aparam->type = String;
+			else if(strcmp(typestr, "string") == 0) {
+				aparam->type = RSLString;
 				aparam->v = doc.getAttribByName("value");
+			}
+			else if(strcmp(typestr, "vector") == 0) {
+				aparam->type = RSLVector;
+				doc.getFloat3AttribByName("value", aparam->r, aparam->g, aparam->b);
+			}
+			else if(strcmp(typestr, "point") == 0) {
+				aparam->type = RSLPoint;
+				doc.getFloat3AttribByName("value", aparam->r, aparam->g, aparam->b);
 			}
 			
 			if(doc.isEmpty() != 1) {

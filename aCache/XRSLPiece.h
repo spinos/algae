@@ -21,9 +21,11 @@ enum XRSLParameterDetail {
 };
 
 enum XRSLParameterType {
-	Float = 0,
-	Color = 1,
-	String = 2
+	RSLFloat = 0,
+	RSLColor = 1,
+	RSLString = 2,
+	RSLVector = 3,
+	RSLPoint = 4
 };
 
 struct XRSLParameter
