@@ -9,9 +9,9 @@
 
 #include "SLDoc.h"
 
-char SLDoc::checkExistingExternal(string& name)
+char SLDoc::checkExistingArgs(string& name)
 {
-	for(VariableList::iterator varit= _extns.begin(); varit != _extns.end(); ++varit) {
+	for(VariableList::iterator varit= _args.begin(); varit != _args.end(); ++varit) {
 			if((*varit)->name == name) return 1;
 	}
 	return 0;
@@ -25,17 +25,13 @@ char SLDoc::checkExistingBlock(string& name)
 	return 0;
 }
 
-void SLDoc::addVariable(SLVariable* var)
+void SLDoc::addArg(SLVariable* var)
 {
-	_vars.push_back(var);
+	if(!checkExistingArgs(var->name)) _args.push_back(var);
 }
 
-void SLDoc::addVariable(const char* type, const char* name, const char* value)
+void SLDoc::addVariable(SLVariable* var)
 {
-	SLVariable* var = new SLVariable();
-	var->type = type;
-	var->name = name;
-	var->value = value;
 	_vars.push_back(var);
 }
 
@@ -56,15 +52,23 @@ void SLDoc::save()
 		emitSpace();
 		_file.write((*it)->name.c_str(), (*it)->name.length());
 		parenthesisBegin();
+		
 // declare external vars
-		for(VariableList::iterator varit= (*it)->_extns.begin(); varit != (*it)->_extns.end(); ++varit) {
+		for(VariableList::iterator varit= (*it)->_args.begin(); varit != (*it)->_args.end(); ++varit) {
+			if((*varit)->access != "uniform") {
+				_file.write((*varit)->access.c_str(), (*varit)->access.length());
+				emitSpace();
+			}
+			
 			_file.write((*varit)->type.c_str(), (*varit)->type.length());
 			emitSpace();
 			_file.write((*varit)->name.c_str(), (*varit)->name.length());
 			emitEOL();
 		}
+		
 		parenthesisEnd();
 		braceBegin();
+		
 		if(!(*it)->no_var) {
 			for(VariableList::iterator varit= (*it)->_vars.begin(); varit != (*it)->_vars.end(); ++varit) {
 				_file.write((*varit)->type.c_str(), (*varit)->type.length());
@@ -76,6 +80,7 @@ void SLDoc::save()
 			}
 		}
 		_file.write((*it)->body.c_str(), (*it)->body.length());
+		
 		braceEnd();
 		separate();
 	}
@@ -85,7 +90,12 @@ void SLDoc::save()
 	_file.write(_name.c_str(), _name.length());
 	parenthesisBegin();
 // declare external vars
-	for(VariableList::iterator it= _extns.begin(); it != _extns.end(); ++it) {
+	for(VariableList::iterator it= _args.begin(); it != _args.end(); ++it) {
+		if((*it)->access != "uniform") {
+			_file.write((*it)->access.c_str(), (*it)->access.length());
+			emitSpace();
+		}
+			
 		_file.write((*it)->type.c_str(), (*it)->type.length());
 		emitSpace();
 		_file.write((*it)->name.c_str(), (*it)->name.length());
@@ -93,16 +103,7 @@ void SLDoc::save()
 		_file.write((*it)->value.c_str(), (*it)->value.length());
 		emitEOL();
 	}
-// declare output
-	for(VariableList::iterator it= _outputs.begin(); it != _outputs.end(); ++it) {
-		_file.write("output ", 7);
-		_file.write((*it)->type.c_str(), (*it)->type.length());
-		emitSpace();
-		_file.write((*it)->name.c_str(), (*it)->name.length());
-		emitEquals();
-		_file.write((*it)->value.c_str(), (*it)->value.length());
-		emitEOL();
-	}
+
 	parenthesisEnd();
 	braceBegin();
 // declare internal vars

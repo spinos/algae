@@ -16,6 +16,7 @@ struct SLVariable
 	string name;
 	string value;
 	string type;
+	string access;
 	
 	void setDefault() 
 	{
@@ -36,15 +37,25 @@ struct SLBlock
 	string name;
 	string body;
 	VariableList _vars;
-	VariableList _extns;
+	VariableList _args;
 	char no_var;
 	
-	char checkExistingExternal(string& name)
+	char checkExistingArgs(string& name)
 	{
-		for(VariableList::iterator varit= _extns.begin(); varit != _extns.end(); ++varit) {
-				if((*varit)->name == name) return 1;
+		for(VariableList::iterator it= _args.begin(); it != _args.end(); ++it) {
+				if((*it)->name == name) return 1;
 		}
 		return 0;
+	}
+	
+	void addInternal(SLVariable *var)
+	{
+		_vars.push_back(var);
+	}
+	
+	void addArg(SLVariable *var)
+	{
+		if(!checkExistingArgs(var->name)) _args.push_back(var);
 	}
 };
 
@@ -61,16 +72,16 @@ public:
 	void setType(const char* name) {_type = name;}
 	void setMain(const char* name) {_main = name;}
 
-	void addVariable(const char* type, const char* name, const char* value);
 	void addVariable(SLVariable* var);
 	void addBlock(SLBlock* blk);
 	void save();
 	
-	VariableList _extns;
-	VariableList _outputs;
-	
-	char checkExistingExternal(string& name);
+	void addArg(SLVariable* var);
+
+	char checkExistingArgs(string& name);
 	char checkExistingBlock(string& name);
+	
+	VariableList _args;
 private:
 	string _path;
 	string _name;

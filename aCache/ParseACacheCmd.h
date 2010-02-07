@@ -32,11 +32,11 @@ private:
 	MStatus parseArgs ( const MArgList& args );
 	MObject getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname);
 	void injectShaderStatement(MObject& node, MString& objname, MString& passname, int type);
-	MString funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& dwnextvars);
+	MString funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& downstreamargs);
 	MString valueVarNode(MObject& node);
-	int getMatchedCondition(MObject& node, char byobj, MString& name);
-	void getValueFromNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var);
-	void getValueFromNode(MObject& node, SLVariable* var);
+	int getMatchedCondition(MObject& node, MString& name);
+	void valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var);
+	void valueFromVarNode(MObject& node, SLVariable* var, int& access);
 	void convertType(int type, SLVariable* var);
 
 	SLDoc* _sl;

@@ -41,11 +41,12 @@ MSyntax ParseACache::newSyntax()
 	syntax.addFlag("-r", "-remove");
 	syntax.addFlag("-e", "-emit", MSyntax::kString);
 	syntax.addFlag("-f", "-flush");
+	
 	syntax.addFlag("-c", "-contains");
 	syntax.addFlag("-l", "-list" );
 
-	syntax.setObjectType(MSyntax::kStringObjects, 0, 1);
-
+	//syntax.setObjectType(MSyntax::kStringObjects, 0, 1);
+syntax.setObjectType(MSyntax::kSelectionList, 0, 1); 
 	return syntax;
 }
 
@@ -151,8 +152,9 @@ MStatus ParseACache::doIt( const MArgList& args )
 		MString sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
 		MString scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
 		MGlobal::executeCommand(scmd);
+
 	}
-	if (argData.isFlagSet("-f")) {
+	/*else if (argData.isFlagSet("-l")) {
 		
 		MString proj;
 		MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
@@ -174,7 +176,7 @@ MStatus ParseACache::doIt( const MArgList& args )
 			MGlobal::displayInfo(MString("compile ")+srcs[i]);
 			MGlobal::executeCommand(scmd);
 		}
-	}
+	}*/
 
  return MS::kSuccess;
  }
@@ -207,8 +209,8 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 			
 			int match_sit = 0;
 			
-			if(byobj) match_sit = getMatchedCondition(oconn, byobj, objname);
-			else match_sit = getMatchedCondition(oconn, byobj, passname);
+			if(byobj) match_sit = getMatchedCondition(oconn, objname);
+			else match_sit = getMatchedCondition(oconn, passname);
 
 // get matched plug
 			MPlug plgens = fnode.findPlug("ensemble").elementByLogicalIndex( match_sit, &status);
@@ -252,144 +254,50 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 			_sl->setMain(ppiece->getBody());
 			
 // variables, if no connections, use values from node
-			//char valbuf[256];
 			ParamList params = ppiece->getAttrib();
 			for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
-				if((*it)->detail == Output) {
-// output
-					SLVariable* var = new SLVariable();
-					var->name = (*it)->name;
-					/*switch((*it)->type) {
-						case RSLFloat:
-							var->type = "float";
-							break;
-						case RSLColor:
-							var->type = "color";
-							break;
-						case RSLVector:
-							var->type = "vector";
-							break;
-						case RSLPoint:
-							var->type = "point";
-							break;
-						default:
-							var->type = "string";
-							break;
-					}*/
-					convertType((*it)->type, var);
-					var->setDefault();
-					_sl->_outputs.push_back(var);
-				}
-// todo varying
-				else { 
-// standard
-					SLVariable* var = new SLVariable();
-					var->name = (*it)->name;
-					convertType((*it)->type, var);
+				
+				SLVariable* var = new SLVariable();
+				var->name = (*it)->name;
+				convertType((*it)->type, var);
+				var->setDefault();
+				
+				if((*it)->access != Output) {
+
 					MPlug pgattr = fnode.findPlug((*it)->name.c_str());
 					
 					MObject oconn;
 					AHelper::getConnectedNode(oconn, pgattr);
-					if(oconn == MObject::kNullObj) { 
-					/*
-// no connection
-						float x, y, z;
-// value from node 
-						switch((*it)->type) {
-							case RSLFloat:
-								var->type = "float";
-								x = pgattr.asFloat();
-								sprintf(valbuf, "%f", x);
-								break;
-							case RSLColor:
-								var->type = "color";
-								x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-								y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-								z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-								sprintf(valbuf, "color( %f, %f, %f )", x, y, z);
-								break;
-							case RSLVector:
-								var->type = "vector";
-								x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-								y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-								z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-								sprintf(valbuf, "vector( %f, %f, %f )", x, y, z);
-								break;
-							case RSLPoint:
-								var->type = "point";
-								x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-								y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-								z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-								sprintf(valbuf, "point( %f, %f, %f )", x, y, z);
-								break;
-							default:
-								var->type = "string";
-								MString sv = pgattr.asString();
-								sprintf(valbuf, "\"%s\"", sv.asChar());
-								break;
-						}
-						
-						var->value = valbuf;
-						*/
-						
-						getValueFromNode((*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
-
-						
-					/*
-						if((*it)->type == RSLFloat) {
-							float x = pgattr.asFloat();
-							sprintf(valbuf, "%f", x);
-							_sl->addVariable("float", (*it)->name.c_str(), valbuf);
-						}
-						else if((*it)->type == RSLColor) {
-							float x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-							float y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-							float z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-							sprintf(valbuf, "color( %f, %f, %f )", x, y, z);
-							_sl->addVariable("color", (*it)->name.c_str(), valbuf);
-						}
-						else if((*it)->type == RSLString) {
-							MString sv = pgattr.asString();
-							sprintf(valbuf, "\"%s\"", sv.asChar());
-							_sl->addVariable("string", (*it)->name.c_str(), valbuf);
-						}
-						else if((*it)->type == RSLVector) {
-							float x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-							float y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-							float z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-							sprintf(valbuf, "vector( %f, %f, %f )", x, y, z);
-							_sl->addVariable("vector", (*it)->name.c_str(), valbuf);
-						}
-						else if((*it)->type == RSLPoint) {
-							float x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-							float y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-							float z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-							sprintf(valbuf, "point( %f, %f, %f )", x, y, z);
-							_sl->addVariable("point", (*it)->name.c_str(), valbuf);
-						}*/
-					}
+					if(oconn == MObject::kNullObj) valueFromPieceNode((*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
 					else {
-// set by a func or var
-						VariableList extvar;
-						MString funcname = funcOrVarNode(oconn, objname, passname, extvar);
+// set by a func or var, collect uniform varying output
+						VariableList uniformvar;
+						MString funcname = funcOrVarNode(oconn, objname, passname, uniformvar);
 						
 						var->value = funcname.asChar();
-						/*if((*it)->type == RSLFloat) {
-							_sl->addVariable("float", (*it)->name.c_str(), funcname.asChar());
-						}
-						else if((*it)->type == RSLColor) {
-							_sl->addVariable("color", (*it)->name.c_str(), funcname.asChar());
-						}
-						else {
-							_sl->addVariable("string", (*it)->name.c_str(), funcname.asChar());
-						}*/
-						
-						for(VariableList::iterator varit= extvar.begin(); varit != extvar.end(); ++varit) {
-							if(!_sl->checkExistingExternal((*varit)->name)) _sl->_extns.push_back(*varit);
-						}
+
+						for(VariableList::iterator varit= uniformvar.begin(); varit != uniformvar.end(); ++varit)
+							_sl->addArg(*varit);
 					}
-					
-					_sl->addVariable(var);
+				}
+// add var to main
+				switch((*it)->access) {
+					case Uniform:
+						var->access = "uniform";
+						_sl->addArg(var);
+						break;
+					case Varying:
+						var->access = "varying";
+						_sl->addArg(var);
+						break;
+					case Output:
+						var->access = "output varying";
+						_sl->addArg(var);
+						break;
+					default:
+						var->access = "internal";
+						_sl->addVariable(var);
+						break;
 				}
 			}
 			
@@ -401,7 +309,9 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 			else slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Displacement \\\"") + shader_path + fnode.name() + "\\\"";
 // parameter list
 			MString paramlist = " ";
-			for(VariableList::iterator varit= _sl->_extns.begin(); varit != _sl->_extns.end(); ++varit) {
+			for(VariableList::iterator varit= _sl->_args.begin(); varit != _sl->_args.end(); ++varit) {
+				if((*varit)->access == "uniform") {
+				
 					paramlist = paramlist + "\\\" ";
 					paramlist = paramlist + (*varit)->type.c_str();
 					paramlist = paramlist + " ";
@@ -416,16 +326,21 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 					paramlist = paramlist + "[" + sval.c_str() + "]";
 					
 					paramlist = paramlist + " ";
+				}
 			}
 			//MGlobal::displayInfo(paramlist);
 			slog = slog + paramlist + "\\n\"";
 			MGlobal::executeCommand(slog);
 
+// compile sl
+			slog = MString("system(\"shaderdl -o "+ shader_path + "/" + fnode.name() + ".sdl "+shader_path + "/" + fnode.name() +".sl\")");
+			MGlobal::displayInfo(MString("compile ")+fnode.name());
+			MGlobal::executeCommand(slog);
 		}
 	}
 }
 
-MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& dwnextvars)
+MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& downstreamargs)
 {
 	MStatus status;
 	MString res;
@@ -445,101 +360,78 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 			
 			ParamList params = ppiece->getAttrib();
 			for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
-					SLVariable * var = new SLVariable();
-					var->name = (*it)->name.c_str();
+				SLVariable * var = new SLVariable();
+				var->name = (*it)->name.c_str();
+				
+				convertType((*it)->type, var);
+				var->setDefault();
+				
+				if((*it)->access != Output) {
 // standard
 					MPlug pgattr = fnode.findPlug((*it)->name.c_str());
 					MObject oconn;
 					AHelper::getConnectedNode(oconn, pgattr);
-					if(oconn == MObject::kNullObj) { 
-// no connection
-						getValueFromNode((int)(*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
-/*
-						if((*it)->type == RSLFloat) {
-							float x = pgattr.asFloat();
-							sprintf(valbuf, "%f", x);
-							
-							var->type = "float";
-							var->value = valbuf;
-						}
-						else if((*it)->type == RSLColor) {
-							float x = fnode.findPlug(MString((*it)->name.c_str())+"X").asFloat();
-							float y = fnode.findPlug(MString((*it)->name.c_str())+"Y").asFloat();
-							float z = fnode.findPlug(MString((*it)->name.c_str())+"Z").asFloat();
-							sprintf(valbuf, "color( %f, %f, %f )", x, y, z);
-							
-							var->type = "color";
-							var->value = valbuf;
-						}
-						else {
-							MString sv = pgattr.asString();
-							sprintf(valbuf, "\"%s\"", sv.asChar());
-							
-							var->type = "string";
-							var->value = valbuf;
-						}*/
-						
-						block->_vars.push_back(var);
-					}
+					if(oconn == MObject::kNullObj) valueFromPieceNode((int)(*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
 					else {
 // set by a func or var
-						VariableList extvars;
-						MString funcname = funcOrVarNode(oconn, objname, passname, extvars);
+						VariableList uniformvar;
+						MString funcname = funcOrVarNode(oconn, objname, passname, uniformvar);
 						
-							/*if((*it)->type == RSLFloat) var->type = "float";
-							else if((*it)->type == RSLColor) var->type = "color";
-							else var->type = "string";*/
-							convertType((*it)->type, var);
-							
-							var->value = funcname.asChar();
-							var->name = (*it)->name.c_str();
-							block->_vars.push_back(var);
-							
-						for(VariableList::iterator varit= extvars.begin(); varit != extvars.end(); ++varit) {
-							if(!block->checkExistingExternal((*varit)->name)) block->_extns.push_back(*varit);
+						var->value = funcname.asChar();
+	
+						for(VariableList::iterator varit= uniformvar.begin(); varit != uniformvar.end(); ++varit) {
+							block->addArg(*varit);
 						}
-						
 					}
+				}
+				
+// add var to sl block
+				switch((*it)->access) {
+					case Uniform:
+						var->access = "uniform";
+						block->addArg(var);
+						break;
+					case Varying:
+						var->access = "varying";
+						block->addArg(var);
+						break;
+					case Output:
+						var->access = "output varying";
+						block->addArg(var);
+						break;
+					default:
+						var->access = "internal";
+						block->addInternal(var);
+						break;
+				}
 			}
 			if(!_sl->checkExistingBlock(block->name)) _sl->addBlock(block);
 			res = fnode.name() + " ( ";
 			int i = 0;
-			for(VariableList::iterator varit= block->_extns.begin(); varit != block->_extns.end(); ++varit) {
+			for(VariableList::iterator varit= block->_args.begin(); varit != block->_args.end(); ++varit) {
 				res = res + (*varit)->name.c_str();
 				i++;
-				if(i < block->_extns.size()) res = res + ", ";
+				if(i < block->_args.size()) res = res + ", ";
 			}
 			res = res + " )";
 			
 			// update external vars
-			dwnextvars = block->_extns;
+			downstreamargs = block->_args;
 		}
 	}
 	else if(fnode.typeName() == "aShaderVariable") {
 // is a variable
 		SLVariable *var = new SLVariable();
-		/*var->name = fnode.name().asChar();
-		var->type = fnode.findPlug("handle").asString().asChar();
-		//char valbuf[256];
-		if(var->type == "float") {
-			float x =  fnode.findPlug("value").asFloat();
-			sprintf(valbuf, "%f", x);
-		}
-		else if(var->type == "color") {
-			float x = fnode.findPlug("valueX").asFloat();
-			float y = fnode.findPlug("valueY").asFloat();
-			float z = fnode.findPlug("valueZ").asFloat();
-			sprintf(valbuf, "color( %f, %f, %f )", x, y, z);				
-		}
-		else {
-			sprintf(valbuf, "\"%s\"", fnode.findPlug("value").asString().asChar());
-		}
-		var->value = valbuf;*/
-		getValueFromNode(node, var);
+
+		int access = 0;
+		valueFromVarNode(node, var, access);
+		if(access==0) var->access = "uniform";
+		else var->access = "varying";
 		
 		res = fnode.name();
-// update external vars
-		dwnextvars.push_back(var);
+		
+// update external vars		
+				downstreamargs.push_back(var);
 	}
 	else if(fnode.typeName() == "aShaderAdaptVariable") {
 // is a adapt variable
@@ -561,8 +453,8 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 					MObject oconn;
 					AHelper::getConnectedNode(oconn, plgvar);
 					if(oconn != MObject::kNullObj) { // only when it is connected
-						VariableList extvars;
-						MString funcname = funcOrVarNode(oconn, objname, passname, extvars);
+						VariableList uniformvar;
+						MString funcname = funcOrVarNode(oconn, objname, passname, uniformvar);
 						
 						SLVariable * var = new SLVariable();
 						var->type = block->type;
@@ -570,8 +462,8 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 						var->name = MFnDependencyNode(oconn).name().asChar();
 						//block->_extns.push_back(var);
 // only have external vars	
-						for(VariableList::iterator varit= extvars.begin(); varit != extvars.end(); ++varit) {
-							if(!block->checkExistingExternal((*varit)->name)) block->_extns.push_back(*varit);
+						for(VariableList::iterator varit= uniformvar.begin(); varit != uniformvar.end(); ++varit) {
+							block->addArg(*varit);
 						}
 					}
 				}
@@ -586,7 +478,7 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 			if(tvar == "color") sbody += "color( 0.0, 0.0, 0.0 ); \n";
 			else sbody += "0.0; \n";
 			
-			for(VariableList::iterator varit= block->_extns.begin(); varit != block->_extns.end(); ++varit) {
+			for(VariableList::iterator varit= block->_args.begin(); varit != block->_args.end(); ++varit) {
 				sbody += "res += ";
 				sbody += (*varit)->name;
 				sbody += " ;\n";
@@ -599,15 +491,15 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 // output func
 			res = fnode.name() + " ( ";
 			int i = 0;
-			for(VariableList::iterator varit= block->_extns.begin(); varit != block->_extns.end(); ++varit) {
+			for(VariableList::iterator varit= block->_args.begin(); varit != block->_args.end(); ++varit) {
 				res = res + (*varit)->name.c_str();
 				i++;
-				if(i < block->_extns.size()) res = res + ", ";
+				if(i < block->_args.size()) res = res + ", ";
 			}
 			res = res + " )";
 			
 // update external vars
-			dwnextvars = block->_extns;
+			downstreamargs = block->_args;
 		}
 		else {
 // context or objname var select as single external var
@@ -621,8 +513,8 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 			
 			int match_sit = 0;
 			
-			if( tadp != "objname" ) match_sit = getMatchedCondition(node, byobj, passname);
-			else match_sit = getMatchedCondition(node, byobj, objname);
+			if( tadp != "objname" ) match_sit = getMatchedCondition(node, passname);
+			else match_sit = getMatchedCondition(node, objname);
 			
 			SLVariable *var = new SLVariable();
 			var->name = fnode.name().asChar();
@@ -639,15 +531,15 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 					var->value = valueVarNode(oconn).asChar();
 				}
 			}
-// update external vars
-			dwnextvars.push_back(var);
+// update external vars, only uniform ones can be adaptive
+			downstreamargs.push_back(var);
 		}
 	}
 	
 	return res;
 }
 
-int ParseACache::getMatchedCondition(MObject& node, char byobj, MString& name)
+int ParseACache::getMatchedCondition(MObject& node, MString& name)
 {
 	MFnDependencyNode fnode(node);
 	int nsit = fnode.findPlug("numCondition").asInt();
@@ -686,21 +578,7 @@ MString ParseACache::valueVarNode(MObject& node)
 	MFnDependencyNode fnode(node);
 	char valbuf[256];
 	MString handle = fnode.findPlug("handle").asString();
-	/*if(handle == "float") {
-		float x =  fnode.findPlug("value").asFloat();
-		sprintf(valbuf, "%f", x);
-	}
-	else if(handle == "color") {
-		float x = fnode.findPlug("valueX").asFloat();
-		float y = fnode.findPlug("valueY").asFloat();
-		float z = fnode.findPlug("valueZ").asFloat();
-		sprintf(valbuf, "color( %f, %f, %f )", x, y, z);				
-	}
-	else {
-		sprintf(valbuf, "\"%s\"", fnode.findPlug("value").asString().asChar());
-	}
-	
-		char valbuf[256];*/
+
 	if(handle == "float") {
 		float x =  fnode.findPlug("value").asFloat();
 		sprintf(valbuf, "%f", x);
@@ -730,7 +608,7 @@ MString ParseACache::valueVarNode(MObject& node)
 	return MString(valbuf);
 }
 
-void ParseACache::getValueFromNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var)
+void ParseACache::valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var)
 {
 	MFnDependencyNode fnode(node);
 	float x, y, z;
@@ -769,14 +647,19 @@ void ParseACache::getValueFromNode(int type, const char* nmattr, MPlug& pgattr, 
 			sprintf(valbuf, "\"%s\"", sv.asChar());
 			break;
 	}
-		var->value = valbuf;
+	var->value = valbuf;
 }
 
-void ParseACache::getValueFromNode(MObject& node, SLVariable* var)
+void ParseACache::valueFromVarNode(MObject& node, SLVariable* var, int& access)
 {
 	MFnDependencyNode fnode(node);
 	var->name = fnode.name().asChar();
 	var->type = fnode.findPlug("handle").asString().asChar();
+	MString saccess = fnode.findPlug("access").asString();
+// no output here
+	if(saccess == "uniform") access = 0;
+	else access = 1;
+	
 	char valbuf[256];
 	if(var->type == "float") {
 		float x =  fnode.findPlug("value").asFloat();

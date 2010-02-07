@@ -11,13 +11,18 @@
 #include <vector>
 using namespace std;
 
+enum XRSLParameterAccess {
+	Internal = 0,
+	Uniform = 1,
+	Varying = 2,
+	Output = 3
+};
+
 enum XRSLParameterDetail {
 	Simple = 0,
 	Slider = 1,
 	Switch = 2,
-	Connection = 3,
-	Output = 4,
-	Varying = 5
+	Connection = 3
 };
 
 enum XRSLParameterType {
@@ -36,6 +41,7 @@ struct XRSLParameter
 	string v;
 	XRSLParameterType type;
 	XRSLParameterDetail detail;
+	XRSLParameterAccess access;
 };
 
 typedef vector<XRSLParameter*>ParamList;

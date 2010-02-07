@@ -38,6 +38,7 @@ char XRSLPiece::load(const char* filename)
 		else if(doc.checkNodeName("parameter") == 1) {
 			XRSLParameter *aparam = new XRSLParameter();
 			aparam->detail = Simple;
+			aparam->access = Internal;
 			aparam->min = 0.f;
 			aparam->max = 1.f;
 			aparam->name = doc.getAttribByName("name");
@@ -77,8 +78,11 @@ char XRSLPiece::load(const char* filename)
 						if(strcmp(doc.getAttribByName("value"), "slider") == 0) aparam->detail = Slider;	
 						else if(strcmp(doc.getAttribByName("value"), "switch") == 0) aparam->detail = Switch;
 						else if(strcmp(doc.getAttribByName("value"), "connection") == 0) aparam->detail = Connection;
-						else if(strcmp(doc.getAttribByName("value"), "output") == 0) aparam->detail = Output;
-						else aparam->detail = Simple;
+					}
+					else if(doc.checkNodeName("access") ==1) {
+						if(strcmp(doc.getAttribByName("value"), "uniform") == 0) aparam->access = Uniform;	
+						else if(strcmp(doc.getAttribByName("value"), "varying") == 0) aparam->access = Varying;
+						else if(strcmp(doc.getAttribByName("value"), "output") == 0) aparam->access = Output;
 					}
 					doc.nextNode();
 				}
