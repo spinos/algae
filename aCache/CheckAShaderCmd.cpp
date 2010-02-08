@@ -85,8 +85,10 @@ MStatus CheckAShader::doIt( const MArgList& args )
 				char valbuf[32];
 				ParamList params = ppiece->getAttrib();
 				for(ParamList::iterator it= params.begin(); it != params.end(); ++it) {
-//4 strings - name type value (float with min max) detail
+//5 strings each - name type value (float with min max) detail access
 					appendToResult((*it)->name.c_str());
+					
+					/*
 					if((*it)->type == RSLFloat) {
 						appendToResult("double");
 						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->min, (*it)->max);
@@ -110,13 +112,69 @@ MStatus CheckAShader::doIt( const MArgList& args )
 						appendToResult("double3");
 						sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
 						appendToResult(valbuf);
+					}*/
+					
+					switch((*it)->type) {
+						case RSLColor:
+							appendToResult("double3");
+							sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
+							appendToResult(valbuf);
+							break;
+						case RSLVector:
+							appendToResult("double3");
+							sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
+							appendToResult(valbuf);
+							break;
+						case RSLPoint:
+							appendToResult("double3");
+							sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->g, (*it)->b);
+							appendToResult(valbuf);
+							break;
+						case RSLString:
+							appendToResult("string");
+							appendToResult((*it)->v.c_str());
+							break;
+						default:
+							appendToResult("double");
+							sprintf(valbuf, "%f %f %f", (*it)->r, (*it)->min, (*it)->max);
+							appendToResult(valbuf);
+							break;
 					}
 					
-					if((*it)->detail == Simple) appendToResult("simple");
+					/*if((*it)->detail == Simple) appendToResult("simple");
 					else if((*it)->detail == Slider) appendToResult("slider");
 					else if((*it)->detail == Switch) appendToResult("switch");
-					else if((*it)->detail == Connection) appendToResult("connection");
-					else appendToResult("output");
+					else if((*it)->detail == Connection) appendToResult("connection");*/
+					
+					switch((*it)->detail) {
+						case Slider:
+							appendToResult("slider");
+							break;
+						case Switch:
+							appendToResult("switch");
+							break;
+						case Connection:
+							appendToResult("connection");
+							break;
+						default:
+							appendToResult("simple");
+							break;
+					}
+					
+					switch((*it)->access) {
+						case Output:
+							appendToResult("output");
+							break;
+						case Uniform:
+							appendToResult("uniform");
+							break;
+						case Varying:
+							appendToResult("varying");
+							break;
+						default:
+							appendToResult("internal");
+							break;
+					}
 				}
 			}
 			if(argData.isFlagSet("-pt")) {

@@ -6,6 +6,8 @@
  *  Copyright 2010 __MyCompanyName__. All rights reserved.
  *
  */
+#ifndef _SL_DOC_H
+#define _SL_DOC_H
 #include <string>
 #include <fstream>
 #include <vector>
@@ -101,3 +103,4 @@ private:
 	
 	BlockList _blocks;
 };
+#endif

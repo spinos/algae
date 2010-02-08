@@ -1,5 +1,5 @@
 /*
- *  ParseACacheCmd.cpp
+ *  TranslateAShaderCmd.cpp
  *  vertexCache
  *
  *  Created by zhang on 08-10-9.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "ParseACacheCmd.h"
+#include "TranslateAShaderCmd.h"
 
 #include <maya/MAnimControl.h>
 #include <maya/MFnNurbsSurface.h>
@@ -28,29 +28,22 @@
 #include "PieceASHader.h"
 
   
-ParseACache::ParseACache() {}
+TranslateAShader::TranslateAShader() {}
 
-ParseACache::~ParseACache() {}
+TranslateAShader::~TranslateAShader() {}
 
-MSyntax ParseACache::newSyntax() 
+MSyntax TranslateAShader::newSyntax() 
 {
 	MSyntax syntax;
 
-	syntax.addFlag("-st", "-sampleTime", MSyntax::kDouble);
-	syntax.addFlag("-a", "-addstep");
-	syntax.addFlag("-r", "-remove");
 	syntax.addFlag("-e", "-emit", MSyntax::kString);
-	syntax.addFlag("-f", "-flush");
-	
-	syntax.addFlag("-c", "-contains");
-	syntax.addFlag("-l", "-list" );
 
 	//syntax.setObjectType(MSyntax::kStringObjects, 0, 1);
 syntax.setObjectType(MSyntax::kSelectionList, 0, 1); 
 	return syntax;
 }
 
-MStatus ParseACache::doIt( const MArgList& args ) 
+MStatus TranslateAShader::doIt( const MArgList& args ) 
 {
 
 	MStatus status = parseArgs( args );
@@ -62,145 +55,38 @@ MStatus ParseACache::doIt( const MArgList& args )
 	MString semit;
 	if (argData.isFlagSet("-e")) {
 		argData.getFlagArgument("-e", 0, semit);
-		
-	//|pSphereShape7|aCacheMesh7 delightRenderPass1 20 0 0 0 24 perspShape	
-
-		char nodename[512];
-		char passname[512];
-		char cameraname[512];
-		float fframe, fshutteropen, fshutterclose, ffps;
-		int bshadow;
-		sscanf(semit.asChar(), "%s %s %f %f %f %d %f %s", 
-			nodename, passname, &fframe, &fshutteropen, &fshutterclose, &bshadow, &ffps, cameraname);
 			
 	// get obj
 		MObject oviz;
-		MString snode(nodename);
-		AHelper::getNamedObject(snode, oviz);
+		AHelper::getNamedObject(semit, oviz);
 		
 		if(oviz == MObject::kNullObj) {
-			//MGlobal::displayInfo( MString("cannot find ") + nodename);
+			MGlobal::displayInfo( MString("cannot find ") + semit);
 			return MS::kSuccess;
 		}
 		
-		MString spass(passname);
-		
-		MFnDependencyNode fviz(oviz);
-		
-// find ensemble attached
-		MPlug plgmsg = fviz.findPlug("aensembleMsg", &status);
-		if(status) {
-			MString ssname = fviz.name();
-			MObject oensemble = getDirectEnsembleNode(plgmsg, ssname, spass);
-			if(oensemble != MObject::kNullObj) {
-// find surface
-				MFnDependencyNode fens(oensemble);
-				MPlug surfplg = fens.findPlug("surfaceShader", &status);
-				MObject osurf;
-				AHelper::getConnectedNode(osurf, surfplg);
-				injectShaderStatement(osurf, ssname, spass, 0);
-				
-// find displacement
-				MPlug dispplg = fens.findPlug("displacementShader", &status);
-				MObject odisp;
-				AHelper::getConnectedNode(odisp, dispplg);
-				injectShaderStatement(odisp, ssname, spass, 1);
-			}
-		}
-
-	// get bbox
-		float fbbox[6];
-		fbbox[0] = fviz.findPlug("boundingBoxMinX").asFloat();
-		fbbox[1] = fviz.findPlug("boundingBoxMaxX").asFloat();
-		fbbox[2] = fviz.findPlug("boundingBoxMinY").asFloat();
-		fbbox[3] = fviz.findPlug("boundingBoxMaxY").asFloat();
-		fbbox[4] = fviz.findPlug("boundingBoxMinZ").asFloat();
-		fbbox[5] = fviz.findPlug("boundingBoxMaxZ").asFloat();
-
-	// get cache file	
-		MString scache =  fviz.findPlug("cachePath").asString();
-
-	// get mesh name
-		MString smesh =  fviz.findPlug("meshName").asString();
-		
-	// get camera
-		MDagPath pcam;
-		MString scam(cameraname);
-		AHelper::getTypedPathByName(MFn::kCamera, scam, pcam);
-		MFnCamera fcam(pcam);
-		
-		MVector viewDir = fcam.viewDirection( MSpace::kWorld );
-		MVector eyePos = fcam.eyePoint( MSpace::kWorld );
-		MVector rightDir = fcam.rightDirection( MSpace::kWorld);
-		MVector upDir = fcam.upDirection( MSpace::kWorld );
-		
-		int bpersp = 1;
-		float ffov = fcam.horizontalFieldOfView();
-		ffov = ffov/3.1415927f*180.f;
-		if (fcam.isOrtho()) {
-			bpersp = 0;
-			ffov = fcam.orthoWidth();
-		}
-		
-		char argbuf[1024];
-		sprintf(argbuf, "%s %s %f %f %f",
-						scache.asChar(), smesh.asChar(), 
-						fframe, fshutteropen, fshutterclose);
-						
-		char bboxbuf[128];
-		sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
-		MString sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
-		MString scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
-		MGlobal::executeCommand(scmd);
-
-	}
-	/*else if(argData.isFlagSet("-ts")) {
-		argData.getFlagArgument("-ts", 0, semit);
-		MObject onode;
-		AHelper::getNamedObject(semit, onode);
 		MString ssname("nil");
 		MString spass("nil");
-		injectShaderStatement(onode, ssname, spass, 0);
+// find ensemble attached
+		
+		injectShaderStatement(oviz, ssname, spass, 0);
 	}
-	/*else if (argData.isFlagSet("-l")) {
-		
-		MString proj;
-		MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
-		MString scn;
-		MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
-		string sscn = scn.asChar();
-		SHelper::filenameWithoutPath(sscn);
-		MString shader_path = proj+"/rmanshaders/"+sscn.c_str();
-		
-		MString scmd = MString("getFileList -folder \"") + shader_path + "\" -filespec \"*.sl\"";
-		string srcname;
-		MStringArray srcs;
-		MGlobal::executeCommand (scmd, srcs);
-		for(int i=0; i<srcs.length(); i++) {
-			srcname = srcs[i].asChar();
-			SHelper::cutByLastDot(srcname);
-// compile sl
-			scmd = MString("system(\"shaderdl -o "+ shader_path + "/" + srcname.c_str() + ".sdl "+shader_path + "/" + srcname.c_str() +".sl\")");
-			MGlobal::displayInfo(MString("compile ")+srcs[i]);
-			MGlobal::executeCommand(scmd);
-		}
-	}*/
 
  return MS::kSuccess;
  }
 
-void* ParseACache::creator() {
- return new ParseACache;
+void* TranslateAShader::creator() {
+ return new TranslateAShader;
  }
  
-MStatus ParseACache::parseArgs( const MArgList& args )
+MStatus TranslateAShader::parseArgs( const MArgList& args )
 {
 	// Parse the arguments.
 	MStatus stat = MS::kSuccess;
 	return MS::kSuccess;
 }
 
-MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname)
+MObject TranslateAShader::getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname)
 {
 	MStatus status;
 		MObject oconn;
@@ -233,7 +119,7 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 		else return MObject::kNullObj;
 }
 
-void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString& passname, int type)
+void TranslateAShader::injectShaderStatement(MObject& node, MString& objname, MString& passname, int type)
 {
 	if(node == MObject::kNullObj) return;
 // shader and scene path
@@ -258,8 +144,7 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 			_sl = new SLDoc();
 			_sl->setPath(shader_path.asChar());
 			_sl->setName(fnode.name().asChar());
-			if(type == 0) _sl->setType("surface");
-			else _sl->setType("displacement");
+			_sl->setType("surface");
 			_sl->setMain(ppiece->getBody());
 			
 // variables, if no connections, use values from node
@@ -311,35 +196,8 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 			}
 			
 			_sl->save();
-// rib statement
-			MString slog;
-		// Surface "/Users/jianzhang/Documents/maya/projects/default/3delight/untitled/shaders/OBJ/lambert1"			
-			if(type == 0) slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Surface \\\"") + shader_path + fnode.name() + "\\\"";
-			else slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Displacement \\\"") + shader_path + fnode.name() + "\\\"";
-// parameter list
-			MString paramlist = " ";
-			for(VariableList::iterator varit= _sl->_args.begin(); varit != _sl->_args.end(); ++varit) {
-				if((*varit)->access == "uniform") {
-				
-					paramlist = paramlist + "\\\" ";
-					paramlist = paramlist + (*varit)->type.c_str();
-					paramlist = paramlist + " ";
-					paramlist = paramlist + (*varit)->name.c_str();
-					paramlist = paramlist + "\\\" ";
-					
-					string sval = (*varit)->value;
 
-					if( (*varit)->type == "color" || (*varit)->type == "vector" || (*varit)->type == "point" ) SHelper::ribthree(sval);
-					else if( (*varit)->type == "string" ) SHelper::protectComma(sval);
-						
-					paramlist = paramlist + "[" + sval.c_str() + "]";
-					
-					paramlist = paramlist + " ";
-				}
-			}
-			//MGlobal::displayInfo(paramlist);
-			slog = slog + paramlist + "\\n\"";
-			MGlobal::executeCommand(slog);
+			MString slog;
 
 // compile sl
 			slog = MString("system(\"shaderdl -o "+ shader_path + "/" + fnode.name() + ".sdl "+shader_path + "/" + fnode.name() +".sl\")");
@@ -349,7 +207,7 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 	}
 }
 
-MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& downstreamargs)
+MString TranslateAShader::funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& downstreamargs)
 {
 	MStatus status;
 	MString res;
@@ -475,8 +333,10 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 						for(VariableList::iterator varit= uniformvar.begin(); varit != uniformvar.end(); ++varit) {
 							block->addArg(*varit);
 						}
+						
 // add var to sl block
 						block->addInternal(var);
+
 					}
 				}
 			}
@@ -551,7 +411,7 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 	return res;
 }
 
-int ParseACache::getMatchedCondition(MObject& node, MString& name)
+int TranslateAShader::getMatchedCondition(MObject& node, MString& name)
 {
 	MFnDependencyNode fnode(node);
 	int nsit = fnode.findPlug("numCondition").asInt();
@@ -585,7 +445,7 @@ int ParseACache::getMatchedCondition(MObject& node, MString& name)
 	return default_sit;
 }
 
-MString ParseACache::valueVarNode(MObject& node)
+MString TranslateAShader::valueVarNode(MObject& node)
 {
 	MFnDependencyNode fnode(node);
 	char valbuf[256];
@@ -620,7 +480,7 @@ MString ParseACache::valueVarNode(MObject& node)
 	return MString(valbuf);
 }
 
-void ParseACache::valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var)
+void TranslateAShader::valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var)
 {
 	MFnDependencyNode fnode(node);
 	float x, y, z;
@@ -662,7 +522,7 @@ void ParseACache::valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr
 	var->value = valbuf;
 }
 
-void ParseACache::valueFromVarNode(MObject& node, SLVariable* var, int& access)
+void TranslateAShader::valueFromVarNode(MObject& node, SLVariable* var, int& access)
 {
 	MFnDependencyNode fnode(node);
 	var->name = fnode.name().asChar();
@@ -701,7 +561,7 @@ void ParseACache::valueFromVarNode(MObject& node, SLVariable* var, int& access)
 	var->value = valbuf;
 }
 
-void ParseACache::convertType(int type, SLVariable* var)
+void TranslateAShader::convertType(int type, SLVariable* var)
 {
 	switch(type) {
 		case RSLFloat:

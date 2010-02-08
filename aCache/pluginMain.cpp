@@ -23,6 +23,7 @@
 #include "VariableAShader.h"
 #include "AdaptVariableAShader.h"
 #include "ParseACacheCmd.h"
+#include "TranslateAShaderCmd.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
@@ -138,6 +139,12 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.1.7 Sun Feb 7 2010", "Any" );
 			status.perror("registerCommand");
 			return status;
 		}
+		
+	status = plugin.registerCommand( "translateAShader", TranslateAShader::creator, TranslateAShader::newSyntax);
+		if (!status) {
+			status.perror("registerCommand");
+			return status;
+		}
 	
 	MGlobal::executeCommand ( "source aCacheMenus.mel;anemoneMakeMenus;" );
 
@@ -238,6 +245,13 @@ MFnPlugin plugin( obj );
 		      status.perror("deregisterCommand");
 		      return status;
 		}
+		
+	status = plugin.deregisterCommand( "translateAShader" );
+		if (!status) {
+		      status.perror("deregisterCommand");
+		      return status;
+		}
+		
 	MGlobal::executeCommand ( "anemoneRemoveMenus;" );
 
  return MS::kSuccess;

@@ -15,6 +15,8 @@
 		7F7F905E11158E9000E1A2F9 /* VariableAShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7F905C11158E9000E1A2F9 /* VariableAShader.h */; };
 		7F7F907A1116036F00E1A2F9 /* AdaptVariableAShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F90781116036F00E1A2F9 /* AdaptVariableAShader.cpp */; };
 		7F7F907B1116036F00E1A2F9 /* AdaptVariableAShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7F90791116036F00E1A2F9 /* AdaptVariableAShader.h */; };
+		7F80AD33112049F0008B479A /* TranslateAShaderCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */; };
+		7F80AD34112049F0008B479A /* TranslateAShaderCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F80AD32112049F0008B479A /* TranslateAShaderCmd.h */; };
 		7F83DBC1110DA4E700CD9BED /* ContextACache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */; };
 		7F83DBC2110DA4E700CD9BED /* ContextACache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F83DBC0110DA4E700CD9BED /* ContextACache.h */; };
 		7F83DC34110DAD5700CD9BED /* DescACacheContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F83DC32110DAD5700CD9BED /* DescACacheContext.cpp */; };
@@ -105,6 +107,8 @@
 		7F7F905C11158E9000E1A2F9 /* VariableAShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableAShader.h; sourceTree = "<group>"; };
 		7F7F90781116036F00E1A2F9 /* AdaptVariableAShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptVariableAShader.cpp; sourceTree = "<group>"; };
 		7F7F90791116036F00E1A2F9 /* AdaptVariableAShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdaptVariableAShader.h; sourceTree = "<group>"; };
+		7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TranslateAShaderCmd.cpp; sourceTree = "<group>"; };
+		7F80AD32112049F0008B479A /* TranslateAShaderCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslateAShaderCmd.h; sourceTree = "<group>"; };
 		7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContextACache.cpp; sourceTree = "<group>"; };
 		7F83DBC0110DA4E700CD9BED /* ContextACache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextACache.h; sourceTree = "<group>"; };
 		7F83DC32110DAD5700CD9BED /* DescACacheContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DescACacheContext.cpp; sourceTree = "<group>"; };
@@ -177,6 +181,8 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */,
+				7F80AD32112049F0008B479A /* TranslateAShaderCmd.h */,
 				7F4738801118E7D700D04B77 /* SLDoc.h */,
 				7F4738811118E7D700D04B77 /* SLDoc.cpp */,
 				7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */,
@@ -280,6 +286,7 @@
 				7F7F907B1116036F00E1A2F9 /* AdaptVariableAShader.h in Headers */,
 				7FCD1DDF11172FE90036E3C6 /* ParseACacheCmd.h in Headers */,
 				7F4738821118E7D700D04B77 /* SLDoc.h in Headers */,
+				7F80AD34112049F0008B479A /* TranslateAShaderCmd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +377,7 @@
 				7F7F907A1116036F00E1A2F9 /* AdaptVariableAShader.cpp in Sources */,
 				7FCD1DDE11172FE90036E3C6 /* ParseACacheCmd.cpp in Sources */,
 				7F4738831118E7D700D04B77 /* SLDoc.cpp in Sources */,
+				7F80AD33112049F0008B479A /* TranslateAShaderCmd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

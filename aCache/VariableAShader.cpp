@@ -10,6 +10,7 @@ MTypeId     VariableAShaderNode::id( 0x00026253 );
 MObject		VariableAShaderNode::ahandle;
 MObject		VariableAShaderNode::adetail;
 MObject		VariableAShaderNode::aaccess;
+MObject		VariableAShaderNode::aicon;
 MObject     VariableAShaderNode::output;
 MObject     VariableAShaderNode::outputC; 
 MObject     VariableAShaderNode::outputS;        
@@ -58,6 +59,10 @@ MStatus VariableAShaderNode::initialize()
 	aaccess = tAttr.create( "access", "acs", MFnData::kString );
 	tAttr.setStorable(true);
 	addAttribute( aaccess );
+	
+	aicon = tAttr.create( "iconfile", "icf", MFnData::kString );
+	tAttr.setStorable(true);
+	addAttribute( aicon );
 	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
