@@ -205,6 +205,28 @@ return $buffer[0];
 }
 
 /*
+remove string attr with scroll field
+*/
+
+global proc anm_clearStringAttrByScrollField(string $scroll)
+{
+	scrollField -e -clear $scroll;
+	string $attr = `scrollField -q -ann $scroll`;
+	setAttr -type "string" $attr "";
+}
+
+/*
+change string attr by scroll field
+*/
+
+global proc anm_stringAttrByScrollField(string $scroll)
+{
+	string $attr = `scrollField -q -ann $scroll`;
+	string $val = `scrollField -q -text $scroll`;
+	setAttr -type "string" $attr $val;
+}
+
+/*
 change string attr by text field
 */
 
@@ -1098,14 +1120,43 @@ global proc anm_listVariableAttrib(string $name)
 			}
 			else if($handle == "string") {
 				string $scur =`getAttr ($name+".value")`;
-				string $txctr = `textFieldButtonGrp -cw 1 50 -cw 2 200 -cw 3 40
-							-l "Value" 
-							-bl "<...>"
-							-text $scur 
-							-ann ($name+".value")`;
-				textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
-	// pick up a file
-				textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
+				if($dtl=="texture") {
+					
+					string $txctr = `textFieldButtonGrp -cw 1 50 -cw 2 200 -cw 3 40
+								-l "Value" 
+								-bl "<...>"
+								-text $scur 
+								-ann ($name+".value")`;
+					textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
+		// pick up a file
+					textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
+				}
+				else if($dtl=="rib") {
+					
+					optionMenuGrp;
+					menuItem -l "Select Template:";
+						menuItem -l "bake";
+						menuItem -l "visibility";
+						
+					
+					string $sclcur =`scrollField
+						-text $scur
+						-height 150
+						-width 300
+						-wordWrap on
+						-ann ($name+".value")`;
+						
+					scrollField -e -cc ("anm_stringAttrByScrollField(\""+$sclcur+"\")") $sclcur;
+					rowLayout -numberOfColumns 2
+						-columnWidth2 80 80
+						-columnAttach 1 "both"     0
+						-columnAttach 2 "both"  0;
+						button -l "Done";
+						button -l "Clear" -c ("anm_clearStringAttrByScrollField(\""+$sclcur+"\")");
+					setParent..;
+				}
+				else 
+					textField -text $scur;
 			}
 		}
         		
@@ -1829,10 +1880,16 @@ string $row = `rowColumnLayout -numberOfColumns 5
         columnLayout;
         
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
-        		-image1 "anm_variableS.xpm" 
+        		-image1 "anm_sfile.xpm" 
         		-height 36 
-        		-l "Variable"
-        		-c "anm_createVariable(\"string\",\"uniform\",\"nil\",\"anm_variableS.xpm\")";
+        		-l "Texture File"
+        		-c "anm_createVariable(\"string\",\"uniform\",\"texture\",\"anm_sfile.xpm\")";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "anm_srib.xpm" 
+        		-height 36 
+        		-l "RIB Box"
+        		-c "anm_createVariable(\"string\",\"uniform\",\"rib\",\"anm_srib.xpm\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCtxS.xpm" 
