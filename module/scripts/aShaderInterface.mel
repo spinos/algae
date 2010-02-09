@@ -105,6 +105,43 @@ global proc anm_downstreamConn( string $connected[], string $node)
 	}
 }
 
+global proc anm_scrollAppendTxt(string $opt)
+{
+	string $scl = `optionMenuGrp -q -ann $opt`;
+	
+	string $ribstat[];
+	$ribstat[0] = "";
+	$ribstat[1] = "";
+	$ribstat[2] = "Attribute \"cull\" \"hidden\" 0 \nAttribute \"cull\" \"backfacing\" 0 \nAttribute \"dice\" \"rasterorient\" 0 \n";
+	$ribstat[3] = "Attribute \"visibility\" \"integer camera\" [ 0 ] \n";
+	$ribstat[4] = "Matte 1 \n";
+	$ribstat[5] = "Attribute \"visibility\" \"integer photon\" [ 1 ] \n";
+
+	int $i = `optionMenuGrp -q -sl $opt`;
+	if($i>1) {
+		scrollField -e -it $ribstat[$i] $scl;
+	}
+	
+	optionMenuGrp -e -sl 1 $opt;
+}
+
+/*
+rib box template options
+*/
+
+global proc anm_appendRIBStateOpt(string $txtgrp)
+{
+	string $opt = `optionMenuGrp -ann $txtgrp`;
+	
+	menuItem -l "Select Template:";
+	menuItem -l "bake";
+	menuItem -l "hidden in primary";
+	menuItem -l "matte object";
+	menuItem -l "visible in photon";
+	
+	optionMenuGrp -e -cc ("anm_scrollAppendTxt(\""+$opt+"\")") $opt;
+}
+
 /*
 go up stream popup
 */
@@ -1132,26 +1169,23 @@ global proc anm_listVariableAttrib(string $name)
 					textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
 				}
 				else if($dtl=="rib") {
-					
-					optionMenuGrp;
-					menuItem -l "Select Template:";
-						menuItem -l "bake";
-						menuItem -l "visibility";
-						
-					
+
 					string $sclcur =`scrollField
 						-text $scur
 						-height 150
 						-width 300
 						-wordWrap on
+						-ip 1
 						-ann ($name+".value")`;
+						
+					anm_appendRIBStateOpt($sclcur);
 						
 					scrollField -e -cc ("anm_stringAttrByScrollField(\""+$sclcur+"\")") $sclcur;
 					rowLayout -numberOfColumns 2
 						-columnWidth2 80 80
 						-columnAttach 1 "both"     0
 						-columnAttach 2 "both"  0;
-						button -l "Done";
+						button -l "Done" -c ("anm_stringAttrByScrollField(\""+$sclcur+"\")");
 						button -l "Clear" -c ("anm_clearStringAttrByScrollField(\""+$sclcur+"\")");
 					setParent..;
 				}
