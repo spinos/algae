@@ -335,4 +335,23 @@ void SHelper::ribthree(std::string& res)
 		found = res.find(',', found);
 	}
 }
+
+int SHelper::findPartBeforeChar(std::string& full, std::string& frag, int start, char sep)
+{
+	int found = full.find(sep, start);
+	if(found < 0) frag = full;
+	else frag = full.substr(start, found - start);
+	return found;
+}
+
+void SHelper::protectCommaFree(std::string& res)
+{
+	int lstart = 0;
+	int lend = res.find('\"', lstart);
+	while(lend > 0) {
+		res.insert(lend, "\\");
+		lstart = lend+2;
+		lend = res.find('\"', lstart);
+	}
+}
 //:~

@@ -71,14 +71,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 287328162;
-			PBXWorkspaceStateSaveDate = 287328162;
-		};
-		perUserProjectItems = {
-			7F80AD5311206A76008B479A /* PBXBookmark */ = 7F80AD5311206A76008B479A /* PBXBookmark */;
-			7F80AD6911206E9F008B479A /* PBXBookmark */ = 7F80AD6911206E9F008B479A /* PBXBookmark */;
-			7F80AD7011206FE5008B479A /* PBXTextBookmark */ = 7F80AD7011206FE5008B479A /* PBXTextBookmark */;
-			7F80AD7111206FE5008B479A /* PBXTextBookmark */ = 7F80AD7111206FE5008B479A /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 287443038;
+			PBXWorkspaceStateSaveDate = 287443038;
 		};
 		sourceControlManager = 7FE58B990FB61EA800187112 /* Source Control */;
 		userBookmarkGroup = 7F4737F01118B14700D04B77 /* PBXBookmarkGroup */;
@@ -87,17 +81,17 @@
 	};
 	7F16D5EF1110B862006694FA /* EnsembleAShader.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {578, 938}}";
-			sepNavSelRange = "{1015, 13}";
-			sepNavVisRange = "{744, 924}";
+			sepNavIntBoundsRect = "{{0, 0}, {578, 1036}}";
+			sepNavSelRange = "{1496, 0}";
+			sepNavVisRange = "{890, 1033}";
 			sepNavWindowFrame = "{{15, 123}, {600, 650}}";
 		};
 	};
 	7F16D5F01110B862006694FA /* EnsembleAShader.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {541, 522}}";
-			sepNavSelRange = "{346, 0}";
-			sepNavVisRange = "{0, 424}";
+			sepNavSelRange = "{372, 0}";
+			sepNavVisRange = "{0, 451}";
 			sepNavWindowFrame = "{{15, 123}, {600, 650}}";
 		};
 	};
@@ -134,7 +128,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = nctx;
 		rLen = 0;
-		rLoc = 6368;
+		rLoc = 6528;
 		rType = 0;
 		vrLen = 1126;
 		vrLoc = 6454;
@@ -144,7 +138,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = cmbblk;
 		rLen = 0;
-		rLoc = 15022;
+		rLoc = 15858;
 		rType = 0;
 		vrLen = 837;
 		vrLoc = 15177;
@@ -154,7 +148,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = avar;
 		rLen = 0;
-		rLoc = 12991;
+		rLoc = 13827;
 		rType = 0;
 		vrLen = 1131;
 		vrLoc = 14627;
@@ -164,7 +158,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = ctxvar;
 		rLen = 0;
-		rLoc = 16075;
+		rLoc = 16911;
 		rType = 0;
 		vrLen = 233;
 		vrLoc = 20626;
@@ -203,39 +197,11 @@
 	};
 	7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {842, 8148}}";
+			sepNavIntBoundsRect = "{{0, 0}, {782, 8162}}";
 			sepNavSelRange = "{8386, 18}";
-			sepNavVisRange = "{8090, 1339}";
+			sepNavVisRange = "{8090, 1333}";
 			sepNavWindowFrame = "{{22, 74}, {665, 670}}";
 		};
-	};
-	7F80AD5311206A76008B479A /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */;
-	};
-	7F80AD6911206E9F008B479A /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-	};
-	7F80AD7011206FE5008B479A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-		name = "ParseACacheCmd.cpp: 453";
-		rLen = 0;
-		rLoc = 13580;
-		rType = 0;
-		vrLen = 1305;
-		vrLoc = 13324;
-	};
-	7F80AD7111206FE5008B479A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */;
-		name = "TranslateAShaderCmd.cpp: 311";
-		rLen = 18;
-		rLoc = 8386;
-		rType = 0;
-		vrLen = 1339;
-		vrLoc = 8090;
 	};
 	7F83DBBF110DA4E700CD9BED /* ContextACache.cpp */ = {
 		uiCtxt = {
@@ -333,9 +299,9 @@
 	};
 	7F937038111333C300B2962B /* PieceAShader.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {722, 1820}}";
-			sepNavSelRange = "{2036, 0}";
-			sepNavVisRange = "{0, 1074}";
+			sepNavIntBoundsRect = "{{0, 0}, {722, 1764}}";
+			sepNavSelRange = "{1419, 24}";
+			sepNavVisRange = "{1312, 975}";
 			sepNavWindowFrame = "{{636, 107}, {600, 650}}";
 		};
 	};
@@ -430,18 +396,18 @@
 	};
 	7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */ = {
 		uiCtxt = {
-			sepNavFolds = "{\n    c =     (\n                {\n            r = \"{4408, 1125}\";\n        }\n    );\n    r = \"{0, 21289}\";\n}";
-			sepNavIntBoundsRect = "{{0, 0}, {842, 9534}}";
-			sepNavSelRange = "{12456, 0}";
-			sepNavVisRange = "{12200, 1305}";
+			sepNavFolds = "{\n    c =     (\n                {\n            r = \"{4568, 1125}\";\n        }\n    );\n    r = \"{0, 22125}\";\n}";
+			sepNavIntBoundsRect = "{{0, 0}, {842, 10038}}";
+			sepNavSelRange = "{6002, 0}";
+			sepNavVisRange = "{5514, 998}";
 			sepNavWindowFrame = "{{546, 113}, {651, 652}}";
 		};
 	};
 	7FCD1DDD11172FE90036E3C6 /* ParseACacheCmd.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {656, 630}}";
-			sepNavSelRange = "{967, 14}";
-			sepNavVisRange = "{76, 1239}";
+			sepNavIntBoundsRect = "{{0, 0}, {656, 644}}";
+			sepNavSelRange = "{788, 39}";
+			sepNavVisRange = "{135, 1221}";
 			sepNavWindowFrame = "{{107, 95}, {552, 669}}";
 		};
 	};
@@ -459,8 +425,8 @@
 	7FE58BA00FB61F6700187112 /* pluginMain.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {764, 3654}}";
-			sepNavSelRange = "{6627, 0}";
-			sepNavVisRange = "{5852, 871}";
+			sepNavSelRange = "{748, 0}";
+			sepNavVisRange = "{5732, 918}";
 			sepNavWindowFrame = "{{95, 73}, {552, 669}}";
 		};
 	};
@@ -474,10 +440,10 @@
 	};
 	7FEA3A34110B21BE0061D5DF /* SHelper.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {566, 4718}}";
-			sepNavSelRange = "{5248, 0}";
-			sepNavVisRange = "{4990, 818}";
-			sepNavWindowFrame = "{{65, -22}, {552, 669}}";
+			sepNavIntBoundsRect = "{{0, 0}, {560, 4942}}";
+			sepNavSelRange = "{6519, 0}";
+			sepNavVisRange = "{5956, 743}";
+			sepNavWindowFrame = "{{13, 109}, {552, 669}}";
 		};
 	};
 	7FEA3A67110B27180061D5DF /* FXMLMesh.cpp */ = {
@@ -517,7 +483,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = "sl params";
 		rLen = 0;
-		rLoc = 7915;
+		rLoc = 8751;
 		rType = 0;
 		vrLen = 1371;
 		vrLoc = 7017;
@@ -527,7 +493,7 @@
 		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
 		name = "blk param";
 		rLen = 0;
-		rLoc = 11258;
+		rLoc = 12094;
 		rType = 0;
 		vrLen = 1477;
 		vrLoc = 10488;

@@ -1,5 +1,6 @@
 #include "EnsembleAShader.h"
 #include <maya/MFnNumericAttribute.h>
+#include <maya/MFnTypedAttribute.h>
 #include <maya/MTypeId.h> 
 #include <maya/MPlug.h>
 #include <maya/MDataBlock.h>
@@ -8,6 +9,7 @@
 MTypeId     EnsembleAShaderNode::id( 0x00026250 );
 MObject		EnsembleAShaderNode::asurface;
 MObject		EnsembleAShaderNode::adisplacement;
+MObject		EnsembleAShaderNode::aribbox;
 MObject     EnsembleAShaderNode::output;       
 
 EnsembleAShaderNode::EnsembleAShaderNode() {}
@@ -40,6 +42,7 @@ void* EnsembleAShaderNode::creator()
 MStatus EnsembleAShaderNode::initialize()
 {
 	MFnNumericAttribute numAttr;
+	MFnTypedAttribute tAttr;
 	MStatus				stat;
 	
 	asurface = numAttr.create( "surfaceShader", "sfs", MFnNumericData::kFloat, 0.0 );
@@ -52,6 +55,10 @@ MStatus EnsembleAShaderNode::initialize()
 	numAttr.setKeyable(true);
 	addAttribute( adisplacement );
 	
+	aribbox = tAttr.create( "ribBox", "rbx", MFnData::kString);
+	tAttr.setStorable(false);
+	addAttribute( aribbox );
+	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
 	numAttr.setStorable(false);
@@ -60,7 +67,7 @@ MStatus EnsembleAShaderNode::initialize()
 		
 	attributeAffects( asurface, output );
 	attributeAffects( adisplacement, output );
-	
+	attributeAffects( aribbox, output );
 
 	return MS::kSuccess;
 }

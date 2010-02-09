@@ -16,6 +16,7 @@ public:
 public:
 	static  MObject		asurface;
 	static  MObject		adisplacement;
+	static  MObject		aribbox;
 	static  MObject		output;        // The output value.
 	static	MTypeId		id;
 };

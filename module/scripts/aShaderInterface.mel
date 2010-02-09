@@ -1071,6 +1071,28 @@ global proc anm_displacementConnectDropcallback(string $dragControl, string $dro
 }
 
 /*
+drop to connect ribbox
+*/
+
+global proc anm_ribboxConnectDropcallback(string $dragControl, string $dropControl, string $msgs[], int $x, int $y, int $type)
+{
+	string $node = `rowLayout -q -ann $msgs[0]`;
+// avoid self connection
+	string $dstnode = anm_cutByFirstDot(`textFieldButtonGrp -q -ann $dropControl`);
+		
+	if(`nodeType $node` == "aShaderVariable") {
+		
+		if(`getAttr ($node+".handle")`=="string" && `getAttr ($node+".detail")`=="rib") {
+			connectAttr -f ($node + ".outputS") `textFieldButtonGrp -q -ann $dropControl`;
+			textFieldButtonGrp -e -text $node $dropControl;
+			print("\nconnect "+$node+" to "+$dstnode);
+		}
+		else print("only rib string can be connected");
+	}
+	else print("only rib string can be connected");
+}
+
+/*
 list ensemble attrib
 */
 
@@ -1087,8 +1109,6 @@ proc anm_listEnsembleAttrib(string $name)
 			-label "Surface" -ed false 
 			-buttonLabel "->"
 			-cw3 115 115 50
-			//-bc ("anm_aShaderNaviConnected( \""+ $name +".surfaceShader\")")
-			//-text `anm_aShaderGetConnected( $name +".surfaceShader")`
 			-dpc anm_surfaceConnectDropcallback
 			`;
 			textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrsurf)` $tfbsurf;
@@ -1102,15 +1122,28 @@ proc anm_listEnsembleAttrib(string $name)
 			-label "Displacement" -ed false 
 			-buttonLabel "->"
 			-cw3 115 115 50
-			//-bc ("anm_aShaderNaviConnected( \""+ $name +".displacementShader\")")
-			//-text `anm_aShaderGetConnected( $name +".displacementShader")`
 			-dpc anm_displacementConnectDropcallback
 			`;
 			textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrdisp)` $tfbdisp;
 			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrdisp +"\")") $tfbdisp;
 			popupMenu;
 				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbdisp+"\")");
+		
+		
+		string $attrrbx = $name+".rbx";
+		string $tfbrbx = `textFieldButtonGrp
+			-ann $attrrbx
+			-label "RIB Box" -ed false 
+			-buttonLabel "->"
+			-cw3 115 115 50
+			-dpc anm_ribboxConnectDropcallback
+			`;
+			textFieldButtonGrp -e -text `anm_aShaderGetConnected($attrrbx)` $tfbrbx;
+			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrrbx +"\")") $tfbrbx;
+			popupMenu;
+				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbrbx+"\")");
 		setParent..;
+		
 	setParent..;
 }
 
@@ -1174,7 +1207,7 @@ global proc anm_listVariableAttrib(string $name)
 						-text $scur
 						-height 150
 						-width 300
-						-wordWrap on
+						-wordWrap off
 						-ip 1
 						-ann ($name+".value")`;
 						

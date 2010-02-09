@@ -93,8 +93,13 @@ MStatus ParseACache::doIt( const MArgList& args )
 			MString ssname = fviz.name();
 			MObject oensemble = getDirectEnsembleNode(plgmsg, ssname, spass);
 			if(oensemble != MObject::kNullObj) {
-// find surface
 				MFnDependencyNode fens(oensemble);
+// rib box first
+				MPlug rbxplg = fens.findPlug("rbx", &status);
+				MObject orbx;
+				AHelper::getConnectedNode(orbx, rbxplg);
+				injectRIBStatement(orbx);
+// find surface
 				MPlug surfplg = fens.findPlug("surfaceShader", &status);
 				MObject osurf;
 				AHelper::getConnectedNode(osurf, surfplg);
@@ -231,6 +236,31 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 			}
 		}
 		else return MObject::kNullObj;
+}
+
+void ParseACache::injectRIBStatement(MObject& node)
+{
+	if(node == MObject::kNullObj) return;
+	MStatus status;
+	MFnDependencyNode fnode(node);
+	if(fnode.typeName() == "aShaderVariable") {
+// is a variable
+		string srib = fnode.findPlug("value").asString().asChar();
+		
+		int start =0;
+		string sline;
+/*could be \r\n on windows*/
+		int end = SHelper::findPartBeforeChar(srib, sline, start, '\r');
+		while(end > 0) {
+		
+			SHelper::protectCommaFree(sline);
+			MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sline.c_str() + "\\n\"";
+			MGlobal::executeCommand(slog);
+
+			start = end+1;
+			end = SHelper::findPartBeforeChar(srib, sline, start, '\r');
+		}
+	}
 }
 
 void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString& passname, int type)
