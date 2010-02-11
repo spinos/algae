@@ -87,12 +87,26 @@ MStatus ParseACache::doIt( const MArgList& args )
 		
 		MFnDependencyNode fviz(oviz);
 		
+		int bSubd = 1;
+// find render attrib node
+		MPlug plgatt = fviz.findPlug("achMsg", &status);
+		if(status) {
+			MObject oatt;
+			AHelper::getConnectedNode(oatt, plgatt);
+			if(oatt != MObject::kNullObj) {
+				MFnDependencyNode fatt(oatt);
+				if(!fatt.findPlug("asSubdiv").asBool()) bSubd = 0;
+			}
+		}
+		
 // find ensemble attached
 		MPlug plgmsg = fviz.findPlug("aensembleMsg", &status);
 		if(status) {
 			MString ssname = fviz.name();
 			MObject oensemble = getDirectEnsembleNode(plgmsg, ssname, spass);
 			if(oensemble != MObject::kNullObj) {
+// default rib
+				defRIBStat();
 				MFnDependencyNode fens(oensemble);
 // rib box first
 				MPlug rbxplg = fens.findPlug("rbx", &status);
@@ -148,9 +162,10 @@ MStatus ParseACache::doIt( const MArgList& args )
 		}
 		
 		char argbuf[1024];
-		sprintf(argbuf, "%s %s %f %f %f",
+		sprintf(argbuf, "%s %s %d %f %f %d",
 						scache.asChar(), smesh.asChar(), 
-						fframe, fshutteropen, fshutterclose);
+						(int)fframe, fshutteropen, fshutterclose,
+						bSubd);
 						
 		char bboxbuf[128];
 		sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
@@ -236,6 +251,14 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 			}
 		}
 		else return MObject::kNullObj;
+}
+
+void ParseACache::defRIBStat()
+{
+//Attribute "visibility" "integer transmission" [ 1 ] 
+//        Attribute "shade" "string transmissionhitmode" [ "opaque" ] 
+	MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"visibility\\\" \\\"integer transmission\\\" [ 1 ]\\n\"");
+	MGlobal::executeCommand(slog);
 }
 
 void ParseACache::injectRIBStatement(MObject& node)

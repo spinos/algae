@@ -7,13 +7,13 @@
 
 MTypeId     AttribACacheExportNode::id( 0x00025257 );
 MObject		AttribACacheExportNode::anochange;
-MObject		AttribACacheExportNode::askipidir;
+/*MObject		AttribACacheExportNode::askipidir;
 MObject		AttribACacheExportNode::askipscat;
 MObject		AttribACacheExportNode::askipepid;
 MObject		AttribACacheExportNode::aaslight;    
 MObject		AttribACacheExportNode::aklight; 
 MObject		AttribACacheExportNode::anoshadow;
-MObject		AttribACacheExportNode::aasghost;   
+MObject		AttribACacheExportNode::aasghost;  */ 
 MObject     AttribACacheExportNode::output;       
 
 AttribACacheExportNode::AttribACacheExportNode() {}
@@ -52,7 +52,7 @@ MStatus AttribACacheExportNode::initialize()
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
 	addAttribute( anochange );
-	
+/*	
 	askipidir = numAttr.create( "skipIndirect", "skind", MFnNumericData::kBoolean, 0 );
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
@@ -87,7 +87,7 @@ MStatus AttribACacheExportNode::initialize()
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
 	addAttribute( aasghost );
-
+*/
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
 	numAttr.setStorable(false);
@@ -95,13 +95,13 @@ MStatus AttribACacheExportNode::initialize()
 		if (!stat) { stat.perror("addAttribute"); return stat;}
 		
 	attributeAffects( anochange, output );
-	attributeAffects( askipidir, output );
+/*attributeAffects( askipidir, output );
 	attributeAffects( askipepid, output );
 	attributeAffects( askipscat, output );
 	attributeAffects( aaslight, output );
 	attributeAffects( aklight, output );
 	attributeAffects( aasghost, output );
-	attributeAffects( anoshadow, output );
+	attributeAffects( anoshadow, output );*/
 
 	return MS::kSuccess;
 }

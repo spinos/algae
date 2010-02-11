@@ -12,18 +12,20 @@ using namespace std;
 	frame number
 	shutter open
 	shutter close
+	subdiv or not
 */
 			
 meshData::meshData(std::string& parameter):
 m_i_hdr_shadowed(0), m_i_hdr_indirect(0), m_i_hdr_scat(0), m_i_hdr_backscat(0),
 m_i_lightsrc_shadowed(0),m_i_double_sided(0)
 {
-	int n = sscanf(parameter.c_str(), "%s %s %d %f %f", 
+	int n = sscanf(parameter.c_str(), "%s %s %d %f %f %d", 
 	m_cache_name, 
 	m_mesh_name,
 	&m_frame,
 	&m_mesh_0, 
-	&m_mesh_1);
+	&m_mesh_1,
+	&m_bSubdiv);
 }
 
 meshData::~meshData() 
@@ -57,7 +59,7 @@ void meshData::generateRIB(RtFloat detail)
 			paramvalue[0] =(RtPoint*)pMesh->points();
 			
 			int nparam = 1;
-			printf("%d uv set ", pMesh->getNumUVSet());
+			//printf("%d uv set ", pMesh->getNumUVSet());
 			for(int i=0; i<pMesh->getNumUVSet(); i++) {
 				paramname[nparam] = (RtToken)pMesh->getSNameById(i);
 				paramvalue[nparam] = (RtFloat*)pMesh->getSById(i);
@@ -121,7 +123,10 @@ void meshData::generateRIB(RtFloat detail)
 			}
 */			
 //			if(m_mesh_0 == m_mesh_1) 
-			RiHierarchicalSubdivisionMeshV("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, (RtInt)nparam, paramname, paramvalue );
+
+			if(m_bSubdiv==1) RiHierarchicalSubdivisionMeshV("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, (RtInt)nparam, paramname, paramvalue );
+			else RiPointsPolygonsV( (RtInt)pMesh->nfaces(), (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)nparam, paramname, paramvalue);
+
 /*			else {
 				pMesh->setMotion(m_mesh_0, m_mesh_1);
 				RiMotionBegin(2, (RtFloat)m_shutter_open, (RtFloat)m_shutter_close);

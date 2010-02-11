@@ -7,7 +7,7 @@
 
 MTypeId     AttribACacheRenderNode::id( 0x0002525b );
 MObject		AttribACacheRenderNode::asurfacecolor;
-MObject		AttribACacheRenderNode::askipidir;
+MObject		AttribACacheRenderNode::aassubd;
 MObject     AttribACacheRenderNode::output;       
 
 AttribACacheRenderNode::AttribACacheRenderNode() {}
@@ -48,10 +48,10 @@ MStatus AttribACacheRenderNode::initialize()
 	numAttr.setDefault(1.f, 1.f, 1.f);
 	addAttribute( asurfacecolor );
 	
-	askipidir = numAttr.create( "skipIndirect", "skind", MFnNumericData::kBoolean, 0 );
+	aassubd = numAttr.create( "asSubdiv", "asd", MFnNumericData::kBoolean, 1 );
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
-	addAttribute( askipidir );
+	addAttribute( aassubd );
 	
 	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
@@ -61,7 +61,7 @@ MStatus AttribACacheRenderNode::initialize()
 		if (!stat) { stat.perror("addAttribute"); return stat;}
 		
 	attributeAffects( asurfacecolor, output );
-	attributeAffects( askipidir, output );
+	attributeAffects( aassubd, output );
 	
 
 	return MS::kSuccess;

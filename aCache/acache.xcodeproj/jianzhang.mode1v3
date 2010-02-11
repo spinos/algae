@@ -197,7 +197,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>7FA43AD911239C2D007A8448</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>ParseACacheCmd.cpp</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>7FA43ADA11239C2D007A8448</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>ParseACacheCmd.cpp</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>7FA43AEE1123A9B6007A8448</string>
+						<key>history</key>
+						<array>
+							<string>7FA43AD711239AA4007A8448</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {651, 555}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>546 169 651 596 0 0 1280 778 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -279,13 +320,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>11</integer>
+									<integer>9</integer>
 									<integer>3</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 339}, {267, 239}}</string>
+							<string>{{0, 1}, {267, 239}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -304,7 +345,7 @@
 							<real>267</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>496 284 683 298 0 0 1280 778 </string>
+						<string>429 359 683 298 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -341,7 +382,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {394, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>496 284 683 298 0 0 1280 778 </string>
+								<string>429 359 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -361,7 +402,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {394, 252}}</string>
 								<key>RubberWindowFrame</key>
-								<string>496 284 683 298 0 0 1280 778 </string>
+								<string>429 359 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -385,9 +426,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7FA43AAB11220899007A8448</string>
+				<string>7FA43AC311239939007A8448</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>7FA43AAC11220899007A8448</string>
+				<string>7FA43AC411239939007A8448</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -521,12 +562,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>7FA43AC911239939007A8448</string>
 		<string>7FE58BA50FB61F9000187112</string>
-		<string>7FA439F41121EFD2007A8448</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
+		<string>7FA43AD911239C2D007A8448</string>
 	</array>
 	<key>WindowString</key>
-	<string>496 284 683 298 0 0 1280 778 </string>
+	<string>429 359 683 298 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -603,7 +645,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7FE58BA50FB61F9000187112</string>
-				<string>7FA43AAD11220899007A8448</string>
+				<string>7FA43ACC11239939007A8448</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

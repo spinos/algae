@@ -10,9 +10,10 @@ global proc string anm_getMasterPath()
 global proc string[] anm_getSurfaceFiles()
 {
 	string $res[];
-	$res[0] = "Constant"; $res[1] = "anm_Constant.xpm";
-	$res[2] = "ImageFile"; $res[3] = "anm_SImageFile.xpm";
-	$res[4] = "ImageFileST"; $res[5] = "anm_SImageFile.xpm";
+	$res[0] = "Matte"; $res[1] = "anm_Matte.xpm";
+	$res[2] = "Constant"; $res[3] = "anm_Constant.xpm";
+	$res[4] = "ImageFile"; $res[5] = "anm_SImageFile.xpm";
+	$res[6] = "ImageFileST"; $res[7] = "anm_SImageFile.xpm";
 	return $res;
 }
 

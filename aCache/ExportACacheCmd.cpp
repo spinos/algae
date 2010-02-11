@@ -247,7 +247,7 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			
 			AHelper::getBoolAttributeByName(fnode, "noChange", iattr);
 			if(iattr) xml_f.addAttribute("noChange", 1);
-			
+/*			
 			AHelper::getBoolAttributeByName(fnode, "skipIndirect", iattr);
 			if(iattr) xml_f.addAttribute("skipIndirect", 1);
 			
@@ -273,7 +273,7 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			
 			double td;
 			if(AHelper::getDoubleAttributeByName(fnode, "lightIntensity", td)) light_intensity = td;
-			
+*/			
 			fnode.setObject(m_mesh_list[it].node());
 		}
 
