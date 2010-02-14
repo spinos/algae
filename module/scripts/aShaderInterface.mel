@@ -11,9 +11,10 @@ global proc string[] anm_getSurfaceFiles()
 {
 	string $res[];
 	$res[0] = "Matte"; $res[1] = "anm_Matte.xpm";
-	$res[2] = "Constant"; $res[3] = "anm_Constant.xpm";
-	$res[4] = "ImageFile"; $res[5] = "anm_SImageFile.xpm";
-	$res[6] = "ImageFileST"; $res[7] = "anm_SImageFile.xpm";
+	$res[2] = "Beauty"; $res[3] = "anm_Matte.xpm";
+	$res[4] = "Constant"; $res[5] = "anm_Constant.xpm";
+	$res[6] = "ImageFile"; $res[7] = "anm_SImageFile.xpm";
+	$res[8] = "ImageFileST"; $res[9] = "anm_SImageFile.xpm";
 	return $res;
 }
 
@@ -106,6 +107,45 @@ global proc anm_downstreamConn( string $connected[], string $node)
 	}
 }
 
+/*
+point cloud file expression
+*/
+
+global proc anm_fieldOptTxt(string $opt)
+{
+	string $fld = `optionMenuGrp -q -ann $opt`;
+	
+	string $fileexp[];
+	$fileexp[0] = "";
+	$fileexp[1] = "";
+	$fileexp[2] = "$S.$F.ptc";
+	$fileexp[3] = "$O.$F.ptc";
+
+	int $i = `optionMenuGrp -q -sl $opt`;
+	if($i>1) {
+		textFieldButtonGrp -e -text $fileexp[$i] $fld;
+		string $attr = `textFieldButtonGrp -q -ann $fld`;
+		setAttr -type "string" $attr $fileexp[$i];
+	}
+	
+	optionMenuGrp -e -sl 1 $opt;
+}
+
+global proc anm_appendPointCloudEpr(string $txtgrp)
+{
+	string $opt = `optionMenuGrp -ann $txtgrp`;
+	
+	menuItem -l "Select Template:";
+	menuItem -l "bake scene per frame";
+	menuItem -l "bake object per frame";
+	
+	optionMenuGrp -e -cc ("anm_fieldOptTxt(\""+$opt+"\")") $opt;
+}
+
+/*
+rib box template options
+*/
+
 global proc anm_scrollAppendTxt(string $opt)
 {
 	string $scl = `optionMenuGrp -q -ann $opt`;
@@ -126,9 +166,6 @@ global proc anm_scrollAppendTxt(string $opt)
 	optionMenuGrp -e -sl 1 $opt;
 }
 
-/*
-rib box template options
-*/
 
 global proc anm_appendRIBStateOpt(string $txtgrp)
 {
@@ -1223,6 +1260,22 @@ global proc anm_listVariableAttrib(string $name)
 						button -l "Clear" -c ("anm_clearStringAttrByScrollField(\""+$sclcur+"\")");
 					setParent..;
 				}
+				else if($dtl=="pointcloud") {
+
+					string $txctr = `textFieldButtonGrp -cw 1 50 -cw 2 200 -cw 3 40
+								-l "Value" 
+								-bl "<...>"
+								-text $scur 
+								-ann ($name+".value")`;
+					textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
+		// pick up a file
+					textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
+						
+					anm_appendPointCloudEpr($txctr);
+						
+					//scrollField -e -cc ("anm_stringAttrByScrollField(\""+$sclcur+"\")") $sclcur;
+					
+				}
 				else 
 					textField -text $scur;
 			}
@@ -1958,6 +2011,12 @@ string $row = `rowColumnLayout -numberOfColumns 5
         		-height 36 
         		-l "RIB Box"
         		-c "anm_createVariable(\"string\",\"uniform\",\"rib\",\"anm_srib.xpm\")";
+        		
+        	iconTextButton -width 100  -style "iconAndTextHorizontal" 
+        		-image1 "anm_sbake.xpm" 
+        		-height 36 
+        		-l "Bake File"
+        		-c "anm_createVariable(\"string\",\"uniform\",\"pointcloud\",\"anm_sbake.xpm\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableCtxS.xpm" 

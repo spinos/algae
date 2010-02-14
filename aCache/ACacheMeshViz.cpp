@@ -115,11 +115,13 @@ void ACacheMeshViz::draw( M3dView & view, const MDagPath & /*path*/,
 		}
 		else m_pMesh->draw();
 		glPopAttrib();*/
+		if(m_mode < 0) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		m_pRender->setTriangles(m_pMesh->triangles(), m_pMesh->getNumTriangle()*3);
 		m_pRender->setP((const float *)m_pMesh->points(), m_pMesh->getNumVertex());
 		m_pRender->enableProgram(m_program);
 		m_pRender->draw();
 		m_pRender->disableProgram();
+		if(m_mode < 0) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		
 		GHelper::drawBoundingBox( m_pMesh->getBBox0X(), m_pMesh->getBBox0Y(), m_pMesh->getBBox0Z(), m_pMesh->getBBox1X(), m_pMesh->getBBox1Y(), m_pMesh->getBBox1Z());
 	
@@ -138,7 +140,7 @@ MBoundingBox ACacheMeshViz::boundingBox() const
 	MPoint corner1( 0,0,0 );
 	MPoint corner2( 1,1,1 );
 	
-	if(m_mode>-3) {
+	//if(m_mode>-3) {
 		if(m_pMesh) {
 			corner1.x = m_pMesh->getBBox0X();
 			corner1.y = m_pMesh->getBBox0Y();
@@ -147,7 +149,7 @@ MBoundingBox ACacheMeshViz::boundingBox() const
 			corner2.y = m_pMesh->getBBox1Y();
 			corner2.z = m_pMesh->getBBox1Z();
 		}
-	}
+	//}
 
 	return MBoundingBox( corner1, corner2 );
 }

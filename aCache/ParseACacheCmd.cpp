@@ -259,6 +259,10 @@ void ParseACache::defRIBStat()
 //        Attribute "shade" "string transmissionhitmode" [ "opaque" ] 
 	MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"visibility\\\" \\\"integer transmission\\\" [ 1 ]\\n\"");
 	MGlobal::executeCommand(slog);
+	
+//Attribute "shade" "string transmissionhitmode" [ "opaque" ] 
+	slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"shade\\\" \\\"string transmissionhitmode\\\" [ \\\"opaque\\\" ]\\n\"");
+	MGlobal::executeCommand(slog);
 }
 
 void ParseACache::injectRIBStatement(MObject& node)
@@ -584,6 +588,7 @@ MString ParseACache::funcOrVarNode(MObject& node, MString& objname, MString& pas
 			SLVariable *var = new SLVariable();
 			var->name = fnode.name().asChar();
 			var->type = tvar;
+			var->access = "uniform";
 			var->setDefault();
 			
 			res = fnode.name();
