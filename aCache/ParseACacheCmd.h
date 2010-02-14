@@ -40,7 +40,9 @@ private:
 	void valueFromPieceNode(int type, const char* nmattr, MPlug& pgattr, MObject& node, SLVariable* var);
 	void valueFromVarNode(MObject& node, SLVariable* var, int& access);
 	void convertType(int type, SLVariable* var);
+	void pathExpression(string& res, MString& objname);
 
 	SLDoc* _sl;
+	int m_iFrame;
  };
 

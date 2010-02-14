@@ -1829,6 +1829,10 @@ global proc anm_openAShaderManWin()
 	string $shader_path = `workspace -q -fn`+"/rmanshaders/";
 	
 	system("mkdir "+$shader_path);
+// create tmp path
+	string $tmp_path = `workspace -q -fn`+"/rmantmp/";
+	
+	system("mkdir "+$tmp_path);
 
 //If such a window already exists, destory it.
  if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;

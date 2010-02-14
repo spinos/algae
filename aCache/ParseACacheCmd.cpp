@@ -73,6 +73,9 @@ MStatus ParseACache::doIt( const MArgList& args )
 		sscanf(semit.asChar(), "%s %s %f %f %f %d %f %s", 
 			nodename, passname, &fframe, &fshutteropen, &fshutterclose, &bshadow, &ffps, cameraname);
 			
+// store frame
+		m_iFrame = (int)fframe;
+			
 	// get obj
 		MObject oviz;
 		MString snode(nodename);
@@ -303,7 +306,10 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 	MString shader_path = proj+"/rmanshaders/"+sscn.c_str()+"/";
 	
 	MString pathcmd = MString("system(\"mkdir ")+shader_path+"\")";
-//MGlobal::displayInfo(pathcmd);
+	MGlobal::executeCommand(pathcmd);
+	
+	MString ptc_path = proj+"/rmantmp/"+sscn.c_str()+"/";
+	pathcmd = MString("system(\"mkdir ")+ ptc_path+"\")";
 	MGlobal::executeCommand(pathcmd);
 	
 	MFnDependencyNode fnode(node);
@@ -387,7 +393,11 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 					string sval = (*varit)->value;
 
 					if( (*varit)->type == "color" || (*varit)->type == "vector" || (*varit)->type == "point" ) SHelper::ribthree(sval);
-					else if( (*varit)->type == "string" ) SHelper::protectComma(sval);
+					else if( (*varit)->type == "string" ) {
+						SHelper::protectComma(sval);
+// filename expression 
+						pathExpression(sval, objname);
+					}
 						
 					paramlist = paramlist + "[" + sval.c_str() + "]";
 					
@@ -777,6 +787,42 @@ void ParseACache::convertType(int type, SLVariable* var)
 		default:
 			var->type = "string";
 			break;
+	}
+}
+
+void ParseACache::pathExpression(string& res, MString& objname)
+{
+	MString proj;
+	MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
+	MString scn;
+	MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
+	string sscn = scn.asChar();
+	SHelper::filenameWithoutPath(sscn);
+	
+	MString glb_path = proj+"/rmantmp/"+sscn.c_str()+"/global";
+	
+	char buf[8];
+	sprintf(buf, "%d", m_iFrame);
+	MString sframe = buf;
+	
+	MString obj_path = proj+"/rmantmp/"+sscn.c_str()+"/"+objname;
+	
+	int ls = res.find("$S", 0);
+	if(ls > 0) {
+		res.erase(ls, 2);
+		res.insert(ls, glb_path.asChar(), glb_path.length());
+	}
+	
+	int lf = res.find("$F", 0);
+	if(lf > 0) {
+		res.erase(lf, 2);
+		res.insert(lf, sframe.asChar(), sframe.length());
+	}
+	
+	int lo = res.find("$O", 0);
+	if(lo > 0) {
+		res.erase(lo, 2);
+		res.insert(lo, obj_path.asChar(), obj_path.length());
 	}
 }
 //:~
