@@ -75,6 +75,7 @@ global proc anm_initStrategy()
 		print("initialize pass "+$ANM_StrategyPasses[$i]+"\n");
 		setAttr ($ANM_StrategyPasses[$i]+".renderMode") 1;
 		setAttr ($ANM_StrategyPasses[$i]+".ribFilename") -type "string" "3delight/<scene>/rib/<pass>.@.<ext>";
+		setAttr ($ANM_StrategyPasses[$i]+".connectToRenderGlobals") 0;
 	}
 }
 
@@ -88,6 +89,46 @@ global proc anm_activatePass(string $check, string $frame)
 	if(!`checkBox -q -v $check`) $val = "off";
 	frameLayout -e -ann $val $frame;
 	print("set "+`frameLayout -q -l $frame`+" "+$val+"\n");
+}
+
+/*
+connect camera to pass
+*/
+
+global proc anm_stg_onChangeCameraOpt(string $opt)
+{
+	string $cams[] = `ls -type camera`;
+	string $pass = `optionMenu -q -ann $opt`;
+	int $ucam = `optionMenu -q -sl $opt`;
+	string $cam = $cams[$ucam-1];
+	if(!`attributeExists "usedBy3dfm" $cam`) addAttr -ln "usedBy3dfm" -dt "string" $cam;
+	connectAttr -f ($cam +".usedBy3dfm") ($pass + ".camera");
+}
+
+/*
+find connected camera
+*/
+
+global proc int anm_findPassCamera(string $pass)
+{
+	string $cams[] = `ls -type camera`;
+	string $conn[] =`listConnections -shapes on -scn on -d off -s on ($pass+".camera")`;
+	int $i;
+	for($i=0; $i<size($cams); $i++) {
+		if($cams[$i] == $conn[0]) return $i;
+	}
+	return 0;
+}
+
+/*
+append cameras
+*/
+
+global proc anm_listCameraAsMenuItems()
+{
+	string $cams[] = `ls -type camera`;
+	string $acam;
+	for($acam in $cams) menuItem -l $acam;
 }
 
 /*
@@ -106,8 +147,9 @@ global proc anm_listStrategyPasses()
 	
 	int $i;
 	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+		string $passname = $ANM_StrategyPasses[$i];
 		string $frmpass = `frameLayout -p anm_renderStrategyClm 
-			-label $ANM_StrategyPasses[$i] 
+			-label $passname 
 			-labelAlign "center"
 			-borderStyle "in"
 			-width 300
@@ -115,8 +157,23 @@ global proc anm_listStrategyPasses()
                 columnLayout;
                     string $chkpass = `checkBox -l "Enable" -v 1`; 
                     checkBox -e -cc ("anm_activatePass(\""+$chkpass+"\", \""+$frmpass+"\")") $chkpass;
-                    button -l "Select" -c ("select "+$ANM_StrategyPasses[$i]);
-                    setParent ..;
+                    button -l "Select" -c ("select "+$passname);
+                    
+                    if($ANM_StrategyPasses[$i] == "estimateRadiosity") {
+                    	attrControlGrp -attribute ($passname+".renderPhotonMaps");
+			attrControlGrp -attribute ($passname+".numberOfPhotons");
+		    }
+                    
+                    string $camopt = `optionMenu -ann $passname -label "Camera"`;
+
+				anm_listCameraAsMenuItems;
+			setParent ..;	
+				int $usrcam = anm_findPassCamera($passname);
+				
+				$usrcam++;
+				
+				optionMenu -e -sl $usrcam $camopt;
+				optionMenu -e -cc ("anm_stg_onChangeCameraOpt(\""+$camopt+"\")") $camopt;   
                 setParent ..;
 	}
 }
@@ -148,17 +205,57 @@ global proc int anm_checkActivePass(string $name)
 render
 */
 
-global proc anm_renderStrateg()
+global proc anm_renderStrategy()
 {
+	// get job path
+	string $scn = `file -q -sceneName`;
+	if($scn == "") $scn = "untitled.mb";
+	string $buffer[];
+	$numTokens = `tokenize $scn "/" $buffer`;
+	$scn = $buffer[$numTokens-1];
+	$numTokens = `tokenize $scn "." $buffer`;
+	$scn = $buffer[0];
+	string $job_path = `workspace -q -fn`+"/rmantmp/" + $scn +"/";
+	
+// get rib path
+	string $rib_path = `workspace -q -fn`+"/3delight/" + $scn + "/rib/";
+	
+// open job file
+	int $jobfile =`fopen ($job_path+"jobspool.txt") "w"`;
+	
 	global string $ANM_StrategyPasses[];
 	global int $ANM_NumStrategyPasses;
 	
 	int $i;
-	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
-		if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
-			delightRenderMenuItemCommand $ANM_StrategyPasses[$i];	
+	int $frame = `currentTime -q`;
+	string $ribfile;
+	if(!`checkBox -q -v anm_stg_multiframe`) {
+		for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+			if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
+				delightRenderMenuItemCommand $ANM_StrategyPasses[$i];	
+				$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
+				fwrite $jobfile ($ribfile+"\n");
+			}
 		}
 	}
+	else {
+		int $frame_start = `intField -q -v anm_stg_minframe`;
+		int $frame_end = `intField -q -v anm_stg_maxframe`;
+		
+		for($frame = $frame_start; $frame <= $frame_end; $frame++) {
+			currentTime $frame;
+			for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+				if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
+					delightRenderMenuItemCommand $ANM_StrategyPasses[$i];
+					$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
+					fwrite $jobfile ($ribfile+"\n");
+				}
+			}
+		}
+	}
+// finish
+	fclose $jobfile;
+	print("starting job from: "+$job_path+"jobspool.txt\n");
 }
 
 /*
@@ -182,15 +279,19 @@ menu -label "Help" -helpMenu true;
 
 //Layout
 string $form = `formLayout -numberOfDivisions 100`;
-string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 120 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+string $row = `rowColumnLayout -numberOfColumns 3 -columnWidth 1 120 -columnWidth 2 120 -columnWidth 3 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
 string $scroll = `scrollLayout -p $form`;
 
 columnLayout -adjustableColumn true anm_renderStrategyClm;
 
 	
 //row begin
+checkBox -label "Multi Frame" -p $row anm_stg_multiframe;
+intField -v 1 -p $row anm_stg_minframe;
+intField -v 24 -p $row anm_stg_maxframe;
+text -l "" -p $row;text -l "" -p $row;text -l "" -p $row;
 button -l "Reload" -c "anm_listStrategyPasses" -p $row;
-button -l "Render" -c "anm_renderStrateg" -p $row;
+button -l "Render" -c "anm_renderStrategy" -p $row;
 button -l "Close"-c "deleteUI anm_renderStrategyWin" -p $row;
 
 formLayout -edit
