@@ -1,0 +1,250 @@
+/*
+global values
+*/
+
+global string $ANM_StrategyPasses[];
+global int $ANM_NumStrategyPasses;
+
+/*
+choose strategy
+*/
+
+global proc anm_chooseStrategy(int $stg)
+{
+	global string $ANM_StrategyPasses[];
+	global int $ANM_NumStrategyPasses;
+	
+	if($stg==0) {
+		$ANM_StrategyPasses[0] = "estimateRadiosity";
+		$ANM_StrategyPasses[1] = "approxGlobalDiffuse";
+		$ANM_StrategyPasses[2] = "makeGlobalDiffuseBrickMap";
+		$ANM_StrategyPasses[3] = "renderFinale";
+		$ANM_NumStrategyPasses = 4;
+	}
+	
+	anm_createStrategy;
+	anm_initStrategy;
+	anm_listStrategyPasses;
+}
+
+/*
+already exists?
+*/
+
+global proc int anm_checkExistingPass(string $name)
+{
+	 string $render_passes[];
+	 $render_passes = `ls -type "delightRenderPass"`;
+	 int $i;
+	 for($i=0; $i<size($render_passes); $i++) {
+	 	 if($render_passes[$i] == $name) return 1;
+	 }
+	return 0;	
+}
+
+/*
+create strategy
+*/
+
+global proc anm_createStrategy()
+{
+	global string $ANM_StrategyPasses[];
+	global int $ANM_NumStrategyPasses;
+	
+	int $i;
+	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+		if(`anm_checkExistingPass($ANM_StrategyPasses[$i])` != 1) {
+			print("create pass "+$ANM_StrategyPasses[$i]+"\n");
+			string $pass = `DL_createRenderPassNode`;
+			rename $pass $ANM_StrategyPasses[$i];
+		}
+	}
+}
+
+/*
+default values
+*/
+
+global proc anm_initStrategy()
+{
+	global string $ANM_StrategyPasses[];
+	global int $ANM_NumStrategyPasses;
+	
+	int $i;
+	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+		print("initialize pass "+$ANM_StrategyPasses[$i]+"\n");
+		setAttr ($ANM_StrategyPasses[$i]+".renderMode") 1;
+		setAttr ($ANM_StrategyPasses[$i]+".ribFilename") -type "string" "3delight/<scene>/rib/<pass>.@.<ext>";
+	}
+}
+
+/*
+annotate activeness of a pass
+*/
+
+global proc anm_activatePass(string $check, string $frame)
+{
+	string $val = "on";
+	if(!`checkBox -q -v $check`) $val = "off";
+	frameLayout -e -ann $val $frame;
+	print("set "+`frameLayout -q -l $frame`+" "+$val+"\n");
+}
+
+/*
+list strategy passes
+*/
+
+global proc anm_listStrategyPasses()
+{
+// cleanup existing list
+	string $pass[] =`columnLayout -q -childArray anm_renderStrategyClm`;
+	string $an;
+	for($an in $pass) deleteUI $an;
+	
+	global string $ANM_StrategyPasses[];
+	global int $ANM_NumStrategyPasses;
+	
+	int $i;
+	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+		string $frmpass = `frameLayout -p anm_renderStrategyClm 
+			-label $ANM_StrategyPasses[$i] 
+			-labelAlign "center"
+			-borderStyle "in"
+			-width 300
+			-ann "on"`;
+                columnLayout;
+                    string $chkpass = `checkBox -l "Enable" -v 1`; 
+                    checkBox -e -cc ("anm_activatePass(\""+$chkpass+"\", \""+$frmpass+"\")") $chkpass;
+                    button -l "Select" -c ("select "+$ANM_StrategyPasses[$i]);
+                    setParent ..;
+                setParent ..;
+	}
+}
+
+/*
+check activeness of named pass
+*/
+
+global proc int anm_checkActivePass(string $name)
+{
+	string $pass[] =`columnLayout -q -childArray anm_renderStrategyClm`;
+	string $an;
+	for($an in $pass) {
+		if(`frameLayout -q -l $an` == $name) {
+			if(`frameLayout -q -ann $an` == "on") {
+				print($name+" is active\n");
+				return 1;
+			}
+			else {
+				print($name+" is inactive\n");
+				return 0;
+			}
+		}
+	}
+	return 0;	
+}
+
+/*
+render
+*/
+
+global proc anm_renderStrateg()
+{
+	global string $ANM_StrategyPasses[];
+	global int $ANM_NumStrategyPasses;
+	
+	int $i;
+	for($i=0; $i<$ANM_NumStrategyPasses; $i++) {
+		if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
+			delightRenderMenuItemCommand $ANM_StrategyPasses[$i];	
+		}
+	}
+}
+
+/*
+main window
+*/
+
+global proc anm_openRenderStrategyWin()
+{
+//If such a window already exists, destory it.
+ if ( (`window -exists anm_renderStrategyWin`) == true ) deleteUI anm_renderStrategyWin;
+
+//Create the window.
+ window -title "Anemone 4.0 - Render Strategy" -wh 400 300  -mb on anm_renderStrategyWin;
+ 
+ menu -label "Create Strategy" -tearOff false;
+    menuItem -label "Global Illumination" -c "anm_chooseStrategy(0)";
+    //menuItem -divider true;
+    //menuItem -label "Quit";
+menu -label "Help" -helpMenu true;
+    menuItem -label "About Anemone" -c anm_openRenderStrategyHelpWin;
+
+//Layout
+string $form = `formLayout -numberOfDivisions 100`;
+string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 120 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+string $scroll = `scrollLayout -p $form`;
+
+columnLayout -adjustableColumn true anm_renderStrategyClm;
+
+	
+//row begin
+button -l "Reload" -c "anm_listStrategyPasses" -p $row;
+button -l "Render" -c "anm_renderStrateg" -p $row;
+button -l "Close"-c "deleteUI anm_renderStrategyWin" -p $row;
+
+formLayout -edit
+        -attachNone     $row     "top"
+        -attachForm     $row     "left"   2
+        -attachForm	$row     "bottom" 2
+        -attachForm 	$row     "right"  2
+
+        -attachForm     $scroll "top"    2
+        -attachForm	$scroll "left"   2
+        -attachControl	$scroll "bottom" 2 $row
+        -attachForm     $scroll "right"  2
+    $form;
+
+showWindow anm_renderStrategyWin;
+}
+
+/*
+help window
+*/
+
+global proc anm_openRenderStrategyHelpWin()
+{
+//If such a window already exists, destory it.
+ if ( (`window -exists anm_renderStrategyHelpWin`) == true ) deleteUI anm_renderStrategyHelpWin;
+
+//Create the window.
+ window -title "Anemone 4.0 - Render Strategy Help" -wh 400 300  -mb off anm_renderStrategyHelpWin;
+
+//Layout
+string $form = `formLayout -numberOfDivisions 100`;
+string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 120 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+string $scroll = `scrollField -p $form -wordWrap true -ed off`;
+
+scrollField -e -text "Create Strategy to create render passes for specific purposes. Resulting passes will show up below for more tweak. " $scroll;
+scrollField -e -it "Reload to list existing render passes. Render will save RIB from active passes and lauch a render job on them." $scroll;
+
+	
+//row begin
+button -l "Close"-c "deleteUI anm_renderStrategyHelpWin" -p $row;
+text -l " " -p $row;
+text -l " " -p $row;
+
+formLayout -edit
+        -attachNone     $row     "top"
+        -attachForm     $row     "left"   2
+        -attachForm	$row     "bottom" 2
+        -attachForm 	$row     "right"  2
+
+        -attachForm     $scroll "top"    2
+        -attachForm	$scroll "left"   2
+        -attachControl	$scroll "bottom" 2 $row
+        -attachForm     $scroll "right"  2
+    $form;
+
+showWindow anm_renderStrategyHelpWin;
+}

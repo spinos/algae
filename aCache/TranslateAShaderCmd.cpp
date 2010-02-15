@@ -162,7 +162,7 @@ void TranslateAShader::injectShaderStatement(MObject& node, MString& objname, MS
 					
 					MObject oconn;
 					AHelper::getConnectedNode(oconn, pgattr);
-					if(oconn == MObject::kNullObj) valueFromPieceNode((*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
+					if(oconn == MObject::kNullObj) valueFromPieceNode((*it)->type, (*it)->name.c_str(), pgattr, node, var);
 					else {
 // set by a func or var, collect uniform varying output
 						VariableList uniformvar;
@@ -238,7 +238,7 @@ MString TranslateAShader::funcOrVarNode(MObject& node, MString& objname, MString
 					MPlug pgattr = fnode.findPlug((*it)->name.c_str());
 					MObject oconn;
 					AHelper::getConnectedNode(oconn, pgattr);
-					if(oconn == MObject::kNullObj) valueFromPieceNode((int)(*it)->type, (*it)->name.c_str(), pgattr, oconn, var);
+					if(oconn == MObject::kNullObj) valueFromPieceNode((int)(*it)->type, (*it)->name.c_str(), pgattr, node, var);
 					else {
 // set by a func or var
 						VariableList uniformvar;

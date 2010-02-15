@@ -74,7 +74,8 @@ global proc anemoneAppendMenuItems()
 	//menuItem -l "Load MCF Mesh Cache" -c "openImportanemoneWin";
 	//menuItem -l "Add Cache Deformer" -c "openAddCacheDeformerWin";
 	//menuItem -l "Snap To Second" -c "mfc_UtilSnap";
-	menuItem -l "SLMan" -c "source aShaderInterface.mel;anm_openAShaderManWin;";
+	menuItem -l "SLMan" -c "source aShaderInterface.mel;anm_openAShaderManWin";
+	menuItem -l "Make BrickMaps" -c anm_makeObjBkm;
 	menuItem -divider true;
 	menuItem -l "Export Attribute" -subMenu true;
 		menuItem -l "Attach" -c "mcf_addAttr";
@@ -1238,4 +1239,35 @@ global proc mfc_UtilSnap()
 	string $scmd = "move -r " + $dist[0] + " " + $dist[1] + " " + $dist[2] + " " + $sel[0];
 	print($scmd);
 	eval($scmd);
+}
+
+global proc anm_makeObjBkm()
+{
+	string $path = `workspace -q -fn`+"/rmantmp/";
+	string $scn = `file -q -sceneName`;
+	string $buffer[];
+	$numTokens = `tokenize $scn "/" $buffer`;
+	$scn = $buffer[$numTokens-1];
+	$numTokens = `tokenize $scn "." $buffer`;
+	$scn = $buffer[0];
+	$path = $path + $scn;
+	
+	string $clouds[] = `getFileList -folder $path -filespec "*.ptc"`;
+
+	string $acloud;
+	string $cmd;
+	string $bkm;
+	int $i;
+	for($acloud in $clouds) {
+		$bkm = "";
+		$numTokens = `tokenize $acloud "." $buffer`;
+		if($buffer[0] != "global") {
+			for($i =0; $i < $numTokens-1; $i++) $bkm = $bkm + $buffer[$i] + ".";
+			$bkm = $bkm + "bkm";
+			$cmd = "ptc2brick " + $path + "/" + $acloud + " " + $path + "/" + $bkm;
+			print($cmd+"\n");
+			$cmd = "system(\""+$cmd+"\")";
+			evalDeferred $cmd;
+		}
+	}
 }

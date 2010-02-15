@@ -11,19 +11,21 @@ global proc string[] anm_getSurfaceFiles()
 {
 	string $res[];
 	$res[0] = "Matte"; $res[1] = "anm_Matte.xpm";
-	$res[2] = "Beauty"; $res[3] = "anm_Matte.xpm";
-	$res[4] = "Constant"; $res[5] = "anm_Constant.xpm";
-	$res[6] = "ImageFile"; $res[7] = "anm_SImageFile.xpm";
-	$res[8] = "ImageFileST"; $res[9] = "anm_SImageFile.xpm";
+	$res[2] = "GlobalDiffuse"; $res[3] = "anm_GlobalDiffuse.xpm";
+	$res[4] = "Harmony"; $res[5] = "anm_Harmony.xpm";
+	$res[6] = "Constant"; $res[7] = "anm_Constant.xpm";
+	//$res[8] = "ImageFile"; $res[9] = "anm_SImageFile.xpm";
+	//$res[10] = "ImageFileST"; $res[11] = "anm_SImageFile.xpm";
 	return $res;
 }
 
 global proc string[] anm_getColorFiles()
 {
 	string $res[];
-	$res[0] = "mixColor"; $res[1] = "";
-	$res[2] = "CImageFile"; $res[3] = "anm_CImageFile.xpm";
-	$res[4] = "CImageFileST"; $res[5] = "anm_CImageFileST.xpm";
+	$res[0] = "SCIndirect"; $res[1] = "";
+	$res[2] = "mixColor"; $res[3] = "";
+	$res[4] = "CImageFile"; $res[5] = "anm_CImageFile.xpm";
+	$res[6] = "CImageFileST"; $res[7] = "anm_CImageFileST.xpm";
 	return $res;
 }
 
@@ -119,7 +121,10 @@ global proc anm_fieldOptTxt(string $opt)
 	$fileexp[0] = "";
 	$fileexp[1] = "";
 	$fileexp[2] = "$S.$F.ptc";
-	$fileexp[3] = "$O.$F.ptc";
+	$fileexp[3] = "$S.ptc";
+	$fileexp[4] = "$O.$F.ptc";
+	$fileexp[5] = "$O.$F.bkm";
+	$fileexp[6] = "$O.bkm";
 
 	int $i = `optionMenuGrp -q -sl $opt`;
 	if($i>1) {
@@ -136,8 +141,11 @@ global proc anm_appendPointCloudEpr(string $txtgrp)
 	string $opt = `optionMenuGrp -ann $txtgrp`;
 	
 	menuItem -l "Select Template:";
-	menuItem -l "bake scene per frame";
-	menuItem -l "bake object per frame";
+	menuItem -l "point cloud scene per frame";
+	menuItem -l "point cloud scene once";
+	menuItem -l "point cloud object per frame";
+	menuItem -l "brick map object per frame";
+	menuItem -l "brick map object once";
 	
 	optionMenuGrp -e -cc ("anm_fieldOptTxt(\""+$opt+"\")") $opt;
 }
@@ -1440,7 +1448,13 @@ proc anm_listPieceAttrib(string $name)
 						addAttr -ln ($paramsh[$i]+"Y") -attributeType double -p $paramsh[$i] $name;
 						addAttr -ln ($paramsh[$i]+"Z") -attributeType double -p $paramsh[$i] $name;
 						string $xyz[] = `anm_splitbyspace($paramsh[$i+2])`;
-						string $cmd="setAttr "+$name+"."+$paramsh[$i]+" -type double3 "+$xyz[0]+" "+$xyz[1]+" "+$xyz[2];
+						string $cmd="setAttr "+$name+"."+$paramsh[$i]+"X "+$xyz[0];
+						
+						eval($cmd);
+						string $cmd="setAttr "+$name+"."+$paramsh[$i]+"Y "+$xyz[1];
+						
+						eval($cmd);
+						string $cmd="setAttr "+$name+"."+$paramsh[$i]+"Z "+$xyz[2];
 						
 						eval($cmd);
 					}
