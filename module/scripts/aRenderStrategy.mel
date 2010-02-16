@@ -1,3 +1,8 @@
+global proc string anm_stg_getPythonScriptPath()
+{
+	return "/Users/jianzhang/Documents/anemone/module/python/";
+}
+
 /*
 global values
 */
@@ -150,6 +155,7 @@ global proc anm_listStrategyPasses()
 		string $passname = $ANM_StrategyPasses[$i];
 		string $frmpass = `frameLayout -p anm_renderStrategyClm 
 			-label $passname 
+			-collapsable on
 			-labelAlign "center"
 			-borderStyle "in"
 			-width 300
@@ -234,7 +240,7 @@ global proc anm_renderStrategy()
 			if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
 				delightRenderMenuItemCommand $ANM_StrategyPasses[$i];	
 				$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
-				fwrite $jobfile ($ribfile+"\n");
+				fprint $jobfile ($ribfile+"\n");
 			}
 		}
 	}
@@ -248,7 +254,7 @@ global proc anm_renderStrategy()
 				if(`anm_checkActivePass($ANM_StrategyPasses[$i])`==1) {
 					delightRenderMenuItemCommand $ANM_StrategyPasses[$i];
 					$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
-					fwrite $jobfile ($ribfile+"\n");
+					fprint $jobfile ($ribfile+"\n");
 				}
 			}
 		}
@@ -256,6 +262,12 @@ global proc anm_renderStrategy()
 // finish
 	fclose $jobfile;
 	print("starting job from: "+$job_path+"jobspool.txt\n");
+	if(`checkBox -q -v anm_stg_immediate`) {
+		system("python "+anm_stg_getPythonScriptPath()+"anemone.py --file "+$job_path+"jobspool.txt");
+		print("all done!\n");
+	}
+	else 
+		print("no render, start job outside maya.");
 }
 
 /*
@@ -289,7 +301,8 @@ columnLayout -adjustableColumn true anm_renderStrategyClm;
 checkBox -label "Multi Frame" -p $row anm_stg_multiframe;
 intField -v 1 -p $row anm_stg_minframe;
 intField -v 24 -p $row anm_stg_maxframe;
-text -l "" -p $row;text -l "" -p $row;text -l "" -p $row;
+checkBox -v 1 -label "Immediate Render" -p $row anm_stg_immediate;
+text -l "" -p $row;text -l "" -p $row;
 button -l "Reload" -c "anm_listStrategyPasses" -p $row;
 button -l "Render" -c "anm_renderStrategy" -p $row;
 button -l "Close"-c "deleteUI anm_renderStrategyWin" -p $row;
