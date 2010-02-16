@@ -1139,6 +1139,17 @@ global proc anm_ribboxConnectDropcallback(string $dragControl, string $dropContr
 }
 
 /*
+change ensemble operation
+*/
+
+global proc anm_sdr_onChangeEnsembleOpt(string $opt)
+{
+	string $ens = `optionMenu -q -ann $opt`;
+	int $usropt = `optionMenu -q -sl $opt`;
+	setAttr ($ens+".operation") ($usropt - 1);
+}
+
+/*
 list ensemble attrib
 */
 
@@ -1188,6 +1199,16 @@ proc anm_listEnsembleAttrib(string $name)
 			textFieldButtonGrp -e -bc ("anm_aShaderNaviConnected(\""+ $attrrbx +"\")") $tfbrbx;
 			popupMenu;
 				menuItem -l "Disconnect" -c ("anm_disconnectAttrAny(\""+$tfbrbx+"\")");
+				
+		string $attropt = $name+".operation";
+		string $ensopt = `optionMenu -ann $name -label "Operation"`;
+			menuItem -l "Render";
+			menuItem -l "Make Brick Map Global Illumination";
+			menuItem -l "Make Brick Map SSS";
+			menuItem -l "Do Nothing";
+		int $ensusropt = `getAttr $attropt` + 1;
+		optionMenu -e -sl $ensusropt $ensopt;
+		optionMenu -e -cc ("anm_sdr_onChangeEnsembleOpt(\""+$ensopt+"\")") $ensopt;
 		setParent..;
 		
 	setParent..;

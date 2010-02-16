@@ -10,6 +10,7 @@ MTypeId     EnsembleAShaderNode::id( 0x00026250 );
 MObject		EnsembleAShaderNode::asurface;
 MObject		EnsembleAShaderNode::adisplacement;
 MObject		EnsembleAShaderNode::aribbox;
+MObject		EnsembleAShaderNode::aoperation;
 MObject     EnsembleAShaderNode::output;       
 
 EnsembleAShaderNode::EnsembleAShaderNode() {}
@@ -59,6 +60,11 @@ MStatus EnsembleAShaderNode::initialize()
 	tAttr.setStorable(false);
 	addAttribute( aribbox );
 	
+	aoperation = numAttr.create( "operation", "opt", MFnNumericData::kInt, 0 );
+	numAttr.setStorable(true);
+	numAttr.setKeyable(true);
+	addAttribute( aoperation );
+	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
 	numAttr.setStorable(false);
@@ -68,6 +74,7 @@ MStatus EnsembleAShaderNode::initialize()
 	attributeAffects( asurface, output );
 	attributeAffects( adisplacement, output );
 	attributeAffects( aribbox, output );
+	attributeAffects( aoperation, output );
 
 	return MS::kSuccess;
 }

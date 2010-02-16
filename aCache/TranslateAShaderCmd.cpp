@@ -127,6 +127,7 @@ void TranslateAShader::injectShaderStatement(MObject& node, MString& objname, MS
 	MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
 	MString scn;
 	MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
+	if(scn.length() < 1) scn = "untitled";
 	string sscn = scn.asChar();
 	SHelper::filenameWithoutPath(sscn);
 	MString shader_path = proj+"/rmanshaders/"+sscn.c_str()+"/";
