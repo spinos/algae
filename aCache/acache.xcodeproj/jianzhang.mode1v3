@@ -197,48 +197,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>7F7B4F2D112B922200ADDB6D</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>ParseACacheCmd.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>7F7B4F2E112B922200ADDB6D</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>ParseACacheCmd.h</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>7F7B4F37112B978B00ADDB6D</string>
-						<key>history</key>
-						<array>
-							<string>7F7B4F2F112B922200ADDB6D</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {552, 572}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>664 138 552 613 0 0 1280 778 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -344,7 +303,7 @@
 							<real>267</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>305 311 683 298 0 0 1280 778 </string>
+						<string>305 313 683 298 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -381,7 +340,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {394, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>305 311 683 298 0 0 1280 778 </string>
+								<string>305 313 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -401,7 +360,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {394, 252}}</string>
 								<key>RubberWindowFrame</key>
-								<string>305 311 683 298 0 0 1280 778 </string>
+								<string>305 313 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -561,13 +520,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>7F7B4F2D112B922200ADDB6D</string>
 		<string>7FE58BA50FB61F9000187112</string>
 		<string>7F7B4F22112B8E6200ADDB6D</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
-		<string>7F7B4F2D112B922200ADDB6D</string>
 	</array>
 	<key>WindowString</key>
-	<string>305 311 683 298 0 0 1280 778 </string>
+	<string>305 313 683 298 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

@@ -344,6 +344,32 @@ global proc anm_pickupFileAsStringAttr(string $textfield)
 }
 
 /*
+convert texture
+*/
+
+global proc anm_sdr_makeTexture(string $textfield)
+{
+	string $file = `textFieldButtonGrp -q -text $textfield`;
+	if($file != "") {
+		string $buffer[];
+		$numTokens = `tokenize $file "." $buffer`;
+		int $i;
+		string $tdl = "";
+		for($i=0; $i<$numTokens - 1; $i++) {
+			$tdl = $tdl + $buffer[$i] + ".";
+		}
+		$tdl = $tdl + "tdl";
+		system("tdlmake -mode black "+$file+" "+$tdl);
+		
+		textFieldButtonGrp -e -text $tdl $textfield;
+		 
+		string $attr = `textFieldButtonGrp -q -ann $textfield`;
+		
+		setAttr -type "string" $attr $tdl;
+	}
+}
+
+/*
 set to selection
 */
 
@@ -1267,6 +1293,7 @@ global proc anm_listVariableAttrib(string $name)
 					textFieldButtonGrp -e -cc ("anm_connectTextFieldButtonToStringAttr(\""+$txctr+"\")") $txctr;
 		// pick up a file
 					textFieldButtonGrp -e -bc ("anm_pickupFileAsStringAttr(\""+$txctr+"\")") $txctr;
+					button -l "Make Texture" -c ("anm_sdr_makeTexture(\""+$txctr+"\")");
 				}
 				else if($dtl=="rib") {
 
