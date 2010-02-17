@@ -1203,8 +1203,8 @@ proc anm_listEnsembleAttrib(string $name)
 		string $attropt = $name+".operation";
 		string $ensopt = `optionMenu -ann $name -label "Operation"`;
 			menuItem -l "Render";
-			menuItem -l "Make Brick Map Global Illumination";
-			menuItem -l "Make Brick Map SSS";
+			menuItem -l "Make Global Illumination Brick Map";
+			menuItem -l "Make SSS Brick Map";
 			menuItem -l "Do Nothing";
 		int $ensusropt = `getAttr $attropt` + 1;
 		optionMenu -e -sl $ensusropt $ensopt;

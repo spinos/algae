@@ -41,8 +41,10 @@ private:
 	void valueFromVarNode(MObject& node, SLVariable* var, int& access);
 	void convertType(int type, SLVariable* var);
 	void pathExpression(string& res, MString& objname);
+	void getTmpPath();
 
 	SLDoc* _sl;
 	int m_iFrame;
+	MString m_tmpPath;
  };
 

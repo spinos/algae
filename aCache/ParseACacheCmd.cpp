@@ -52,7 +52,7 @@ syntax.setObjectType(MSyntax::kSelectionList, 0, 1);
 
 MStatus ParseACache::doIt( const MArgList& args ) 
 {
-
+	getTmpPath();
 	MStatus status = parseArgs( args );
 	
 	if( status != MS::kSuccess ) return status;
@@ -108,106 +108,101 @@ MStatus ParseACache::doIt( const MArgList& args )
 			MString ssname = fviz.name();
 			MObject oensemble = getDirectEnsembleNode(plgmsg, ssname, spass);
 			if(oensemble != MObject::kNullObj) {
-// default rib
-				defRIBStat();
 				MFnDependencyNode fens(oensemble);
 // rib box first
 				MPlug rbxplg = fens.findPlug("rbx", &status);
 				MObject orbx;
 				AHelper::getConnectedNode(orbx, rbxplg);
-				injectRIBStatement(orbx);
 // find surface
 				MPlug surfplg = fens.findPlug("surfaceShader", &status);
 				MObject osurf;
 				AHelper::getConnectedNode(osurf, surfplg);
-				injectShaderStatement(osurf, ssname, spass, 0);
-				
 // find displacement
 				MPlug dispplg = fens.findPlug("displacementShader", &status);
 				MObject odisp;
 				AHelper::getConnectedNode(odisp, dispplg);
-				injectShaderStatement(odisp, ssname, spass, 1);
+// get bbox
+				float fbbox[6];
+				fbbox[0] = fviz.findPlug("boundingBoxMinX").asFloat();
+				fbbox[1] = fviz.findPlug("boundingBoxMaxX").asFloat();
+				fbbox[2] = fviz.findPlug("boundingBoxMinY").asFloat();
+				fbbox[3] = fviz.findPlug("boundingBoxMaxY").asFloat();
+				fbbox[4] = fviz.findPlug("boundingBoxMinZ").asFloat();
+				fbbox[5] = fviz.findPlug("boundingBoxMaxZ").asFloat();
+
+// get cache file	
+				MString scache =  fviz.findPlug("cachePath").asString();
+
+// get mesh name
+				MString smesh =  fviz.findPlug("meshName").asString();
+				
+// get camera
+				MDagPath pcam;
+				MString scam(cameraname);
+				AHelper::getTypedPathByName(MFn::kCamera, scam, pcam);
+				MFnCamera fcam(pcam);
+				
+				MVector viewDir = fcam.viewDirection( MSpace::kWorld );
+				MVector eyePos = fcam.eyePoint( MSpace::kWorld );
+				MVector rightDir = fcam.rightDirection( MSpace::kWorld);
+				MVector upDir = fcam.upDirection( MSpace::kWorld );
+				
+				int bpersp = 1;
+				float ffov = fcam.horizontalFieldOfView();
+				ffov = ffov/3.1415927f*180.f;
+				if (fcam.isOrtho()) {
+					bpersp = 0;
+					ffov = fcam.orthoWidth();
+				}
+
+				MString sproc, scmd, ptcname, bkmname;
+// operation option
+				int ioperation = fens.findPlug("operation").asInt();
+				switch(ioperation) {
+					case 0:
+// default rib
+						defRIBStat();				
+
+						injectRIBStatement(orbx);
+
+						injectShaderStatement(osurf, ssname, spass, 0);
+
+						injectShaderStatement(odisp, ssname, spass, 1);
+					
+						char argbuf[1024];
+						sprintf(argbuf, "%s %s %d %f %f %d",
+										scache.asChar(), smesh.asChar(), 
+										(int)fframe, fshutteropen, fshutterclose,
+										bSubd);
+										
+						char bboxbuf[128];
+						sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
+						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
+						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
+						MGlobal::executeCommand(scmd);
+						break;
+					case 1:
+//MakeBrickMap [ "foo.ptc" ] "foo.bkm" 
+						ptcname = m_tmpPath + smesh + ".ptc";
+						bkmname = m_tmpPath + smesh + ".bkm";
+						sproc = MString("MakeBrickMap [ \\\"") + ptcname + "\\\" ] \\\"" + bkmname +"\\\"";
+						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
+						MGlobal::executeCommand(scmd);
+						break;
+					case 2:
+//MakeBrickMap [ "foo_sss.ptc" ] "foo_sss.bkm" 
+						ptcname = m_tmpPath + smesh + "_sss.ptc";
+						bkmname = m_tmpPath + smesh + "_sss.bkm";
+						sproc = MString("MakeBrickMap [ \\\"") + ptcname + "\\\" ] \\\"" + bkmname +"\\\"";
+						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
+						MGlobal::executeCommand(scmd);
+						break;
+					default:
+						break;
+				}
 			}
 		}
-
-	// get bbox
-		float fbbox[6];
-		fbbox[0] = fviz.findPlug("boundingBoxMinX").asFloat();
-		fbbox[1] = fviz.findPlug("boundingBoxMaxX").asFloat();
-		fbbox[2] = fviz.findPlug("boundingBoxMinY").asFloat();
-		fbbox[3] = fviz.findPlug("boundingBoxMaxY").asFloat();
-		fbbox[4] = fviz.findPlug("boundingBoxMinZ").asFloat();
-		fbbox[5] = fviz.findPlug("boundingBoxMaxZ").asFloat();
-
-	// get cache file	
-		MString scache =  fviz.findPlug("cachePath").asString();
-
-	// get mesh name
-		MString smesh =  fviz.findPlug("meshName").asString();
-		
-	// get camera
-		MDagPath pcam;
-		MString scam(cameraname);
-		AHelper::getTypedPathByName(MFn::kCamera, scam, pcam);
-		MFnCamera fcam(pcam);
-		
-		MVector viewDir = fcam.viewDirection( MSpace::kWorld );
-		MVector eyePos = fcam.eyePoint( MSpace::kWorld );
-		MVector rightDir = fcam.rightDirection( MSpace::kWorld);
-		MVector upDir = fcam.upDirection( MSpace::kWorld );
-		
-		int bpersp = 1;
-		float ffov = fcam.horizontalFieldOfView();
-		ffov = ffov/3.1415927f*180.f;
-		if (fcam.isOrtho()) {
-			bpersp = 0;
-			ffov = fcam.orthoWidth();
-		}
-		
-		char argbuf[1024];
-		sprintf(argbuf, "%s %s %d %f %f %d",
-						scache.asChar(), smesh.asChar(), 
-						(int)fframe, fshutteropen, fshutterclose,
-						bSubd);
-						
-		char bboxbuf[128];
-		sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
-		MString sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
-		MString scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
-		MGlobal::executeCommand(scmd);
-
 	}
-	/*else if(argData.isFlagSet("-ts")) {
-		argData.getFlagArgument("-ts", 0, semit);
-		MObject onode;
-		AHelper::getNamedObject(semit, onode);
-		MString ssname("nil");
-		MString spass("nil");
-		injectShaderStatement(onode, ssname, spass, 0);
-	}
-	/*else if (argData.isFlagSet("-l")) {
-		
-		MString proj;
-		MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
-		MString scn;
-		MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
-		string sscn = scn.asChar();
-		SHelper::filenameWithoutPath(sscn);
-		MString shader_path = proj+"/rmanshaders/"+sscn.c_str();
-		
-		MString scmd = MString("getFileList -folder \"") + shader_path + "\" -filespec \"*.sl\"";
-		string srcname;
-		MStringArray srcs;
-		MGlobal::executeCommand (scmd, srcs);
-		for(int i=0; i<srcs.length(); i++) {
-			srcname = srcs[i].asChar();
-			SHelper::cutByLastDot(srcname);
-// compile sl
-			scmd = MString("system(\"shaderdl -o "+ shader_path + "/" + srcname.c_str() + ".sdl "+shader_path + "/" + srcname.c_str() +".sl\")");
-			MGlobal::displayInfo(MString("compile ")+srcs[i]);
-			MGlobal::executeCommand(scmd);
-		}
-	}*/
 
  return MS::kSuccess;
  }
@@ -257,13 +252,10 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 }
 
 void ParseACache::defRIBStat()
-{
-//Attribute "visibility" "integer transmission" [ 1 ] 
-//        Attribute "shade" "string transmissionhitmode" [ "opaque" ] 
+{ 
 	MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"visibility\\\" \\\"integer transmission\\\" [ 1 ]\\n\"");
 	MGlobal::executeCommand(slog);
 	
-//Attribute "shade" "string transmissionhitmode" [ "opaque" ] 
 	slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"shade\\\" \\\"string transmissionhitmode\\\" [ \\\"opaque\\\" ]\\n\"");
 	MGlobal::executeCommand(slog);
 }
@@ -826,5 +818,18 @@ void ParseACache::pathExpression(string& res, MString& objname)
 		res.erase(lo, 2);
 		res.insert(lo, obj_path.asChar(), obj_path.length());
 	}
+}
+
+void ParseACache::getTmpPath()
+{
+	MString proj;
+	MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
+	MString scn;
+	MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
+	if(scn.length() < 1) scn = "untitled";
+	string sscn = scn.asChar();
+	SHelper::filenameWithoutPath(sscn);
+	
+	m_tmpPath = proj+"/rmantmp/"+sscn.c_str()+"/";
 }
 //:~
