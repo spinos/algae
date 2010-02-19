@@ -7,8 +7,8 @@
 
 MTypeId     AttribACacheExportNode::id( 0x00025257 );
 MObject		AttribACacheExportNode::anochange;
-/*MObject		AttribACacheExportNode::askipidir;
-MObject		AttribACacheExportNode::askipscat;
+MObject		AttribACacheExportNode::anosubdiv;
+/*MObject		AttribACacheExportNode::askipscat;
 MObject		AttribACacheExportNode::askipepid;
 MObject		AttribACacheExportNode::aaslight;    
 MObject		AttribACacheExportNode::aklight; 
@@ -52,12 +52,12 @@ MStatus AttribACacheExportNode::initialize()
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
 	addAttribute( anochange );
-/*	
-	askipidir = numAttr.create( "skipIndirect", "skind", MFnNumericData::kBoolean, 0 );
+	
+	anosubdiv = numAttr.create( "asSubdiv", "asd", MFnNumericData::kBoolean, 1 );
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
-	addAttribute( askipidir );
-	
+	addAttribute( anosubdiv );
+/*	
 	askipepid = numAttr.create( "skipScatter", "skscat", MFnNumericData::kBoolean, 0 );
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
@@ -95,8 +95,8 @@ MStatus AttribACacheExportNode::initialize()
 		if (!stat) { stat.perror("addAttribute"); return stat;}
 		
 	attributeAffects( anochange, output );
-/*attributeAffects( askipidir, output );
-	attributeAffects( askipepid, output );
+	attributeAffects( anosubdiv, output );
+/*	attributeAffects( askipepid, output );
 	attributeAffects( askipscat, output );
 	attributeAffects( aaslight, output );
 	attributeAffects( aklight, output );

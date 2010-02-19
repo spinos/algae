@@ -19,5 +19,4 @@ private:
 	int m_frame;
 	float m_mesh_0, m_mesh_1;
 	int m_i_double_sided;
-	int m_bSubdiv;
 };

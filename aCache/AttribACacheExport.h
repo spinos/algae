@@ -15,8 +15,8 @@ public:
 
 public:
 	static  MObject		anochange;
-	/*static  MObject		askipidir;
-	static  MObject		askipscat;
+	static  MObject		anosubdiv;
+	/*static  MObject		askipscat;
 	static  MObject		askipepid;
 	static  MObject		aaslight;
 	static  MObject		aklight;

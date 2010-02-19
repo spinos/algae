@@ -22,8 +22,8 @@ global proc string[] anm_getSurfaceFiles()
 global proc string[] anm_getColorFiles()
 {
 	string $res[];
-	$res[0] = "SCIndirect"; $res[1] = "";
-	$res[2] = "mixColor"; $res[3] = "";
+	$res[0] = "SCIndirect"; $res[1] = "anm_SCIndirect.xpm";
+	$res[2] = "SCDirect"; $res[3] = "anm_SCDirect.xpm";
 	$res[4] = "CImageFile"; $res[5] = "anm_CImageFile.xpm";
 	$res[6] = "CImageFileST"; $res[7] = "anm_CImageFileST.xpm";
 	return $res;
@@ -120,11 +120,12 @@ global proc anm_fieldOptTxt(string $opt)
 	string $fileexp[];
 	$fileexp[0] = "";
 	$fileexp[1] = "";
-	$fileexp[2] = "$S.$F.ptc";
-	$fileexp[3] = "$S.ptc";
-	$fileexp[4] = "$O.$F.ptc";
-	$fileexp[5] = "$O.$F.bkm";
+	$fileexp[2] = "$S.ptc";
+	$fileexp[3] = "$O.ptc";
+	$fileexp[4] = "$O_sss.ptc";
+	$fileexp[5] = "$S.bkm";
 	$fileexp[6] = "$O.bkm";
+	$fileexp[7] = "$O_sss.bkm";
 
 	int $i = `optionMenuGrp -q -sl $opt`;
 	if($i>1) {
@@ -141,11 +142,12 @@ global proc anm_appendPointCloudEpr(string $txtgrp)
 	string $opt = `optionMenuGrp -ann $txtgrp`;
 	
 	menuItem -l "Select Template:";
-	menuItem -l "point cloud scene per frame";
-	menuItem -l "point cloud scene once";
-	menuItem -l "point cloud object per frame";
-	menuItem -l "brick map object per frame";
-	menuItem -l "brick map object once";
+	menuItem -l "point cloud per scene";
+	menuItem -l "point cloud per object";
+	menuItem -l "point cloud SSS per object";
+	menuItem -l "brick map per scene";
+	menuItem -l "brick map per object";
+	menuItem -l "brick map SSS per object";
 	
 	optionMenuGrp -e -cc ("anm_fieldOptTxt(\""+$opt+"\")") $opt;
 }
@@ -164,7 +166,7 @@ global proc anm_scrollAppendTxt(string $opt)
 	$ribstat[2] = "Attribute \"cull\" \"hidden\" 0 \nAttribute \"cull\" \"backfacing\" 0 \nAttribute \"dice\" \"rasterorient\" 0 \n";
 	$ribstat[3] = "Attribute \"visibility\" \"integer camera\" [ 0 ] \n";
 	$ribstat[4] = "Matte 1 \n";
-	$ribstat[5] = "Attribute \"visibility\" \"integer photon\" [ 1 ] \n";
+	$ribstat[5] = "Attribute \"visibility\" \"integer photon\" [ 1 ] \nAttribute \"shade\" \"string photonhitmode\" [ \"primitive\" ] \nAttribute \"photon\" \"string shadingmodel\" [ \"matte\" ]\n";
 
 	int $i = `optionMenuGrp -q -sl $opt`;
 	if($i>1) {
@@ -197,8 +199,15 @@ global proc anm_popupGoUpMenu(string $name)
 	anm_downstreamConn($conn, $name);
 	string $aconn;
 popupMenu;
+	if(`nodeType $name` == "aShaderEnsemble" || `nodeType $name` == "aShaderAdaptEnsemble") {
+		menuItem -l "Attach" -c ("anm_attachEnsemble(\"" + $name + "\")");
+		menuItem -l "Detach" -c ("anm_detachEnsemble(\"" + $name + "\")");
+		menuItem -l "Affect" -c ("anm_affectbyEnsemble(\"" + $name + "\")");
+		menuItem -divider true;
+	}
+	menuItem -l "Goto";
 	for($aconn in $conn) menuItem -l $aconn -c ("anm_updateAttrib(\"" + $aconn + "\")") ;
-			
+	menuItem -divider true;		
 }
 
 /*
@@ -212,8 +221,9 @@ global proc anm_menuGoUpMenu(string $name)
 	string $conn[];
 	anm_downstreamConn($conn, $name);
 	string $aconn;
-
+	menuItem -p anm_attrpngoupopt -l "Goto";
 	for($aconn in $conn) menuItem -p anm_attrpngoupopt -l $aconn -c ("anm_updateAttrib(\"" + $aconn + "\")") ;
+	menuItem -p anm_attrpngoupopt -divider true;
 			
 }
 
@@ -681,9 +691,8 @@ global proc anm_aShaderConnectTypedAttrDropcallback(string $dragControl, string 
 attach ensemble to a node
 */
 
-global proc anm_attachEnsemble(string $row)
+global proc anm_attachEnsemble(string $node)
 {
-	string $node = `rowLayout -q -ann $row`;
 	string $sel[] = `ls -sl`;
 	int $i;
 	for($i=0; $i<size($sel); $i++) {
@@ -707,9 +716,8 @@ global proc anm_attachEnsemble(string $row)
 detach ensemble to a node
 */
 
-global proc anm_detachEnsemble(string $row)
+global proc anm_detachEnsemble(string $node)
 {
-	string $node = `rowLayout -q -ann $row`;
 	string $sel[] = `ls -sl`;
 	int $i;
 	for($i=0; $i<size($sel); $i++) {
@@ -733,9 +741,8 @@ global proc anm_detachEnsemble(string $row)
 get objects connected to ensemble
 */
 
-global proc anm_affectbyEnsemble(string $row)
+global proc anm_affectbyEnsemble(string $node)
 {
-	string $node = `rowLayout -q -ann $row`;
 	string $conn[] =`listConnections -scn on ($node+".output")`;
 	int $i;
 
@@ -774,20 +781,17 @@ global proc anm_affectbyPiece(string $row)
 }
 
 /*
-a line of adapt ensemble
+show line of adapt ensemble
 */
 
 proc anm_shoAdaptEnsemble(string $name)
 {
-	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 5
-    -columnWidth5 50 50 40 40 40
+	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 2
+    -columnWidth2 50 50
     -adjustableColumn 2
     -columnAlign  1 "right"
     -columnAttach 1 "both"     0
     -columnAttach 2 "both"  0
-    -columnAttach 3 "both"  0
-    -columnAttach 4 "both"  0
-    -columnAttach 5 "both"  0
     -ann $name`;
     
     string $img = "anm_ensembleCtx.xpm";
@@ -803,9 +807,6 @@ proc anm_shoAdaptEnsemble(string $name)
     		anm_popupGoUpMenu($name);
     		
     string $anm_piecetx = `textField -w 125 -text $name`;
-    button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
-    button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
-    button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
     setParent..;
     textField -e -cc ("anm_renameAPiece(\""+$anm_piecerow+"\", \""+$anm_piecetx+"\")") $anm_piecetx;
 }
@@ -816,15 +817,12 @@ show ensemble line
 
 proc anm_shoEnsemble(string $name)
 {
-	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 5
-    -columnWidth5 50 50 40 40 40
+	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 2
+    -columnWidth2 50 50
     -adjustableColumn 2
     -columnAlign  1 "right"
     -columnAttach 1 "both"     0
     -columnAttach 2 "both"  0
-    -columnAttach 3 "both"  0
-    -columnAttach 4 "both"  0
-    -columnAttach 5 "both"  0
     -ann $name`;
     
     iconTextButton -ann $anm_piecerow 
@@ -837,9 +835,6 @@ proc anm_shoEnsemble(string $name)
     		anm_popupGoUpMenu($name);
     		
     string $anm_piecetx = `textField -w 125 -text $name`;
-    button -l "attach" -c ("anm_attachEnsemble(\"" + $anm_piecerow + "\")");
-    button -l "detach" -c ("anm_detachEnsemble(\"" + $anm_piecerow + "\")");
-    button -l "affect" -c ("anm_affectbyEnsemble(\"" + $anm_piecerow + "\")");
     setParent..;
     textField -e -cc ("anm_renameAPiece(\""+$anm_piecerow+"\", \""+$anm_piecetx+"\")") $anm_piecetx;
 }
@@ -850,15 +845,12 @@ show piece line
 
 proc anm_shoPiece(string $name)
 {
-	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 5
-    -columnWidth5 50 50 40 40 40
+	string $anm_piecerow = `rowLayout -p anm_existingclm -numberOfColumns 2
+    -columnWidth2 50 50
     -adjustableColumn 2
     -columnAlign  1 "right"
     -columnAttach 1 "both"     0
     -columnAttach 2 "both"  0
-    -columnAttach 3 "both"  0
-    -columnAttach 4 "both"  0
-    -columnAttach 5 "both"  0
     -ann $name`;
     
     string $node =`rowLayout -q -ann $anm_piecerow`;
@@ -875,28 +867,24 @@ proc anm_shoPiece(string $name)
     		
     string $anm_piecetx = `textField -w 125 -text $name`;
 
-    button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_piecerow + "\")");
-    text -l "";
-    text -l "";
+    //button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_piecerow + "\")");
+
     setParent..;
     textField -e -cc ("anm_renameAPiece(\""+$anm_piecerow+"\", \""+$anm_piecetx+"\")") $anm_piecetx;
 }
 
 /*
-sho variable line
+show line of variable
 */
 
 proc anm_shoVariable(string $name)
 {
-	string $anm_varrow = `rowLayout -p anm_existingclm -numberOfColumns 5
-    -columnWidth5 50 50 40 40 40
+	string $anm_varrow = `rowLayout -p anm_existingclm -numberOfColumns 2
+    -columnWidth2 50 50
     -adjustableColumn 2
     -columnAlign  1 "right"
     -columnAttach 1 "both"     0
     -columnAttach 2 "both"  0
-    -columnAttach 3 "both"  0
-    -columnAttach 4 "both"  0
-    -columnAttach 5 "both"  0
     -ann $name`;
     
     string $img = "anm_variableC.xpm";
@@ -916,28 +904,24 @@ proc anm_shoVariable(string $name)
     		anm_popupGoUpMenu($name);
     		
     string $anm_vartx = `textField -w 125 -text $name`;
-    button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
-    text -l "";
-    text -l "";
+    //button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
+    
     setParent..;
     textField -e -cc ("anm_renameAPiece(\""+$anm_varrow+"\", \""+$anm_vartx+"\")") $anm_vartx;
 }
 
 /*
-sho adapt variable line
+show line of adapt variable
 */
 
 proc anm_shoAdaptVariable(string $name)
 {
-	string $anm_varrow = `rowLayout -p anm_existingclm -numberOfColumns 5
-    -columnWidth5 50 50 40 40 40
+	string $anm_varrow = `rowLayout -p anm_existingclm -numberOfColumns 2
+    -columnWidth2 50 50
     -adjustableColumn 2
     -columnAlign  1 "right"
     -columnAttach 1 "both"     0
     -columnAttach 2 "both"  0
-    -columnAttach 3 "both"  0
-    -columnAttach 4 "both"  0
-    -columnAttach 5 "both"  0
     -ann $name`;
     
     string $img = "anm_variableF.xpm";
@@ -967,9 +951,7 @@ proc anm_shoAdaptVariable(string $name)
     		anm_popupGoUpMenu($name);
     		
     string $anm_vartx = `textField -w 125 -text $name`;
-    button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
-    text -l "";
-    text -l "";
+    //button -l "affect" -c ("anm_affectbyPiece(\"" + $anm_varrow + "\")");
     setParent..;
     textField -e -cc ("anm_renameAPiece(\""+$anm_varrow+"\", \""+$anm_vartx+"\")") $anm_vartx;
 }
@@ -1571,6 +1553,7 @@ create ensemble
 global proc anm_createEnsemble(int $type)
 {
 	string $dummy = `createNode -n "dummy" transform`;
+	
 	string $node;
 	if($type==0) {
 		$node =`createNode -n "ensemble" aShaderEnsemble`;
@@ -1585,6 +1568,10 @@ global proc anm_createEnsemble(int $type)
 	}
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
+	
+	string $dummyGrp = "dummyGrp";
+	if( !`objExists dummyGrp` ) $dummyGrp = `group -em -n dummyGrp`;
+	parent $dummy $dummyGrp;
 }
 
 /*
@@ -1598,8 +1585,13 @@ global proc anm_createPiece(string $name)
 	setAttr -type "string" ($node + ".xslPath") ($rootpath+"/"+$name+".xrsl");
 	
 	string $dummy = `createNode -n "dummy" transform`;
+
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
+	
+	string $dummyGrp = "dummyGrp";
+	if( !`objExists dummyGrp` ) $dummyGrp = `group -em -n dummyGrp`;
+	parent $dummy $dummyGrp;
 }
 
 /*
@@ -1609,6 +1601,8 @@ create variable with handle, acess, and detail
 global proc anm_createVariable(string $handle, string $access, string $detail, string $icon)
 {
 	string $dummy = `createNode -n "dummy" transform`;
+	
+	
 	
 	string $defnm = "fvar";
 	if($handle == "color") $defnm = "cvar";
@@ -1639,6 +1633,10 @@ global proc anm_createVariable(string $handle, string $access, string $detail, s
 	
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
+	
+	string $dummyGrp = "dummyGrp";
+	if( !`objExists dummyGrp` ) $dummyGrp = `group -em -n dummyGrp`;
+	parent $dummy $dummyGrp;
 }
 
 /*
@@ -1648,6 +1646,7 @@ create adapt variable with handle and operation
 global proc anm_createAdaptVariable(string $handle, string $operation)
 {
 	string $dummy = `createNode -n "dummy" transform`;
+		
 	string $defnm;
 	if($handle=="float") $defnm = "fvar";
 	else if($handle == "color") $defnm = "cvar";
@@ -1663,6 +1662,10 @@ global proc anm_createAdaptVariable(string $handle, string $operation)
 
 	connectAttr -f ($node + ".output") ($dummy+".translateX");
 	anm_updateExisting;
+	
+	string $dummyGrp = "dummyGrp";
+	if( !`objExists dummyGrp` ) $dummyGrp = `group -em -n dummyGrp`;
+	parent $dummy $dummyGrp;
 }
 
 /*

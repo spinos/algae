@@ -57,7 +57,7 @@ const char *particleVS =
 const char *particleFS = 
 "uniform vec3 baseColor;"
 "uniform vec2 clipping;"
-
+"uniform float handle;"
 "varying float eyez;"
 
 "void main()                                                        \n"
@@ -66,6 +66,7 @@ const char *particleFS =
 "	float normz = clamp((eyez - clipping.x)/(clipping.y - clipping.x), 0.0, 1.0);"
 "	normz = sqrt(normz);"
 "    gl_FragColor = vec4(1.0-normz, normz, 0.0, 1.0);              \n"
+"    if(handle == 0.0) gl_FragColor = vec4(cs, 1.0);              \n"
 "} ";
 
 GLSLACache::GLSLACache() 
@@ -110,8 +111,9 @@ char GLSLACache::initProgram()
 	glUseProgram(program);
 	//glUniform1f(glGetUniformLocation(program, "scaleDensity"), 1.0);
 	//glUniform1f(glGetUniformLocation(program, "pointRadius"), 1.0);
-	glUniform3f(glGetUniformLocation(program, "baseColor"), 1.0, 0.25, 0.0);
+	//glUniform3f(glGetUniformLocation(program, "baseColor"), 1.0, 0.25, 0.0);
 	glUniform2f(glGetUniformLocation(program, "clipping"), 1.f, 1000.f);
+	glUniform1f(glGetUniformLocation(program, "handle"), 0.f);
 	/*glUniform3f(glGetUniformLocation(program, "lightColor"), 0.0, 1.0, 1.0);
 	glUniform3f(glGetUniformLocation(program, "shadowColor"), 0.0, 0.0, 0.0);
 	glUniform1f(glGetUniformLocation(program, "Lacunarity"), 2.0);
@@ -143,6 +145,7 @@ void GLSLACache::setParam(GLSLACachePARAM& param)
 	//glUniform1f(glGetUniformLocation(program, "pointRadius"), param.radius);
 	glUniform3f(glGetUniformLocation(program, "baseColor"), param.base_r, param.base_g, param.base_b);
 	glUniform2f(glGetUniformLocation(program, "clipping"), param.clip_near, param.clip_far);
+	glUniform1f(glGetUniformLocation(program, "handle"), param.handle);
 	/*glUniform3f(glGetUniformLocation(program, "lightColor"), param.light_r, param.light_g, param.light_b);
 	glUniform3f(glGetUniformLocation(program, "shadowColor"), param.shadow_r, param.shadow_g, param.shadow_b);
 	glUniform4f(glGetUniformLocation(program, "spriteSide"), param.side_x, param.side_y, param.side_z, 1.0);

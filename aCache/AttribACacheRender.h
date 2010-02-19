@@ -15,7 +15,7 @@ public:
 
 public:
 	static  MObject		asurfacecolor;
-	static  MObject		aassubd;
+	//static  MObject		aassubd;
 	static  MObject		output;        // The output value.
 	static	MTypeId		id;
 };

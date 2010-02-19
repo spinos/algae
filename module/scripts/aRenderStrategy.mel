@@ -81,6 +81,12 @@ global proc anm_initStrategy()
 		setAttr ($ANM_StrategyPasses[$i]+".renderMode") 1;
 		setAttr ($ANM_StrategyPasses[$i]+".ribFilename") -type "string" "3delight/<scene>/rib/<pass>.@.<ext>";
 		setAttr ($ANM_StrategyPasses[$i]+".connectToRenderGlobals") 0;
+		
+		string $conn[] =`listConnections -p on -scn on -d off -s on ($ANM_StrategyPasses[$i]+".resolutionX")`;
+		if(size($conn)>0) disconnectAttr $conn[0] ($ANM_StrategyPasses[$i]+".resolutionX");
+		
+		$conn =`listConnections -p on -scn on -d off -s on ($ANM_StrategyPasses[$i]+".resolutionY")`;
+		if(size($conn)>0) disconnectAttr $conn[0] ($ANM_StrategyPasses[$i]+".resolutionY");
 	}
 }
 
@@ -163,11 +169,17 @@ global proc anm_listStrategyPasses()
                 columnLayout;
                     string $chkpass = `checkBox -l "Enable" -v 1`; 
                     checkBox -e -cc ("anm_activatePass(\""+$chkpass+"\", \""+$frmpass+"\")") $chkpass;
-                    button -l "Select" -c ("select "+$passname);
+                    button -l "Select and Open in AE" -c ("select "+$passname+";ShowAttributeEditorOrChannelBox");
                     
                     if($ANM_StrategyPasses[$i] == "estimateRadiosity") {
                     	attrControlGrp -attribute ($passname+".renderPhotonMaps");
 			attrControlGrp -attribute ($passname+".numberOfPhotons");
+		    }
+		    
+		    if($ANM_StrategyPasses[$i] != "makeGlobalDiffuseBrickMap") {
+		    	    attrControlGrp -attribute ($passname+".shadingRate");
+		    	    attrControlGrp -attribute ($passname+".resolutionX");
+		    	    attrControlGrp -attribute ($passname+".resolutionY");
 		    }
                     
                     string $camopt = `optionMenu -ann $passname -label "Camera"`;
@@ -276,11 +288,20 @@ main window
 
 global proc anm_openRenderStrategyWin()
 {
+//create shader path
+	string $shader_path = `workspace -q -fn`+"/rmanshaders/";
+	
+	system("mkdir "+$shader_path);
+// create tmp path
+	string $tmp_path = `workspace -q -fn`+"/rmantmp/";
+	
+	system("mkdir "+$tmp_path);
+	
 //If such a window already exists, destory it.
  if ( (`window -exists anm_renderStrategyWin`) == true ) deleteUI anm_renderStrategyWin;
 
 //Create the window.
- window -title "Anemone 4.0 - Render Strategy" -wh 400 300  -mb on anm_renderStrategyWin;
+ window -title "Anemone 4.1 - Render Strategy" -wh 400 300  -mb on anm_renderStrategyWin;
  
  menu -label "Create Strategy" -tearOff false;
     menuItem -label "Global Illumination" -c "anm_chooseStrategy(0)";

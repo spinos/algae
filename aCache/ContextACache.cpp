@@ -30,12 +30,12 @@
 MTypeId     ContextACache::id( 0x00025258 );
 MObject     ContextACache::aclipnear;
 MObject     ContextACache::aclipfar;
-
+MObject     ContextACache::adrawtype;
+/*
 MObject     ContextACache::frame;
 MObject     ContextACache::adensity;
 
 MObject 	ContextACache::aviewattrib;
-MObject     ContextACache::adrawtype;
 MObject     ContextACache::input;
 
 MObject ContextACache::anoise;
@@ -44,7 +44,6 @@ MObject     ContextACache::alightposx;
 MObject     ContextACache::alightposy;
 MObject     ContextACache::alightposz;
 MObject     ContextACache::ameanradius;
-MObject     ContextACache::aoutval;
 MObject     ContextACache::akkey;
 MObject     ContextACache::akback;
 MObject     ContextACache::acloudr;
@@ -55,7 +54,8 @@ MObject     ContextACache::adimension;
 MObject ContextACache::asaveimage;
 MObject ContextACache::aresolutionx;
 MObject ContextACache::aresolutiony;
-MObject ContextACache::acameraname;
+MObject ContextACache::acameraname;*/
+MObject     ContextACache::aoutval;
 
 ContextACache::ContextACache() : f_type(0), fSaveImage(0),
 fImageWidth(800), fImageHeight(600), fSupported(0),m_pShader(0)
@@ -134,13 +134,14 @@ MStatus ContextACache::compute( const MPlug& plug, MDataBlock& data )
 		fImageWidth = data.inputValue(aresolutionx).asInt();
 		fImageHeight = data.inputValue(aresolutiony).asInt();*/
 		
-		_pDesc->enable = data.inputValue( adrawtype ).asInt();
+		_pDesc->enable = 1;
 		
 		if(m_pShader) {
 			GLSLACachePARAM param;
 			param.base_r = param.base_g = param.base_b = 1.f;
 			param.clip_near =  data.inputValue(aclipnear).asFloat();
 			param.clip_far =  data.inputValue(aclipfar).asFloat();
+			param.handle = data.inputValue(adrawtype).asInt();
 			m_pShader->setParam(param);
 			_pDesc->program = m_pShader->getProgram();
 		}
@@ -252,6 +253,11 @@ MStatus ContextACache::initialize()
 	nAttr.setKeyable(true);
 	addAttribute( aclipfar );
 	
+	adrawtype = nAttr.create( "drawType", "dt", MFnNumericData::kInt, 0 );
+	nAttr.setStorable(true);
+	nAttr.setKeyable(true);
+	addAttribute( adrawtype );
+/*	
 	frame = uAttr.create("currentTime", "ct", MFnUnitAttribute::kTime, 1.0);
 	uAttr.setKeyable(true);
 	uAttr.setAffectsWorldSpace(true);
@@ -275,10 +281,7 @@ MStatus ContextACache::initialize()
  	stringAttr.setStorable(true);
 	addAttribute( aviewattrib );
 	
-	adrawtype = nAttr.create( "drawType", "dt", MFnNumericData::kInt, 1 );
-	nAttr.setStorable(true);
-	nAttr.setKeyable(true);
-	addAttribute( adrawtype );
+	
 	
 		
 	anoise = nAttr.create( "KNoise", "knoi", MFnNumericData::kFloat, 0.5);
@@ -374,7 +377,7 @@ MStatus ContextACache::initialize()
 	acameraname = stringAttr.create( "cameraName", "cmn", MFnData::kString );
  	stringAttr.setStorable(true);
 	addAttribute( acameraname );
-	
+*/	
 	MFnTypedAttribute tAttr;
 	
 	aoutval = tAttr.create("outval", "ov", MFnData::kPlugin);
@@ -384,12 +387,13 @@ MStatus ContextACache::initialize()
     
 	attributeAffects( aclipnear, aoutval );
 	attributeAffects( aclipfar, aoutval );
-	
+	attributeAffects( adrawtype, aoutval );
+/*	
 	attributeAffects( input, aoutval );
 	attributeAffects( frame, aoutval );
 	
 	attributeAffects( aviewattrib, aoutval );
-	attributeAffects( adrawtype, aoutval );
+	
 	
 	attributeAffects( adensity, aoutval );
 	attributeAffects( anoise, aoutval );
@@ -405,7 +409,7 @@ MStatus ContextACache::initialize()
 	attributeAffects( acloudb, aoutval );
 	attributeAffects( alacunarity, aoutval );
 	attributeAffects( adimension, aoutval );
-	attributeAffects( asaveimage, aoutval );
+	attributeAffects( asaveimage, aoutval );*/
 	return MS::kSuccess;
 
 }

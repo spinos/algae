@@ -16,6 +16,7 @@ MObject ACacheMeshViz::aframe;
 MObject ACacheMeshViz::aminframe;
 MObject ACacheMeshViz::amaxframe;
 MObject ACacheMeshViz::amode;
+MObject ACacheMeshViz::asurfacecolor;
 MObject ACacheMeshViz::aoutval;
 
 ACacheMeshViz::ACacheMeshViz():m_pMesh(0),m_pRender(0),m_mode(-1),m_program(0)
@@ -48,8 +49,7 @@ MStatus ACacheMeshViz::compute( const MPlug& plug, MDataBlock& data )
 			ACacheContextData* pDesc = dDesc->getDesc();
 			m_program = pDesc->program;
 		}
-		
-		
+
 		double dtime = data.inputValue( aframe ).asDouble();
 
 		string sbuf(m_cachename.asChar());
@@ -81,6 +81,16 @@ void ACacheMeshViz::draw( M3dView & view, const MDagPath & /*path*/,
 							 M3dView::DisplayStyle style,
 							 M3dView::DisplayStatus status )
 { 
+	MObject thisNode = thisMObject();
+	MPlug csplug( thisNode, asurfacecolor );
+	
+	MObject ocs;
+	csplug.getValue(ocs);
+	
+	float scr, csg, csb;
+	MFnNumericData dcs(ocs);
+	dcs.getData(scr, csg, csb);
+	
 	view.beginGL(); 
 	
 	if(!m_pRender) {
@@ -119,6 +129,9 @@ void ACacheMeshViz::draw( M3dView & view, const MDagPath & /*path*/,
 		m_pRender->setTriangles(m_pMesh->triangles(), m_pMesh->getNumTriangle()*3);
 		m_pRender->setP((const float *)m_pMesh->points(), m_pMesh->getNumVertex());
 		m_pRender->enableProgram(m_program);
+		
+		glUniform3f(glGetUniformLocation(m_program, "baseColor"), scr, csg, csb);
+		
 		m_pRender->draw();
 		m_pRender->disableProgram();
 		if(m_mode < 0) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -171,12 +184,12 @@ MStatus ACacheMeshViz::initialize()
 	
 	aminframe = numAttr.create( "minFrame", "mnf", MFnNumericData::kInt, 1 );
 	numAttr.setStorable(true);
-	numAttr.setKeyable(true);
+	//numAttr.setKeyable(true);
 	addAttribute( aminframe );
 	
 	amaxframe = numAttr.create( "maxFrame", "mxf", MFnNumericData::kInt, 24 );
 	numAttr.setStorable(true);
-	numAttr.setKeyable(true);
+	//numAttr.setKeyable(true);
 	addAttribute( amaxframe );
 	
 	aoutval = numAttr.create( "outval", "ov", MFnNumericData::kInt, 1 );
@@ -201,6 +214,12 @@ MStatus ACacheMeshViz::initialize()
 	numAttr.setKeyable(true);
 	numAttr.setInternal(true);
 	addAttribute( amode );
+	
+	asurfacecolor = numAttr.createColor( "surfaceColor", "cs" );
+	numAttr.setStorable(true);
+	numAttr.setKeyable(true);
+	numAttr.setDefault(1.f, 1.f, 1.f);
+	addAttribute( asurfacecolor );
 	
 	MFnTypedAttribute tAttr;
 	

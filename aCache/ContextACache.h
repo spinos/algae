@@ -45,8 +45,9 @@ public:
 	static  	MTypeId		id;
 	static  	MObject 	aclipnear;
 	static  	MObject 	aclipfar;
+	static      MObject     adrawtype;
 	
-	static  	MObject		input;
+	/*static  	MObject		input;
 	static  	MObject		frame;
 
 	static      MObject     adensity;
@@ -56,7 +57,6 @@ public:
 	static      MObject     alightposy;
 	static      MObject     alightposz;
 	static  	MObject 	aviewattrib;
-	static      MObject     adrawtype;
 	static      MObject     ameanradius;
 	static      MObject     acloudr;
 	static      MObject     acloudg;
@@ -69,7 +69,7 @@ public:
 	static MObject asaveimage;
 	static MObject aresolutionx;
 	static MObject aresolutiony;
-	static MObject acameraname;
+	static MObject acameraname;*/
 	static MObject aoutval;
 private:
 	int f_type, fSaveImage;

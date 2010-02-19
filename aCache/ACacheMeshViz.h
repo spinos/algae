@@ -56,6 +56,7 @@ public:
 	static MObject aminframe;
 	static MObject amaxframe;
 	static MObject amode;
+	static MObject asurfacecolor;
 	static MObject aoutval;
 	static MTypeId id;
 	

@@ -19,13 +19,12 @@ meshData::meshData(std::string& parameter):
 m_i_hdr_shadowed(0), m_i_hdr_indirect(0), m_i_hdr_scat(0), m_i_hdr_backscat(0),
 m_i_lightsrc_shadowed(0),m_i_double_sided(0)
 {
-	int n = sscanf(parameter.c_str(), "%s %s %d %f %f %d", 
+	int n = sscanf(parameter.c_str(), "%s %s %d %f %f", 
 	m_cache_name, 
 	m_mesh_name,
 	&m_frame,
 	&m_mesh_0, 
-	&m_mesh_1,
-	&m_bSubdiv);
+	&m_mesh_1);
 }
 
 meshData::~meshData() 
@@ -122,9 +121,9 @@ void meshData::generateRIB(RtFloat detail)
 				nparam++;
 			}
 */			
-//			if(m_mesh_0 == m_mesh_1) 
-
-			if(m_bSubdiv==1) RiHierarchicalSubdivisionMeshV("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, (RtInt)nparam, paramname, paramvalue );
+			int bSubdiv = 1;
+			if( pMesh->hasAttrib("noSubdiv") ) bSubdiv = 0;
+			if( bSubdiv==1 ) RiHierarchicalSubdivisionMeshV("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, (RtInt)nparam, paramname, paramvalue );
 			else RiPointsPolygonsV( (RtInt)pMesh->nfaces(), (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)nparam, paramname, paramvalue);
 
 /*			else {

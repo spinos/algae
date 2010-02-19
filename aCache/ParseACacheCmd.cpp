@@ -90,18 +90,16 @@ MStatus ParseACache::doIt( const MArgList& args )
 		
 		MFnDependencyNode fviz(oviz);
 		
-		int bSubd = 1;
-// find render attrib node
-		MPlug plgatt = fviz.findPlug("achMsg", &status);
-		if(status) {
-			MObject oatt;
-			AHelper::getConnectedNode(oatt, plgatt);
-			if(oatt != MObject::kNullObj) {
-				MFnDependencyNode fatt(oatt);
-				if(!fatt.findPlug("asSubdiv").asBool()) bSubd = 0;
-			}
-		}
+// color from viz node
 		
+		float csr, csg, csb;
+		csr = fviz.findPlug("surfaceColorR").asFloat();
+		csg = fviz.findPlug("surfaceColorG").asFloat();
+		csb = fviz.findPlug("surfaceColorB").asFloat();
+
+		MGlobal::executeCommand(MString("RiArchiveRecord -m \"verbatim\" -t \"Color [ ") + csr + " " + csg + " " + csb + " ]\\n\"");
+
+
 // find ensemble attached
 		MPlug plgmsg = fviz.findPlug("aensembleMsg", &status);
 		if(status) {
@@ -170,10 +168,9 @@ MStatus ParseACache::doIt( const MArgList& args )
 						injectShaderStatement(odisp, ssname, spass, 1);
 					
 						char argbuf[1024];
-						sprintf(argbuf, "%s %s %d %f %f %d",
+						sprintf(argbuf, "%s %s %d %f %f",
 										scache.asChar(), smesh.asChar(), 
-										(int)fframe, fshutteropen, fshutterclose,
-										bSubd);
+										(int)fframe, fshutteropen, fshutterclose);
 										
 						char bboxbuf[128];
 						sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);

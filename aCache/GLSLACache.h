@@ -32,6 +32,7 @@ struct GLSLACachePARAM
 {
 	float clip_near, clip_far;
 	float base_r, base_g, base_b;
+	float handle;
 };
 
 class GLSLACache

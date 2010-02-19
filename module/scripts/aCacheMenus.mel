@@ -74,8 +74,8 @@ global proc anemoneAppendMenuItems()
 	//menuItem -l "Load MCF Mesh Cache" -c "openImportanemoneWin";
 	//menuItem -l "Add Cache Deformer" -c "openAddCacheDeformerWin";
 	//menuItem -l "Snap To Second" -c "mfc_UtilSnap";
-	menuItem -l "SLMan" -c "source aShaderInterface.mel;anm_openAShaderManWin";
-	menuItem -l "Make BrickMaps" -c anm_makeObjBkm;
+	menuItem -l "Shader Management" -c "source aShaderInterface.mel;anm_openAShaderManWin";
+	menuItem -l "Render Strategy" -c "source aRenderStrategy.mel;anm_openRenderStrategyWin";
 	menuItem -divider true;
 	menuItem -l "Export Attribute" -subMenu true;
 		menuItem -l "Attach" -c "mcf_addAttr";
@@ -83,10 +83,10 @@ global proc anemoneAppendMenuItems()
 		setParent -menu ..;
 	menuItem -l "Save Scene" -c "openSaveXMLSceneWin";
 	menuItem -l "Load Scene" -c "openImportXMLSceneCacheWin";
-	menuItem -l "Render Attribute" -subMenu true;
-		menuItem -l "Attach" -c "rnd_ach_addAttr";
-		menuItem -l "Edit" -c "rnd_ach_editAttr";
-		setParent -menu ..;
+	//menuItem -l "Render Attribute" -subMenu true;
+	//	menuItem -l "Attach" -c "rnd_ach_addAttr";
+	//	menuItem -l "Edit" -c "rnd_ach_editAttr";
+	//	setParent -menu ..;
 	//menuItem -l "Mesh Information" -c "openSceneInformationWin";
 	//menuItem -l "Change Data Path To" -c "fileBrowser \"set_xmlCacheDataPath\" \"Set Path\" \"\" 4";
 	//menuItem -divider true;
@@ -621,6 +621,7 @@ global proc rnd_ach_addAttr()
 		string $shape[] = `pickWalk -d down`;
 		if(!`attributeExists "achMsg" $shape[0]`) addAttr -ln "achMsg" -attributeType "float"  $shape[0];
 		connectAttr -f ($node + ".output") ($shape[0]+".achMsg");
+		connectAttr -f ($node + ".cs") ($shape[0]+".cs");
 	}
 	select -r $node;
 	ShowAttributeEditorOrChannelBox;
@@ -655,7 +656,7 @@ global proc doImportSceneCache()
 {
 // check and create ctx
 	string $est_ctx[] = `ls -type aCacheContext`;
-	if(size($est_ctx) < 1) $est_ctx[0] = `createNode aCacheContext`;
+	if(size($est_ctx) < 1) $est_ctx[0] = `createNode -n aCacheCtx aCacheContext`;
 		
 	string $dummyGrp = `group -em -n dummyGrp`;
 string $path = `textFieldGrp -q -text importSceneCachePath`;
@@ -884,7 +885,7 @@ string $scroll = `scrollLayout -p $form`;
 columnLayout -adjustableColumn true;
 
 //column begin
-text -al left -l "\nSelect mesh(es) and NURBS surface(s) to export .scene files. No need to press DOWN key.";
+text -al left -l "\nSelect meshes to export .scene files. No need to press DOWN key.";
 
 textFieldGrp
      -cw 1 110 -label "Scene Title" -text "untitled"

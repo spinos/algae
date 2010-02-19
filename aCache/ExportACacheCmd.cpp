@@ -247,10 +247,10 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			
 			AHelper::getBoolAttributeByName(fnode, "noChange", iattr);
 			if(iattr) xml_f.addAttribute("noChange", 1);
-/*			
-			AHelper::getBoolAttributeByName(fnode, "skipIndirect", iattr);
-			if(iattr) xml_f.addAttribute("skipIndirect", 1);
 			
+			AHelper::getBoolAttributeByName(fnode, "asSubdiv", iattr);
+			if(!iattr) xml_f.addAttribute("noSubdiv", 1);
+/*			
 			iattr = 0;
 			AHelper::getBoolAttributeByName(fnode, "skipScatter", iattr);
 			if(iattr) xml_f.addAttribute("skipScatter", 1);

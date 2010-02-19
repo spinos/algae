@@ -411,8 +411,7 @@ int FXMLMesh::load(const char* filename, const char* meshname)
 /*get arributes*/
 	doc.setChildren();
 	while(doc.isLastNode()!=1) {
-			if(doc.checkNodeName("attribute") ==1)
-			{
+			if(doc.checkNodeName("attribute") ==1) {
 				//printf("mesh attrib: %s\n", doc.getAttribByName("name"));
 				m_attrib.push_back(doc.getAttribByName("name"));
 			}
