@@ -291,11 +291,11 @@ global proc anm_openRenderStrategyWin()
 //create shader path
 	string $shader_path = `workspace -q -fn`+"/rmanshaders/";
 	
-	system("mkdir "+$shader_path);
+	system("mkdir \""+$shader_path +"\"");
 // create tmp path
 	string $tmp_path = `workspace -q -fn`+"/rmantmp/";
 	
-	system("mkdir "+$tmp_path);
+	system("mkdir \""+$tmp_path +"\"");
 	
 //If such a window already exists, destory it.
  if ( (`window -exists anm_renderStrategyWin`) == true ) deleteUI anm_renderStrategyWin;
