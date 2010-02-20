@@ -6,7 +6,6 @@
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
-//#include "../sh_lighting/FTriangle.h"
 #include "FXMLMesh.h"
 
 #include "SHelper.h"
@@ -463,6 +462,7 @@ int FXMLMesh::load(const char* filename, const char* meshname)
 			m_triangleConn = new int[m_numTriangle*3];
 			ffin.seekg( pos, ios::beg );
 			ffin.read((char*)m_triangleConn, size);
+			
 			
 		doc.setParent();
 		

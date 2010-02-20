@@ -825,7 +825,7 @@ global proc saveXMLSceneSingleFrame(int $fc)
 	$p = $p + "/data/";
 	if ( `textFieldButtonGrp -q -text saveXMLScenePath` != "" ) $p = `textFieldButtonGrp -q -text saveXMLScenePath`;
 	
-	system("mkdir "+$p+"/models");
+	system("mkdir \""+$p+"/models\"");
 	string $cmd;
 
 	$cmd = "exportSceneCache -p \""+$p+"\" -t `textFieldGrp -q -text saveXMLSceneTitle` -bc `listRelatives -p "+$cams[$icam-1]+"` -ec `listRelatives -p "+$cams[$ieye-1]+"`";

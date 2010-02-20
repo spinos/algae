@@ -10,6 +10,11 @@
 #ifndef _GLSL_ANEMONE_H
 #define _GLSL_ANEMONE_H
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>

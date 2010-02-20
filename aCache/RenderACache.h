@@ -10,6 +10,11 @@
 #ifndef _RENDER_A_CACHE_H
 #define _RENDER_A_CACHE_H
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -39,8 +44,8 @@ public:
 	
 	char isInitialized() const { return m_isInitialized; }
 	
-	void setTriangles(const int *triidx, unsigned int num_idx);
-	void setP(const float *p, unsigned int num_vert);
+	void setTriangles(int *triidx, unsigned int num_idx);
+	void setP(float *p, unsigned int num_vert);
 	void draw();
 	void enableProgram(GLuint p);
 	void disableProgram();

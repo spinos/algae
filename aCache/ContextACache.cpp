@@ -27,6 +27,26 @@
 #include "../shared/gExtension.h"
 #endif
 
+typedef struct glExtensionEntry {
+    char* name;
+    GLfloat promoted;
+    GLboolean supported;
+} glExtensionEntry;
+
+glExtensionEntry entriesNeeded[] = {
+{"GL_EXT_framebuffer_object",   0.0, 0},
+{"GL_ARB_texture_cube_map",     1.3, 0},
+{"GL_ARB_shader_objects",       2.0, 0},
+{"GL_ARB_shading_language_100", 2.0, 0},
+{"GL_ARB_fragment_shader",      2.0, 0},
+{"GL_ARB_vertex_buffer_object",      2.0, 0},
+{"GL_ARB_multitexture",      1.3, 0},
+{"GL_ARB_multisample",      1.3, 0},
+{"GL_ARB_vertex_program",      2.0, 0},
+{"GL_ARB_fragment_program",      2.0, 0},
+{"GL_ARB_texture_rectangle",      0.0, 0},
+};
+
 MTypeId     ContextACache::id( 0x00025258 );
 MObject     ContextACache::aclipnear;
 MObject     ContextACache::aclipfar;
@@ -206,9 +226,27 @@ void ContextACache::draw( M3dView & view, const MDagPath & path,
 	int port[4];
 	glGetIntegerv(GL_VIEWPORT, port);
 	
-	GHelper::drawLocator(0.f,0.f,0.f);
+	//GHelper::drawLocator(0.f,0.f,0.f);
 	
 	if(!m_pShader) {
+#ifdef WIN32
+		gExtensionInit();
+		float core_version;
+		sscanf((char *)glGetString(GL_VERSION), "%f", &core_version);
+		char sbuf[64];
+		sprintf(sbuf, "%s version %s\n", (char *)glGetString(GL_RENDERER), (char *)glGetString(GL_VERSION));
+		MGlobal::displayInfo(sbuf);
+		int supported = 1;
+		int j = sizeof(entriesNeeded)/sizeof(glExtensionEntry);
+		for (int i = 0; i < j; i++) {
+			if(!gCheckExtension(entriesNeeded[i].name)) {
+				sprintf(sbuf, "%-32s %d\n", entriesNeeded[i].name, 0);
+				supported = 0;
+			}
+			else sprintf(sbuf, "%-32s %d\n", entriesNeeded[i].name, 1);
+			MGlobal::displayInfo(sbuf);
+		}
+#endif
 		m_pShader = new GLSLACache();
 		if(!m_pShader->isValid()) MGlobal::displayInfo("shader failed to initialize");
 	}

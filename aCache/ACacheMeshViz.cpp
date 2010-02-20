@@ -5,7 +5,11 @@
 #include "../shared/FXMLMesh.h"
 #include "../shared/TVectors.h"
 #include "DescACacheContext.h"
-#include "GHelper.h"
+#include "../shared/GHelper.h"
+
+#ifndef __APPLE__
+#include "../shared/gExtension.h"
+#endif
 
 MTypeId ACacheMeshViz::id( 0x00025256 );
 
@@ -56,9 +60,6 @@ MStatus ACacheMeshViz::compute( const MPlug& plug, MDataBlock& data )
 		SHelper::changeFrameNumber(sbuf, SHelper::safeConvertToInt(dtime));
 		if(m_pMesh) {
 			m_pMesh->updateFrom(sbuf.c_str());
-			//if(hascoe==1) m_pMesh->setHDRLighting(hdrCoeff);
-			//else m_pMesh->resetHDRLighting();
-			//m_pMesh->updateColor(m_mode);
 		}
 		else {
 			m_cachename =  data.inputValue( acachename ).asString();
@@ -93,49 +94,31 @@ void ACacheMeshViz::draw( M3dView & view, const MDagPath & /*path*/,
 	
 	view.beginGL(); 
 	
-	if(!m_pRender) {
-		m_pRender = new RenderACache();
-		m_pRender->initialize();
+	if(m_program) {
+		
 	}
 
 	if(m_pMesh) {
-		/*glPushAttrib( GL_ALL_ATTRIB_BITS );
-		if(m_mode<0) glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-#ifdef LINUX	
-		glFrontFace(GL_CCW);
-#else
-		glFrontFace(GL_CW);
-#endif
-
-		glShadeModel(GL_SMOOTH);
-		if(m_mode<-2) m_pMesh->drawUV(-3-m_mode);
-		else if(m_mode<-1) 
-		{
-			glEnable(GL_CULL_FACE);
-			m_pMesh->drawNoColor();
-			glDisable(GL_CULL_FACE);
-			m_pMesh->drawTangentSpace();
-		}
-		else if(m_mode<0) 
-		{
-			glEnable(GL_CULL_FACE);
-			m_pMesh->drawNoColor();
-			glDisable(GL_CULL_FACE);
-		}
-		else m_pMesh->draw();
-		glPopAttrib();*/
 		if(m_mode < 0) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		m_pRender->setTriangles(m_pMesh->triangles(), m_pMesh->getNumTriangle()*3);
-		m_pRender->setP((const float *)m_pMesh->points(), m_pMesh->getNumVertex());
-		m_pRender->enableProgram(m_program);
-		
-		glUniform3f(glGetUniformLocation(m_program, "baseColor"), scr, csg, csb);
-		
-		m_pRender->draw();
-		m_pRender->disableProgram();
+		if(m_program) {
+			if(!m_pRender) {
+				m_pRender = new RenderACache();
+				m_pRender->initialize();
+			}
+			
+			m_pRender->setTriangles( m_pMesh->triangles(), m_pMesh->getNumTriangle()*3);
+			m_pRender->setP( (float *)m_pMesh->points(), m_pMesh->getNumVertex());
+			m_pRender->enableProgram(m_program);
+			
+			glUniform3f(glGetUniformLocation(m_program, "baseColor"), scr, csg, csb);
+			
+			m_pRender->draw();
+			m_pRender->disableProgram();
+		}
 		if(m_mode < 0) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		
+		glPopAttrib();
 		GHelper::drawBoundingBox( m_pMesh->getBBox0X(), m_pMesh->getBBox0Y(), m_pMesh->getBBox0Z(), m_pMesh->getBBox1X(), m_pMesh->getBBox1Y(), m_pMesh->getBBox1Z());
 	
 	}

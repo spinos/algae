@@ -6,7 +6,6 @@
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
-//#include "../sh_lighting/FQSPLAT.h"
 #include "FXMLMesh.h"
 #include "FXMLScene.h"
 #include "XMLUtil.h"
@@ -142,7 +141,7 @@ void FXMLScene::addFaceConnection(int val, const int* data)
 	static_mesh_file.write((char*)data, val*sizeof(int));
 }
 
-void FXMLScene::addTriangleConnection(int val, const int* data)
+void FXMLScene::addTriangleConnection(int val, int* data)
 {
 	int offset = (int)sizeof(int)*val;
 	doc.elementBegin("triangleConnection");
@@ -154,6 +153,7 @@ void FXMLScene::addTriangleConnection(int val, const int* data)
 	pos_s += offset;
 	
 	static_mesh_file.write((char*)data, val*sizeof(int));
+			
 }
 
 void FXMLScene::uvSetBegin(const char* name)

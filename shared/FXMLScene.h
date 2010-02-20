@@ -37,7 +37,7 @@ public:
 	void staticEnd();
 	void addFaceCount(int val, const int* data);
 	void addFaceConnection(int val, const int* data);
-	void addTriangleConnection(int val, const int* data);
+	void addTriangleConnection(int val, int* data);
 	void uvSetBegin(const char* name);
 	void uvSetEnd();
 	void addS(const char* name, int num, const float* data);
