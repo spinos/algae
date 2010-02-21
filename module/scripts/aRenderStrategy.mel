@@ -1,6 +1,6 @@
 global proc string anm_stg_getPythonScriptPath()
 {
-	return "/Users/jianzhang/Documents/anemone/module/python/";
+	return "D:/anemone/module/python";
 }
 
 /*
@@ -275,7 +275,7 @@ global proc anm_renderStrategy()
 	fclose $jobfile;
 	print("starting job from: "+$job_path+"jobspool.txt\n");
 	if(`checkBox -q -v anm_stg_immediate`) {
-		system("python "+anm_stg_getPythonScriptPath()+"anemone.py --file "+$job_path+"jobspool.txt");
+		system("python "+anm_stg_getPythonScriptPath()+"/anemone.py --file "+$job_path+"jobspool.txt");
 		print("all done!\n");
 	}
 	else 
@@ -296,6 +296,21 @@ global proc anm_openRenderStrategyWin()
 	string $tmp_path = `workspace -q -fn`+"/rmantmp/";
 	
 	system("mkdir \""+$tmp_path +"\"");
+	
+// get scene name
+	string $scnname = `file -q -sceneName`;
+	if($scnname == "") $scnname = "untitled";
+	else {
+		string $buffer[];
+		$numTokens = `tokenize $scnname "/" $buffer`;
+		$scnname = $buffer[$numTokens-1];
+		$numTokens = `tokenize $scnname "." $buffer`;
+		$scnname = $buffer[0];
+	}
+
+// shader and tmp per scene
+	system("mkdir \""+$tmp_path + "/" + $scnname + "\"");
+	system("mkdir \""+$shader_path + "/" + $scnname + "\"");
 	
 //If such a window already exists, destory it.
  if ( (`window -exists anm_renderStrategyWin`) == true ) deleteUI anm_renderStrategyWin;

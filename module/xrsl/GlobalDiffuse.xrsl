@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="GlobalDiffuse" type="surface">
+	<icon>anm_GlobalDiffuse.xpm</icon>
+	<parameter name="irradianceFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="bakeToFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	normal Nn = normalize(N);
+	color irr = 0;
+	color cc = 1;
+	color cdiff = 0;
+	float occ = 0;
+	if(irradianceFile != "nil") {
+		texture3d(irradianceFile, P, Nn, "Cs", cc, "_diff", cdiff);
+		irr += indirectdiffuse(P, Nn, 0, "pointbased", 1, "filename", irradianceFile,
+                            "hitsides", "front",
+                            "clamp", 1,
+                            "sortbleeding", 1,
+                            "maxdist", 1e15, "falloff", 0,
+                            "falloffmode", 0,
+                            "samplebase", 0, "bias", 0,
+                            "maxsolidangle", 0.034);
+                occ = occlusion(P, Nn, 0, "pointbased", 1, "filename", irradianceFile,
+                      "hitsides", "front",
+                      "clamp", 1,
+                      "maxdist", 1e15, "falloff", 0,
+                      "falloffmode", 0,
+                      "samplebase", 0, "bias", 0,
+                      "maxsolidangle", 0.034);
+
+	}
+	color radio = (irr + cdiff) * cc;
+	
+	Oi = Os;
+	Ci = Oi * radio;
+	
+	if(bakeToFile != "nil") {
+		float a = area(P, "dicing");
+		
+		bake3d(bakeToFile, "area,_radiosity,_occlusion,_indirect,_direct", P, Nn, "interpolate", 1,
+              "area", a, "_radiosity", radio, "_occlusion", 1.0 - occ, "_indirect", irr, "_direct", cdiff);
+	}
+	</source>
+</rsl>

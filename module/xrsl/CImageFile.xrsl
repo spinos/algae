@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="CImageFile" type="color">
+	<icon>anm_CImageFile.xpm</icon>
+	<parameter name="filename" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	color res = color texture( filename, "filter", "lagrangian" );
+	return res;
+	</source>
+</rsl>

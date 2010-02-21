@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="SCIndirect" type="color">
+	<icon>anm_SCIndirect.xpm</icon>
+	<parameter name="brickFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="filterRadius" type="float" value="1.0">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="_indirect" type="color" value="0.000000 0.000000 0.000000">
+		<access value="output"/>
+	</parameter>
+	<parameter name="_occlusion" type="float" value="0.000000">
+		<access value="output"/>
+	</parameter>
+	<source>
+	extern point P;
+	extern normal N;
+	color res = 0;
+	normal Nn = normalize(N);
+	float occ = 1;
+	if(brickFile != "nil") texture3d(brickFile, P, Nn, "filterradius", filterRadius, "lerp", 1, "_indirect", res, "_occlusion", occ);
+	_indirect = res;
+	_occlusion = occ;
+	return res;
+	</source>
+</rsl>

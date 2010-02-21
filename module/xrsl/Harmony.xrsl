@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="Harmony" type="surface">
+	<icon>anm_Harmony.xpm</icon>
+	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_0" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_1" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_2" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_3" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_4" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_5" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_6" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_7" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_8" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_9" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_10" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_11" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_12" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_13" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_14" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_15" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="channel_16" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	color ham = channel_0 * surfaceColor;
+	ham += channel_1 * surfaceColor;
+	ham += channel_2 * surfaceColor;
+	ham += channel_3 * surfaceColor;
+	ham += channel_4 * surfaceColor;
+	ham += channel_5 * surfaceColor;
+	ham += channel_6 * surfaceColor;
+	ham += channel_7 * surfaceColor;
+	ham += channel_8 * surfaceColor;
+	ham += channel_9 * surfaceColor;
+	ham += channel_10 * surfaceColor;
+	ham += channel_11 * surfaceColor;
+	ham += channel_12 * surfaceColor;
+	ham += channel_13 * surfaceColor;
+	ham += channel_14 * surfaceColor;
+	ham += channel_15 * surfaceColor;
+	ham += channel_16 * surfaceColor;
+	Oi = Os;
+	Ci = Oi * ham;
+	</source>
+</rsl>
