@@ -24,6 +24,7 @@ char XRSLPiece::load(const char* filename)
 	
 	m_name = doc.getAttribByName("name");
 	m_type = doc.getAttribByName("type");
+	m_description = "no description";
 	
 	doc.setChildren();
 	
@@ -34,6 +35,9 @@ char XRSLPiece::load(const char* filename)
 		else if(doc.checkNodeName("source") == 1) {
 			m_source = doc.getNodeContent();
 			//printf(m_source.c_str());
+		}
+		else if(doc.checkNodeName("description") == 1) {
+			m_description = doc.getNodeContent();
 		}
 		else if(doc.checkNodeName("parameter") == 1) {
 			XRSLParameter *aparam = new XRSLParameter();

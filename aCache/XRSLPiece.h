@@ -60,12 +60,14 @@ public:
 	ParamList& getAttrib() {return m_param;}
 	const char* getBody() const {return m_source.c_str();}
 	const char* getIcon() const {return m_icon.c_str();}
+	const char* getDescription() const {return m_description.c_str();}
 private:
 	string m_sl_path;
 	string m_name;
 	string m_type;
 	string m_source;
 	string m_icon;
+	string m_description;
 	ParamList m_param;
 	char m_isValid;
 };

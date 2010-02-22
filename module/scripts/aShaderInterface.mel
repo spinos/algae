@@ -1542,7 +1542,14 @@ proc anm_listPieceAttrib(string $name)
 				}
 			}
         	}
+        	frameLayout -l "description" -collapsable true;
+        	string $pdes[] = `aShaderDiagnose -n $name -de on`;
+        	scrollField -width 250 -height 120 -ed off -wordWrap true -text $pdes[0];
+        	setParent..;
 		setParent..;
+		
+		
+		
 	setParent..;
 }
 
