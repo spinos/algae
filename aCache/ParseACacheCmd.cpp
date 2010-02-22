@@ -309,12 +309,12 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 	SHelper::filenameWithoutPath(sscn);
 	MString shader_path = proj+"/rmanshaders/"+sscn.c_str()+"/";
 	
-	MString pathcmd = MString("system(\"mkdir ")+shader_path+"\")";
-	MGlobal::executeCommand(pathcmd);
+	//MString pathcmd = MString("system(\"mkdir ")+shader_path+"\")";
+	//MGlobal::executeCommand(pathcmd);
 	
 	MString ptc_path = proj+"/rmantmp/"+sscn.c_str()+"/";
-	pathcmd = MString("system(\"mkdir ")+ ptc_path+"\")";
-	MGlobal::executeCommand(pathcmd);
+	//pathcmd = MString("system(\"mkdir ")+ ptc_path+"\")";
+	//MGlobal::executeCommand(pathcmd);
 	
 	MFnDependencyNode fnode(node);
 	if(fnode.typeName() == "aShaderPiece") {

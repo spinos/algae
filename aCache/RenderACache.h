@@ -33,6 +33,8 @@
 #include <GL/glext.h>
 #endif
 
+#include "../shared/TVectors.h"
+
 class RenderACache
 {
 public:
@@ -44,8 +46,8 @@ public:
 	
 	char isInitialized() const { return m_isInitialized; }
 	
-	void setTriangles(int *triidx, unsigned int num_idx);
-	void setP(float *p, unsigned int num_vert);
+	void setTriangles(const int *triidx, unsigned int num_idx);
+	void setP(const XYZ *p, unsigned int num_vert);
 	void draw();
 	void enableProgram(GLuint p);
 	void disableProgram();

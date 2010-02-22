@@ -81,11 +81,8 @@ public:
 	int nfaces() const {return m_numFace;}
 	const int* nverts() const {return m_faceCount;}
 	const int* verts() const {return m_vertices;}
-	//const unsigned* triangles() const {return m_triangleConn;}
-	int* triangles() {return m_triangleConn;}
 	const int* triangles() const {return m_triangleConn;}
 	const XYZ* points() const {return m_cvs;}
-	XYZ* points() {return m_cvs;}
 	const XYZ* pointsOpen() const {return m_pOpen;}
 	const XYZ* pointsClose() const {return m_pClose;}
 	

@@ -28,7 +28,7 @@
 MStatus initializePlugin( MObject obj ) 
 {
 MStatus status;
-MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.1.8 Wed Feb 10 2010", "Any" );
+MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.2.3 Mon Feb 22 2010", "Any" );
 
 /*
 	

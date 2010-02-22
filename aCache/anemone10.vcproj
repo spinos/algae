@@ -553,10 +553,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pluginMain.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\RenderACache.cpp"
 				>
 			</File>
@@ -633,6 +629,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\pluginMain.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

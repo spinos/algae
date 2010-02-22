@@ -122,11 +122,12 @@ void rockingTransformMatrix::setRockInX( double rock, const MString& scene, cons
 	std::string sbuf(scene.asChar());
 	SHelper::changeFrameNumber(sbuf, SHelper::safeConvertToInt(rock));
 	
-	ZXMLDoc doc;
+	if(doc.load(sbuf.c_str()) != 1) return;
+	
 	XYZ a, b, c;
 	float size;
 	
-	if(XMLUtil::findByNameAndType(sbuf.c_str(), mesh.asChar(), "transform", doc))
+	if(XMLUtil::findByNameAndType( mesh.asChar(), "transform", doc))
 	{
 		doc.getFloat3AttribByName("X", fm[0][0], fm[0][1], fm[0][2]);
 		doc.getFloat3AttribByName("Y", fm[1][0], fm[1][1], fm[1][2]);
@@ -135,23 +136,33 @@ void rockingTransformMatrix::setRockInX( double rock, const MString& scene, cons
 		
 		doc.free();	
 	}
-	else if(XMLUtil::findByNameAndType(sbuf.c_str(), mesh.asChar(), "camera", doc))
-	{
-		doc.getFloat3AttribByName("X", fm[0][0], fm[0][1], fm[0][2]);
-		doc.getFloat3AttribByName("Y", fm[1][0], fm[1][1], fm[1][2]);
-		doc.getFloat3AttribByName("Z", fm[2][0], fm[2][1], fm[2][2]);
-		doc.getFloat3AttribByName("W", fm[3][0], fm[3][1], fm[3][2]);
+	else {
+		doc.setParent();
 		
-		doc.free();	
+		if(XMLUtil::findByNameAndType( mesh.asChar(), "camera", doc))
+		{
+			doc.getFloat3AttribByName("X", fm[0][0], fm[0][1], fm[0][2]);
+			doc.getFloat3AttribByName("Y", fm[1][0], fm[1][1], fm[1][2]);
+			doc.getFloat3AttribByName("Z", fm[2][0], fm[2][1], fm[2][2]);
+			doc.getFloat3AttribByName("W", fm[3][0], fm[3][1], fm[3][2]);
+			
+			doc.free();	
+		}
+		else {
+			doc.free();	
+			MGlobal::displayWarning(MString("cannot find ") + mesh + " in " +sbuf.c_str());
+		}
 	}
-	else MGlobal::displayWarning(MString("cannot load ")+sbuf.c_str());
+	
 	
 	if(delta >0)
 	{
 		SHelper::changeFrameNumber(sbuf, SHelper::safeConvertToInt(rock+1.0));
 		
+		if(doc.load(sbuf.c_str()) != 1) return;
+		
 		char found = 0;
-		if(XMLUtil::findByNameAndType(sbuf.c_str(), mesh.asChar(), "transform", doc))
+		if(XMLUtil::findByNameAndType( mesh.asChar(), "transform", doc))
 		{
 			found = 1;
 			doc.getFloat3AttribByName("X", fm1[0][0], fm1[0][1], fm1[0][2]);
@@ -161,15 +172,23 @@ void rockingTransformMatrix::setRockInX( double rock, const MString& scene, cons
 			
 			doc.free();	
 		}
-		else if(XMLUtil::findByNameAndType(sbuf.c_str(), mesh.asChar(), "camera", doc))
-		{
-			found = 1;
-			doc.getFloat3AttribByName("X", fm1[0][0], fm1[0][1], fm1[0][2]);
-			doc.getFloat3AttribByName("Y", fm1[1][0], fm1[1][1], fm1[1][2]);
-			doc.getFloat3AttribByName("Z", fm1[2][0], fm1[2][1], fm1[2][2]);
-			doc.getFloat3AttribByName("W", fm1[3][0], fm1[3][1], fm1[3][2]);
+		else {
+			doc.setParent();
 			
-			doc.free();	
+			if(XMLUtil::findByNameAndType( mesh.asChar(), "camera", doc))
+			{
+				found = 1;
+				doc.getFloat3AttribByName("X", fm1[0][0], fm1[0][1], fm1[0][2]);
+				doc.getFloat3AttribByName("Y", fm1[1][0], fm1[1][1], fm1[1][2]);
+				doc.getFloat3AttribByName("Z", fm1[2][0], fm1[2][1], fm1[2][2]);
+				doc.getFloat3AttribByName("W", fm1[3][0], fm1[3][1], fm1[3][2]);
+				
+				doc.free();	
+			}
+			else {
+				doc.free();	
+				MGlobal::displayWarning(MString("cannot find ") + mesh + " in " +sbuf.c_str());
+			}
 		}
 		
 		if(found)

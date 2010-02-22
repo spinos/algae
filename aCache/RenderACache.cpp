@@ -33,7 +33,7 @@ void RenderACache::uninitialize()
 	glDeleteBuffers(1, &vbo);
 }
 
-void RenderACache::setTriangles(int *triidx, unsigned int num_idx)
+void RenderACache::setTriangles(const int *triidx, unsigned int num_idx)
 {
 	m_n_draw = num_idx;
 	unsigned int size = num_idx * sizeof(int);
@@ -43,11 +43,11 @@ void RenderACache::setTriangles(int *triidx, unsigned int num_idx)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void RenderACache::setP(float *p, unsigned int num_vert)
+void RenderACache::setP(const XYZ *p, unsigned int num_vert)
 {
 	unsigned int size = num_vert * sizeof(float) * 3;
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, size, p, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size, (const float *)p, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

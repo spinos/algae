@@ -20,7 +20,7 @@
 // ARISING OUT OF ACCESS TO, USE OF, OR RELIANCE UPON THE DATA.
 // ==========================================================================
 //+
-
+#include "../shared/zXMLDoc.h"
 //
 // Define declarations
 //
@@ -68,6 +68,7 @@ class rockingTransformMatrix : public MPxTransformationMatrix
 		double rockXValue;
 		float fm[4][4];
 		float fm1[4][4];
+		ZXMLDoc doc;
 };
 
 class rockingTransformNode : public MPxTransform 

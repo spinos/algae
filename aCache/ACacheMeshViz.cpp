@@ -109,7 +109,7 @@ void ACacheMeshViz::draw( M3dView & view, const MDagPath & /*path*/,
 			}
 			
 			m_pRender->setTriangles( m_pMesh->triangles(), m_pMesh->getNumTriangle()*3);
-			m_pRender->setP( (float *)m_pMesh->points(), m_pMesh->getNumVertex());
+			m_pRender->setP( m_pMesh->points(), m_pMesh->getNumVertex());
 			m_pRender->enableProgram(m_program);
 			
 			glUniform3f(glGetUniformLocation(m_program, "baseColor"), scr, csg, csb);

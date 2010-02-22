@@ -21,7 +21,7 @@
 	
 	string globalmap = "";
 	attribute( "photon:globalmap", globalmap );
-	if(globalmap!="") irrad += photonmap(globalmap, P, Nn, "estimator", 200, "lookuptype", "irradiance", "mindepth", 1.0 );
+	if(globalmap!="") irrad += photonmap(globalmap, P, Nn, "estimator", 400, "lookuptype", "irradiance", "mindepth", 1.0 );
 
 	irrad *= surfaceColor;
 	

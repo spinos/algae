@@ -88,6 +88,7 @@ char XMLUtil::findByNameAndType(const char* filename, const char* name, const ch
 
 char XMLUtil::findByNameAndType(const char* name, const char* type, ZXMLDoc& doc)
 {
+	doc.setChildren();
 	while(doc.isLastNode() != 1)
 	{
 		if(doc.checkNodeName(type) == 1)
