@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="Matte" type="surface">
 	<icon>anm_Matte.xpm</icon>
+	<description>Bake radiosity to point cloud. Direct light is diffuse(). Indirect light is from photonmap(). Use Photon Map Rendering to calculate N-1 bounce. 
+	Radiosity will be ( direct + indirect ) * surfaceColor.
+	BakeToFile should be point cloud per scene.</description>
 	<parameter name="Kd" type="float" value="1.000000">
 		<detail value="simple"/>
 	</parameter>

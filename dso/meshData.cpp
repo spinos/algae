@@ -46,14 +46,17 @@ void meshData::generateRIB(RtFloat detail)
 	RtToken paramname[MAX_NUMPARAM];
 	RtPointer paramvalue[MAX_NUMPARAM];
 	
-	string sname(m_prt_name);
-	
-	if(!pMesh->isNull())
-	{
-		if(pMesh->getNumUVSet()<1) RiHierarchicalSubdivisionMesh("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, "P", (RtPoint*)pMesh->points(), RI_NULL );
-		else
-		{
-			printf("%s is loaded ", m_mesh_name);
+	//string sname(m_prt_name);
+
+	if(!pMesh->isNull()) {
+		string scache(m_cache_name);
+		SHelper::changeFrameNumber(scache, SHelper::safeConvertToInt(m_frame));
+		printf("anemone loaded %s from %s\n", m_mesh_name, scache.c_str());
+		pMesh->updateFrom(scache.c_str());
+		//if(pMesh->getNumUVSet()<1) RiHierarchicalSubdivisionMesh("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, "P", (RtPoint*)pMesh->points(), RI_NULL );
+		//else
+		//{
+			
 			paramname[0] = "P";
 			paramvalue[0] =(RtPoint*)pMesh->points();
 			
@@ -137,9 +140,9 @@ void meshData::generateRIB(RtFloat detail)
 					
 				RiMotionEnd();
 			}*/
-		}
+		//}
 	}
-  printf("cleanup %s \n", m_mesh_name);
+  printf("anemone cleanup %s \n", m_mesh_name);
 	delete pMesh;
 
 	return;

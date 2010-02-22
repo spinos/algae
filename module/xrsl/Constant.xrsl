@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="Constant" type="surface">
 	<icon>anm_Constant.xpm</icon>
+	<description>Simple constant surface. Connect some color here.</description>
 	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
 		<detail value="connection"/>
 	</parameter>

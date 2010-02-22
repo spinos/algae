@@ -71,16 +71,16 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 288463143;
-			PBXWorkspaceStateSaveDate = 288463143;
+			PBXPerProjectTemplateStateSaveDate = 288496561;
+			PBXWorkspaceStateSaveDate = 288496561;
 		};
 		perUserProjectItems = {
-			7F90BD52113199FC00BE4F28 /* PBXBookmark */ = 7F90BD52113199FC00BE4F28 /* PBXBookmark */;
-			7F90BD5A1131A10E00BE4F28 /* PBXTextBookmark */ = 7F90BD5A1131A10E00BE4F28 /* PBXTextBookmark */;
-			7F90BD5D1131A10E00BE4F28 /* PBXTextBookmark */ = 7F90BD5D1131A10E00BE4F28 /* PBXTextBookmark */;
-			7F90BD5E1131A10E00BE4F28 /* PBXTextBookmark */ = 7F90BD5E1131A10E00BE4F28 /* PBXTextBookmark */;
-			7F90BD611131A10E00BE4F28 /* PBXTextBookmark */ = 7F90BD611131A10E00BE4F28 /* PBXTextBookmark */;
-			7F90BD621131A10E00BE4F28 /* PBXTextBookmark */ = 7F90BD621131A10E00BE4F28 /* PBXTextBookmark */;
+			7F90BD52113199FC00BE4F28 = 7F90BD52113199FC00BE4F28 /* PBXBookmark */;
+			7F90BD5A1131A10E00BE4F28 = 7F90BD5A1131A10E00BE4F28 /* PBXTextBookmark */;
+			7F90BD5D1131A10E00BE4F28 = 7F90BD5D1131A10E00BE4F28 /* PBXTextBookmark */;
+			7F90BD5E1131A10E00BE4F28 = 7F90BD5E1131A10E00BE4F28 /* PBXTextBookmark */;
+			7F90BD611131A10E00BE4F28 = 7F90BD611131A10E00BE4F28 /* PBXTextBookmark */;
+			7F90BD621131A10E00BE4F28 = 7F90BD621131A10E00BE4F28 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7FE58B990FB61EA800187112 /* Source Control */;
 		userBookmarkGroup = 7F4737F01118B14700D04B77 /* PBXBookmarkGroup */;
@@ -333,7 +333,7 @@
 		isa = PBXTextBookmark;
 		fRef = 7F93707C11133E5700B2962B /* XRSLPiece.h */;
 		rLen = 0;
-		rLoc = 2147483715;
+		rLoc = 1308;
 		rType = 0;
 	};
 	7F90BD5E1131A10E00BE4F28 /* PBXTextBookmark */ = {
@@ -350,7 +350,7 @@
 		isa = PBXTextBookmark;
 		fRef = 7F93707B11133E5700B2962B /* XRSLPiece.cpp */;
 		rLen = 0;
-		rLoc = 2147483778;
+		rLoc = 3008;
 		rType = 0;
 	};
 	7F90BD621131A10E00BE4F28 /* PBXTextBookmark */ = {
@@ -381,9 +381,9 @@
 	};
 	7F93707B11133E5700B2962B /* XRSLPiece.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {710, 1470}}";
+			sepNavIntBoundsRect = "{{0, 0}, {539, 1554}}";
 			sepNavSelRange = "{873, 0}";
-			sepNavVisRange = "{310, 1040}";
+			sepNavVisRange = "{339, 1011}";
 			sepNavWindowFrame = "{{78, 108}, {598, 628}}";
 		};
 	};
@@ -392,7 +392,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {466, 1022}}";
 			sepNavSelRange = "{1150, 0}";
 			sepNavVisRange = "{468, 838}";
-			sepNavWindowFrame = "{{92, 44}, {525, 671}}";
+			sepNavWindowFrame = "{{92, 76}, {525, 671}}";
 		};
 	};
 	7F9E8178110CCFEE001A16D3 /* cacheTransform.cpp */ = {

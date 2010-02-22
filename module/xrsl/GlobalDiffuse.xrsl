@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="GlobalDiffuse" type="surface">
 	<icon>anm_GlobalDiffuse.xpm</icon>
+	<description>Final Gathering surface. Direct and Cs is from bake file. Indirect is by point-based indirectdiffuse().
+	radiosity is ( direct + indirect ) * cs. output direct, indirect, occlusion as well.</description>
 	<parameter name="irradianceFile" type="string" value="nil">
 		<detail value="connection"/>
 	</parameter>
