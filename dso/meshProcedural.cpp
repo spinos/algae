@@ -5,7 +5,7 @@
 
 #ifdef _WIN32
 #define export __declspec(dllexport)
-#define strtok_r(str,delim,saveptr) strtok((str),(delim))
+//#define strtok_r(str,delim,saveptr) strtok((str),(delim))
 #else
 #define export
 #endif

@@ -33,6 +33,7 @@ public:
 		static void ribthree(std::string& res);
 		static int findPartBeforeChar(std::string& full, std::string& frag, int start, char sep);
 		static void protectCommaFree(std::string& res);
+		static void endNoReturn(std::string& res);
 };
 #endif
 //:~

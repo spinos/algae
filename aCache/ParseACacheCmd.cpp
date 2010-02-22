@@ -174,7 +174,11 @@ MStatus ParseACache::doIt( const MArgList& args )
 										
 						char bboxbuf[128];
 						sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
+#ifdef WIN32
+						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.dll\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
+#else
 						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
+#endif
 						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
 						MGlobal::executeCommand(scmd);
 						break;
@@ -269,15 +273,25 @@ void ParseACache::injectRIBStatement(MObject& node)
 		int start =0;
 		string sline;
 /*could be \r\n on windows*/
+#ifdef WIN32
+		int end = SHelper::findPartBeforeChar(srib, sline, start, '\n');
+#else
 		int end = SHelper::findPartBeforeChar(srib, sline, start, '\r');
+#endif
 		while(end > 0) {
 		
 			SHelper::protectCommaFree(sline);
+			//SHelper::endNoReturn(sline);
 			MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sline.c_str() + "\\n\"";
 			MGlobal::executeCommand(slog);
+			//MGlobal::displayInfo(slog);
 
 			start = end+1;
+#ifdef WIN32
+			end = SHelper::findPartBeforeChar(srib, sline, start, '\n');
+#else
 			end = SHelper::findPartBeforeChar(srib, sline, start, '\r');
+#endif
 		}
 	}
 }

@@ -340,7 +340,7 @@ int SHelper::findPartBeforeChar(std::string& full, std::string& frag, int start,
 {
 	int found = full.find(sep, start);
 	if(found < 0) frag = full;
-	else frag = full.substr(start, found - start);
+	else frag = full.substr(start, found - start -1);
 	return found;
 }
 
@@ -353,5 +353,11 @@ void SHelper::protectCommaFree(std::string& res)
 		lstart = lend+2;
 		lend = res.find('\"', lstart);
 	}
+}
+
+void SHelper::endNoReturn(std::string& res)
+{
+	int end = res.size() - 1;
+	if( res[end] == '\n' ) res.erase(end);
 }
 //:~

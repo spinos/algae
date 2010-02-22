@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="Matte" type="surface">
+	<icon>anm_Matte.xpm</icon>
+	<parameter name="Kd" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="bakeToFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	float a = area(P, "dicing");
+	normal Nn = normalize(N);
+	color cdiff = Kd * diffuse(Nn);
+	color irrad = cdiff;
+	
+	string globalmap = "";
+	attribute( "photon:globalmap", globalmap );
+	if(globalmap!="") irrad += photonmap(globalmap, P, Nn, "estimator", 200, "lookuptype", "irradiance", "mindepth", 1.0 );
+
+	irrad *= surfaceColor;
+	
+	Oi = Os;
+	Ci = Oi * irrad;
+	
+	if(bakeToFile != "nil") {
+		bake3d(bakeToFile, "area,_radiosity,Cs,_diff", P, Nn, "interpolate", 1,
+             "_area", a, "_radiosity", irrad, "Cs", surfaceColor, "_diff", cdiff);
+	}
+	</source>
+</rsl>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="Constant" type="surface">
+	<icon>anm_Constant.xpm</icon>
+	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	Oi = Os;
+	Ci = Oi * surfaceColor;
+	</source>
+</rsl>

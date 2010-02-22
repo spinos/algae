@@ -4,7 +4,7 @@ init set
 
 global proc string anm_getMasterPath()
 {
-	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+	return "D:/anemone/module/xrsl";
 }
 
 global proc string[] anm_getSurfaceFiles()
@@ -1900,11 +1900,26 @@ global proc anm_openAShaderManWin()
 //create shader path
 	string $shader_path = `workspace -q -fn`+"/rmanshaders/";
 	
-	system("mkdir "+$shader_path);
+	system("mkdir \""+$shader_path +"\"");
 // create tmp path
 	string $tmp_path = `workspace -q -fn`+"/rmantmp/";
 	
-	system("mkdir "+$tmp_path);
+	system("mkdir \""+$tmp_path +"\"");
+	
+// get scene name
+	string $scnname = `file -q -sceneName`;
+	if($scnname == "") $scnname = "untitled";
+	else {
+		string $buffer[];
+		$numTokens = `tokenize $scnname "/" $buffer`;
+		$scnname = $buffer[$numTokens-1];
+		$numTokens = `tokenize $scnname "." $buffer`;
+		$scnname = $buffer[0];
+	}
+
+// shader and tmp per scene
+	system("mkdir \""+$tmp_path + "/" + $scnname + "\"");
+	system("mkdir \""+$shader_path + "/" + $scnname + "\"");
 
 //If such a window already exists, destory it.
  if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;
