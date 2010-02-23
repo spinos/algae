@@ -18,5 +18,5 @@ private:
 	float m_shutter_open, m_shutter_close;
 	int m_frame;
 	float m_mesh_0, m_mesh_1;
-	int m_i_double_sided;
+	int m_b_bake;
 };

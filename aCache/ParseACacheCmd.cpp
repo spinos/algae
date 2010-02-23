@@ -154,12 +154,14 @@ MStatus ParseACache::doIt( const MArgList& args )
 				}
 
 				MString sproc, scmd, ptcname, bkmname;
+				char argbuf[1024];
+				char bboxbuf[128];
 // operation option
 				int ioperation = fens.findPlug("operation").asInt();
 				switch(ioperation) {
 					case 0:
 // default rib
-						defRIBStat();				
+						//defRIBStat();				
 
 						injectRIBStatement(orbx);
 
@@ -167,12 +169,11 @@ MStatus ParseACache::doIt( const MArgList& args )
 
 						injectShaderStatement(odisp, ssname, spass, 1);
 					
-						char argbuf[1024];
-						sprintf(argbuf, "%s %s %d %f %f",
+						
+						sprintf(argbuf, "%s %s %d %f %f 0",
 										scache.asChar(), smesh.asChar(), 
 										(int)fframe, fshutteropen, fshutterclose);
 										
-						char bboxbuf[128];
 						sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
 #ifdef WIN32
 						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.dll\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
@@ -183,6 +184,28 @@ MStatus ParseACache::doIt( const MArgList& args )
 						MGlobal::executeCommand(scmd);
 						break;
 					case 1:
+						defBakeStat();
+						injectRIBStatement(orbx);
+
+						injectShaderStatement(osurf, ssname, spass, 0);
+
+						injectShaderStatement(odisp, ssname, spass, 1);
+					
+						sprintf(argbuf, "%s %s %d %f %f 1",
+										scache.asChar(), smesh.asChar(), 
+										(int)fframe, fshutteropen, fshutterclose);
+										
+						
+						sprintf(bboxbuf, "[%f %f %f %f %f %f]", fbbox[0], fbbox[1], fbbox[2], fbbox[3], fbbox[4], fbbox[5]);
+#ifdef WIN32
+						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.dll\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
+#else
+						sproc = MString("Procedural \\\"DynamicLoad\\\" [\\\"aCacheMeshProcedural.so\\\" \\\"") +argbuf+"\\\"] "+bboxbuf;
+#endif
+						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
+						MGlobal::executeCommand(scmd);
+						break;
+					case 2:
 //MakeBrickMap [ "foo.ptc" ] "foo.bkm" 
 						ptcname = m_tmpPath + smesh + ".ptc";
 						bkmname = m_tmpPath + smesh + ".bkm";
@@ -190,7 +213,7 @@ MStatus ParseACache::doIt( const MArgList& args )
 						scmd = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sproc + "\\n\"";
 						MGlobal::executeCommand(scmd);
 						break;
-					case 2:
+					case 3:
 //MakeBrickMap [ "foo_sss.ptc" ] "foo_sss.bkm" 
 						ptcname = m_tmpPath + smesh + "_sss.ptc";
 						bkmname = m_tmpPath + smesh + "_sss.bkm";
@@ -250,6 +273,20 @@ MObject ParseACache::getDirectEnsembleNode(MPlug& plg, MString& objname, MString
 			}
 		}
 		else return MObject::kNullObj;
+}
+
+void ParseACache::defBakeStat()
+{
+//"Attribute \"cull\" \"hidden\" 0 \nAttribute \"cull\" \"backfacing\" 0 \nAttribute \"dice\" \"rasterorient\" 0 \n";
+	
+	MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"cull\\\" \\\"hidden\\\" 0\\n\"");
+	MGlobal::executeCommand(slog);
+	
+	slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"cull\\\" \\\"backfacing\\\" 0\\n\"");
+	MGlobal::executeCommand(slog);
+	
+	slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"dice\\\" \\\"rasterorient\\\" 0\\n\"");
+	MGlobal::executeCommand(slog);
 }
 
 void ParseACache::defRIBStat()

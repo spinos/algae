@@ -4,8 +4,8 @@ init set
 
 global proc string anm_getMasterPath()
 {
-	//return "D:/anemone/module/xrsl";
-	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+	return "D:/anemone/module/xrsl";
+	//return "/Users/jianzhang/Documents/anemone/module/xrsl";
 }
 
 global proc string[] anm_getSurfaceFiles()
@@ -164,7 +164,7 @@ global proc anm_scrollAppendTxt(string $opt)
 	string $ribstat[];
 	$ribstat[0] = "";
 	$ribstat[1] = "";
-	$ribstat[2] = "Attribute \"cull\" \"hidden\" 0 \nAttribute \"cull\" \"backfacing\" 0 \nAttribute \"dice\" \"rasterorient\" 0 \n";
+	$ribstat[2] = "Attribute \"visibility\" \"integer transmission\" 1 \nAttribute \"shade\" \"string transmissionhitmode\" [ \"opaque\"] \n";
 	$ribstat[3] = "Attribute \"visibility\" \"integer camera\" [ 0 ] \n";
 	$ribstat[4] = "Matte 1 \n";
 	$ribstat[5] = "Attribute \"visibility\" \"integer photon\" [ 1 ] \nAttribute \"shade\" \"string photonhitmode\" [ \"primitive\" ] \nAttribute \"photon\" \"string shadingmodel\" [ \"matte\" ]\n";
@@ -183,7 +183,7 @@ global proc anm_appendRIBStateOpt(string $txtgrp)
 	string $opt = `optionMenuGrp -ann $txtgrp`;
 	
 	menuItem -l "Select Template:";
-	menuItem -l "bake";
+	menuItem -l "visible in transmission";
 	menuItem -l "hidden in primary";
 	menuItem -l "matte object";
 	menuItem -l "visible in photon";
@@ -1212,6 +1212,7 @@ proc anm_listEnsembleAttrib(string $name)
 		string $attropt = $name+".operation";
 		string $ensopt = `optionMenu -ann $name -label "Operation"`;
 			menuItem -l "Render";
+			menuItem -l "Bake";
 			menuItem -l "Make Global Illumination Brick Map";
 			menuItem -l "Make SSS Brick Map";
 			menuItem -l "Do Nothing";
