@@ -279,7 +279,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>8</integer>
+									<integer>10</integer>
 									<integer>3</integer>
 									<integer>0</integer>
 								</array>
@@ -304,7 +304,7 @@
 							<real>267</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>569 197 683 298 0 0 1280 778 </string>
+						<string>145 359 683 298 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -341,7 +341,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {394, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>569 197 683 298 0 0 1280 778 </string>
+								<string>145 359 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -361,7 +361,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {394, 252}}</string>
 								<key>RubberWindowFrame</key>
-								<string>569 197 683 298 0 0 1280 778 </string>
+								<string>145 359 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -385,9 +385,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7FFB631111321BBD00A4FEF1</string>
+				<string>7F182EB611373CE000B84D78</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>7FFB631211321BBD00A4FEF1</string>
+				<string>7F182EB711373CE000B84D78</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -521,11 +521,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FE58BA50FB61F9000187112</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
+		<string>7FE58BA50FB61F9000187112</string>
 	</array>
 	<key>WindowString</key>
-	<string>569 197 683 298 0 0 1280 778 </string>
+	<string>145 359 683 298 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -541,12 +541,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>ParseACacheCmd.cpp</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -602,7 +604,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7FE58BA50FB61F9000187112</string>
-				<string>7FFB631311321BBD00A4FEF1</string>
+				<string>7F182EB811373CE000B84D78</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -613,7 +615,7 @@
 			<key>WindowToolGUID</key>
 			<string>7FE58BA50FB61F9000187112</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
