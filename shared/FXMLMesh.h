@@ -122,7 +122,7 @@ public:
 	void resetHDRLighting();*/
 	
 	const XYZ *getNormals() const {return m_normals;}
-	//const XYZ *getBiNormals() const {return m_binormals;}
+	const XYZ *getFaceNormals() const {return m_facevarying_normals;}
 	//const XYZ *getTangents() const {return m_tangents;}
 	
 	void appendColorSet(const char* paramname, const char* filename);
@@ -161,6 +161,7 @@ private:
 	XYZ* m_cvs;
 	float* m_grd;
 	XYZ* m_normals;
+	XYZ* m_facevarying_normals;
 	//XYZ* m_tangents;
 	//XYZ* m_binormals;
 	//XYZ* m_draw_color;

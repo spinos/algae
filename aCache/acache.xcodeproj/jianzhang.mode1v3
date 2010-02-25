@@ -231,6 +231,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -267,6 +269,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>08FB7794FE84155DC02AAC07</string>
+								<string>7FFA09F4110F431B0061F60E</string>
 								<string>08FB7795FE84155DC02AAC07</string>
 								<string>8A7F063308688F580064D097</string>
 								<string>1AB674ADFE9D54B511CA2CBB</string>
@@ -276,13 +279,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>17</integer>
-									<integer>4</integer>
+									<integer>8</integer>
+									<integer>3</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 245}, {267, 239}}</string>
+							<string>{{0, 0}, {267, 239}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -346,8 +349,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -521,7 +522,6 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>7FE58BA50FB61F9000187112</string>
-		<string>7F90BD5F1131A10E00BE4F28</string>
 		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

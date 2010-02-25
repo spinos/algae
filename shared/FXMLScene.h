@@ -46,12 +46,14 @@ public:
 	void addStaticP(int num, const XYZ* data);
 	void addStaticN(int num, const XYZ* data);
 	void addStaticGridSize(int num, const float* data);
+	void addStaticFaceN(int num, const XYZ* data);
 	void dynamicBegin();
 	void dynamicEnd();
 	void addP(int num, const XYZ* data);
 	void addN(int num, const XYZ* data);
 	//void addTangent(int num, const XYZ* data);
 	void addGridSize(int num, const float* data);
+	void addFaceN(int num, const XYZ* data);
 	void addBBox(float x0, float y0, float z0, float x1, float y1, float z1);
 	void transformBegin(const char* name, float space[4][4]);
 	void transformEnd();

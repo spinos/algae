@@ -57,11 +57,24 @@ void meshData::generateRIB(RtFloat detail)
 		//if(pMesh->getNumUVSet()<1) RiHierarchicalSubdivisionMesh("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, "P", (RtPoint*)pMesh->points(), RI_NULL );
 		//else
 		//{
+		int bSubdiv = 1;
+		if( pMesh->hasAttrib("noSubdiv") || m_b_bake == 1 ) bSubdiv = 0;
 			
-			paramname[0] = "P";
-			paramvalue[0] =(RtPoint*)pMesh->points();
+		paramname[0] = "P";
+		paramvalue[0] =(RtPoint*)pMesh->points();
 			
-			int nparam = 1;
+		int nparam = 1;
+// no subdiv mesh needs face normal
+		if(pMesh->hasAttrib("noSubdiv")) {
+			paramname[nparam] = "facevarying normal N";
+			paramvalue[nparam] = (RtFloat*)pMesh->getFaceNormals();
+			nparam++;
+		}
+		else { // subdiv use vertex normal
+			paramname[nparam] = "vertex normal N";
+			paramvalue[nparam] = (RtFloat*)pMesh->getNormals();
+			nparam++;
+		}
 			//printf("%d uv set ", pMesh->getNumUVSet());
 			for(int i=0; i<pMesh->getNumUVSet(); i++) {
 				paramname[nparam] = (RtToken)pMesh->getSNameById(i);
@@ -71,6 +84,7 @@ void meshData::generateRIB(RtFloat detail)
 				paramvalue[nparam] = (RtFloat*)pMesh->getTById(i);
 				nparam++;
 			}
+
 /*			
 			if(m_i_hdr_shadowed == 1.0f || m_i_lightsrc_shadowed == 1.0f)
 			{
@@ -125,8 +139,7 @@ void meshData::generateRIB(RtFloat detail)
 				nparam++;
 			}
 */			
-			int bSubdiv = 1;
-			if( pMesh->hasAttrib("noSubdiv") || m_b_bake == 1 ) bSubdiv = 0;
+			
 			if( bSubdiv==1 ) RiHierarchicalSubdivisionMeshV("catmull-clark", (RtInt)pMesh->nfaces(),  (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)2, tags, nargs, intargs, floatargs, stringargs, (RtInt)nparam, paramname, paramvalue );
 			else RiPointsPolygonsV( (RtInt)pMesh->nfaces(), (RtInt*)pMesh->nverts(), (RtInt*)pMesh->verts(), (RtInt)nparam, paramname, paramvalue);
 

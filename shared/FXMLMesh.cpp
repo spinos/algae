@@ -54,17 +54,13 @@ m_grd(0),
 m_isNull(1)
 {}
 */
-FXMLMesh::FXMLMesh(const char* filename, const char* meshname):
-//pos_s(0), 
-//pos_d(0),
+FXMLMesh::FXMLMesh(const char* filename, const char* meshname) :
 m_faceCount(0), 
 m_vertices(0),
 m_triangleConn(0), 
 m_cvs(0),
-//m_subd_cvs(0), 
 m_normals(0),
-//m_tangents(0), m_binormals(0),
-//m_draw_color(0),// m_color(0),
+m_facevarying_normals(0),
 m_numFace(0), 
 m_numFaceVertex(0), 
 m_numVertex(0),
@@ -346,10 +342,7 @@ void FXMLMesh::free()
 		if(m_triangleConn) delete[] m_triangleConn;
 		if(m_cvs) delete[] m_cvs;
 		if(m_normals) delete[] m_normals;
-		//if(m_tangents) delete[] m_tangents;
-		//if(m_binormals) delete[] m_binormals;
-		//if(m_draw_color) delete[] m_draw_color;
-		//if(m_color) delete[] m_color;
+		if(m_facevarying_normals) delete[] m_facevarying_normals;
 		if(m_pOpen) delete[] m_pOpen;
 		if(m_pClose) delete[] m_pClose;
 		if(m_grd) delete[] m_grd;
@@ -547,6 +540,17 @@ int FXMLMesh::load(const char* filename, const char* meshname)
 			}
 		doc.setParent();
 		
+		if(hasAttrib("noSubdiv") == 1) {
+			m_facevarying_normals = new XYZ[m_numFaceVertex];
+			
+			if(doc.getChildByName("FaceVaryingN") != 0) {
+				pos = doc.getIntAttribByName("loc");
+				size = doc.getIntAttribByName("size");
+				ffin.seekg( pos, ios::beg );
+				ffin.read((char*)m_facevarying_normals, size);
+			}
+			doc.setParent();
+		}
 		
 		/*
 			if(doc.getChildByName("vertex_color") != 0)
@@ -601,7 +605,15 @@ int FXMLMesh::load(const char* filename, const char* meshname)
 			}
 		doc.setParent();
 		
-		
+		if(hasAttrib("noSubdiv") == 1) {
+			if(doc.getChildByName("FaceVaryingN") != 0) {
+				pos = doc.getIntAttribByName("loc");
+				size = doc.getIntAttribByName("size");
+				ffin.seekg( pos, ios::beg );
+				ffin.read((char*)m_facevarying_normals, size);
+			}
+			doc.setParent();
+		}
 		
 			
 		

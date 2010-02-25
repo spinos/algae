@@ -200,6 +200,7 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 		MPlug pmsg = fnode.findPlug( smsg, 1,  &hasMsg );
 		
 		char bNoChange = 0;
+		char bNoSubd = 0;
 		if(hasMsg) {
 			MObject oattrib;
 			AHelper::getConnectedNode(oattrib, pmsg);
@@ -209,6 +210,9 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			
 			AHelper::getBoolAttributeByName(fnode, "noChange", iattr);
 			if(iattr) bNoChange = 1;
+			
+			AHelper::getBoolAttributeByName(fnode, "asSubdiv", iattr);
+			if(!iattr) bNoSubd = 1;
 		}
 
 		xml_f.meshBegin(surface.asChar(), bNoChange);
@@ -393,13 +397,13 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			vertIter.reset();
 			MString aset = colorSetNames[i];
 			MColor col;
-			for( unsigned int i=0; !vertIter.isDone(); vertIter.next(), i++ ) {
+			for( unsigned int j=0; !vertIter.isDone(); vertIter.next(), j++ ) {
 					MIntArray conn_face;
 					vertIter.getConnectedFaces(conn_face);
 					vertIter.getColor(col, conn_face[0], &aset);
-					colors[i].x = col.r*light_intensity;
-					colors[i].y = col.g*light_intensity;
-					colors[i].z = col.b*light_intensity;
+					colors[j].x = col.r*light_intensity;
+					colors[j].y = col.g*light_intensity;
+					colors[j].z = col.b*light_intensity;
 			}
 				
 			xml_f.addVertexColor(aset.asChar(), n_vert, colors);
@@ -512,7 +516,22 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 		//else 
 		xml_f.addStaticGridSize(n_vert, vgrd);
 		
-		
+		XYZ* facenormals = new XYZ[n_facevertex];
+		if(bNoSubd) {
+// non-subdiv needs face varying normal
+			acc = 0;
+			faceIter.reset();
+			for( ; !faceIter.isDone(); faceIter.next() ) {
+				MVectorArray  norlist;
+				faceIter.getNormals ( norlist );
+				for( int i = norlist.length()-1; i >=0; i-- ) {
+					norlist[i].normalize();
+					facenormals[acc] = XYZ(norlist[i].x, norlist[i].y, norlist[i].z);
+					acc++;
+				}
+			}
+			xml_f.addStaticFaceN(n_facevertex, facenormals);
+		}
 		
 		// 
 		//else 
@@ -526,6 +545,8 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 			xml_f.addN(n_vert, nor);
 			xml_f.addGridSize(n_vert, vgrd);
 			
+			if(bNoSubd) xml_f.addFaceN(n_facevertex, facenormals);
+			
 			xml_f.dynamicEnd();
 		}
 		
@@ -533,6 +554,7 @@ void ExportACache::save(const char* filename, int frameNumber, char bfirst)
 		delete[] tang;
 		delete[] nor;
 		delete[] vgrd;
+		delete[] facenormals;
 		
 		xml_f.addBBox(corner_l.x, corner_l.y, corner_l.z, corner_h.x, corner_h.y, corner_h.z);
 

@@ -254,6 +254,20 @@ void FXMLScene::addStaticGridSize(int num, const float* data)
 	static_mesh_file.write((char*)data, sizeof(float)*num);
 }
 
+void FXMLScene::addStaticFaceN(int num, const XYZ* data)
+{
+	int offset = (int)sizeof(XYZ)*num;
+	doc.elementBegin("FaceVaryingN");
+	doc.addAttribute("loc", pos_s);
+	doc.addAttribute("size", offset);
+	doc.addAttribute("count", num);
+	doc.elementEnd();
+	
+	pos_s += offset;
+	
+	static_mesh_file.write((char*)data, sizeof(XYZ)*num);
+}
+
 void FXMLScene::dynamicBegin()
 {
 	doc.elementBegin("dynamic");
@@ -282,6 +296,20 @@ void FXMLScene::addN(int num, const XYZ* data)
 {
 	int offset = (int)sizeof(XYZ)*num;
 	doc.elementBegin("N");
+	doc.addAttribute("loc", pos_d);
+	doc.addAttribute("size", offset);
+	doc.addAttribute("count", num);
+	doc.elementEnd();
+	
+	pos_d += offset;
+	
+	dynamic_mesh_file.write((char*)data, sizeof(XYZ)*num);
+}
+
+void FXMLScene::addFaceN(int num, const XYZ* data)
+{
+	int offset = (int)sizeof(XYZ)*num;
+	doc.elementBegin("FaceVaryingN");
 	doc.addAttribute("loc", pos_d);
 	doc.addAttribute("size", offset);
 	doc.addAttribute("count", num);
