@@ -2,16 +2,19 @@
 <rsl name="Matte" type="surface">
 	<icon>anm_Matte.xpm</icon>
 	<description>Bake radiosity to point cloud. Direct light is diffuse(). Indirect light is from photonmap(). Use Photon Map Rendering to calculate N-1 bounce. 
-	Radiosity will be ( direct + indirect ) * surfaceColor.
+	Radiosity will be ( direct + indirect ) * surfaceColor. Set negative bias to shrink the bake a bit.
 	BakeToFile should be point cloud per scene.</description>
-	<parameter name="Kd" type="float" value="1.000000">
-		<detail value="simple"/>
-	</parameter>
 	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="Kd" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="bakeToFile" type="string" value="nil">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="bias" type="float" value="-0.01">
+		<detail value="simple"/>
 	</parameter>
 	<source>
 	float a = area(P, "dicing");
@@ -21,7 +24,7 @@
 	
 	string globalmap = "";
 	attribute( "photon:globalmap", globalmap );
-	if(globalmap!="") irrad += photonmap(globalmap, P, Nn, "estimator", 400, "lookuptype", "irradiance", "mindepth", 1.0 );
+	if(globalmap!="") irrad += photonmap(globalmap, P, Nn, "estimator", 200, "lookuptype", "irradiance", "mindepth", 1.0 );
 
 	irrad *= surfaceColor;
 	
@@ -29,8 +32,8 @@
 	Ci = Oi * irrad;
 	
 	if(bakeToFile != "nil") {
-		bake3d(bakeToFile, "area,_radiosity,Cs,_diff", P, Nn, "interpolate", 1,
-             "_area", a, "_radiosity", irrad, "Cs", surfaceColor, "_diff", cdiff);
+		bake3d(bakeToFile, "area,_radiosity,Cs", P + Nn * bias, Nn, "interpolate", 1,
+             "_area", a, "_radiosity", irrad, "Cs", surfaceColor);
 	}
 	</source>
 </rsl>
