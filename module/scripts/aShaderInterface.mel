@@ -23,7 +23,7 @@ global proc string[] anm_getSurfaceFiles()
 global proc string[] anm_getColorFiles()
 {
 	string $res[];
-	$res[0] = "SCIndirect"; $res[1] = "anm_SCIndirect.xpm";
+	$res[0] = "SCGlobalDiffuse"; $res[1] = "anm_SCIndirect.xpm";
 	$res[2] = "SCDirect"; $res[3] = "anm_SCDirect.xpm";
 	$res[4] = "CImageFile"; $res[5] = "anm_CImageFile.xpm";
 	$res[6] = "CImageFileST"; $res[7] = "anm_CImageFileST.xpm";

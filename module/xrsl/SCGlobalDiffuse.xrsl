@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="SCGlobalDiffuse" type="color">
+	<icon>anm_GlobalDiffuse.xpm</icon>
+	<description>Final Gathering color by point-based indirectdiffuse(). output indirect and occlusion .</description>
+	<parameter name="irradianceFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="bias" type="float" value="0.01">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="_indirect" type="color" value="0.000000 0.000000 0.000000">
+		<access value="output"/>
+	</parameter>
+	<parameter name="_occlusion" type="float" value="0.000000">
+		<access value="output"/>
+	</parameter>
+	<source>
+	extern point P;
+	extern normal N;
+	normal Nn = normalize(N);
+	color irr = 0;
+	float occ = 0;
+	if(irradianceFile != "nil") {
+		occ = occlusion(P + Nn * bias, Nn, 0, "pointbased", 1, "filename", irradianceFile,
+                      "hitsides", "front",
+                      "clamp", 1,
+                      "maxdist", 1e15, "falloff", 0,
+                      "falloffmode", 0,
+                      "samplebase", 1, "bias", 0,
+                      "maxsolidangle", 0.04);
+		irr = indirectdiffuse(P + Nn * bias, Nn, 0, "pointbased", 1, "filename", irradianceFile,
+                            "hitsides", "front",
+                            "clamp", 1,
+                            "sortbleeding", 1,
+                            "maxdist", 1e15, "falloff", 0,
+                            "falloffmode", 0,
+                            "samplebase", 1, "bias", 0,
+                            "maxsolidangle", 0.04);
+	}
+	_occlusion = 1 - occ;
+	_indirect = irr;
+	return irr * (1 - occ * 0.5);
+	</source>
+</rsl>
