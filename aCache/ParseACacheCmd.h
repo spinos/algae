@@ -33,6 +33,7 @@ private:
 	MObject getDirectEnsembleNode(MPlug& plg, MString& objname, MString& passname);
 	void defRIBStat();
 	void defBakeStat();
+	void defTraceBias(float val);
 	void injectRIBStatement(MObject& node);
 	void injectShaderStatement(MObject& node, MString& objname, MString& passname, int type);
 	MString funcOrVarNode(MObject& node, MString& objname, MString& passname, VariableList& downstreamargs);

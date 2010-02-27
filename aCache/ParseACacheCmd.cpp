@@ -152,6 +152,9 @@ MStatus ParseACache::doIt( const MArgList& args )
 					bpersp = 0;
 					ffov = fcam.orthoWidth();
 				}
+				
+				float ftracebias = fens.findPlug("traceBias").asFloat();
+				defTraceBias(ftracebias);
 
 				MString sproc, scmd, ptcname, bkmname;
 				char argbuf[1024];
@@ -295,6 +298,13 @@ void ParseACache::defRIBStat()
 	MGlobal::executeCommand(slog);
 	
 	slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"shade\\\" \\\"string transmissionhitmode\\\" [ \\\"opaque\\\" ]\\n\"");
+	MGlobal::executeCommand(slog);
+}
+
+void ParseACache::defTraceBias(float val)
+{
+//Attribute "trace" "float bias" [ 0.1 ] 
+MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"trace\\\" \\\"float bias\\\" [ ")+val+" ]\\n\"";
 	MGlobal::executeCommand(slog);
 }
 

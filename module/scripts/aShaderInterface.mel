@@ -1219,6 +1219,9 @@ proc anm_listEnsembleAttrib(string $name)
 		int $ensusropt = `getAttr $attropt` + 1;
 		optionMenu -e -sl $ensusropt $ensopt;
 		optionMenu -e -cc ("anm_sdr_onChangeEnsembleOpt(\""+$ensopt+"\")") $ensopt;
+		
+		string $attrtbs = $name+".tbs";
+		attrControlGrp -attribute $attrtbs;
 		setParent..;
 		
 	setParent..;
