@@ -259,6 +259,12 @@ global proc anm_renderStrategy()
 				delightRenderMenuItemCommand $ANM_StrategyPasses[$i];	
 				$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
 				fprint $jobfile ($ribfile+"\n");
+				
+				if(`checkBox -q -v anm_stg_depends`) {
+					print("check RIB dependency:\n\n");
+					string $ribdepents = system("ribdepends " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib");
+					print($ribdepents+"\n");
+				}
 			}
 		}
 	}
@@ -273,6 +279,12 @@ global proc anm_renderStrategy()
 					delightRenderMenuItemCommand $ANM_StrategyPasses[$i];
 					$ribfile = "renderdl " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib";
 					fprint $jobfile ($ribfile+"\n");
+					
+					if(`checkBox -q -v anm_stg_depends`) {
+						print("check RIB dependency:\n\n");
+						string $ribdepents = system("ribdepends " + $rib_path + $ANM_StrategyPasses[$i] +"."+$frame+".rib");
+						print($ribdepents+"\n");
+					}
 				}
 			}
 		}
@@ -282,7 +294,7 @@ global proc anm_renderStrategy()
 	print("starting job from: "+$job_path+"jobspool.txt\n");
 	if(`checkBox -q -v anm_stg_immediate`) {
 		system("python "+anm_stg_getPythonScriptPath()+"/anemone.py --file "+$job_path+"jobspool.txt");
-		print("all done!\n");
+		print("render finished!\n");
 	}
 	else 
 		print("no render, start job outside maya.");
@@ -322,7 +334,7 @@ global proc anm_openRenderStrategyWin()
  if ( (`window -exists anm_renderStrategyWin`) == true ) deleteUI anm_renderStrategyWin;
 
 //Create the window.
- window -title "Anemone 4.1 - Render Strategy" -wh 400 300  -mb on anm_renderStrategyWin;
+ window -title "Anemone 4.3 - Render Strategy" -wh 400 300  -mb on anm_renderStrategyWin;
  
  menu -label "Create Strategy" -tearOff false;
     menuItem -label "Global Illumination Simple" -c "anm_chooseStrategy(1)";
@@ -344,8 +356,9 @@ columnLayout -adjustableColumn true anm_renderStrategyClm;
 checkBox -label "Multi Frame" -p $row anm_stg_multiframe;
 intField -v 1 -p $row anm_stg_minframe;
 intField -v 24 -p $row anm_stg_maxframe;
-checkBox -v 1 -label "Immediate Render" -p $row anm_stg_immediate;
-text -l "" -p $row;text -l "" -p $row;
+checkBox -v 1 -label "Immediate Render" -p $row anm_stg_immediate;text -l "" -p $row;text -l "" -p $row;
+checkBox -v 1 -label "Check Dependency" -p $row anm_stg_depends;text -l "" -p $row;text -l "" -p $row;
+text -l "" -p $row;text -l "" -p $row;text -l "" -p $row;
 button -l "Reload" -c "anm_listStrategyPasses" -p $row;
 button -l "Render" -c "anm_renderStrategy" -p $row;
 button -l "Close"-c "deleteUI anm_renderStrategyWin" -p $row;
@@ -375,7 +388,7 @@ global proc anm_openRenderStrategyHelpWin()
  if ( (`window -exists anm_renderStrategyHelpWin`) == true ) deleteUI anm_renderStrategyHelpWin;
 
 //Create the window.
- window -title "Anemone 4.0 - Render Strategy Help" -wh 400 300  -mb off anm_renderStrategyHelpWin;
+ window -title "Anemone 4.3 - Render Strategy Help" -wh 400 300  -mb off anm_renderStrategyHelpWin;
 
 //Layout
 string $form = `formLayout -numberOfDivisions 100`;
@@ -384,7 +397,7 @@ string $scroll = `scrollField -p $form -wordWrap true -ed off`;
 
 scrollField -e -text "Create Strategy to create render passes for specific purposes. Resulting passes will show up below for more tweak. " $scroll;
 scrollField -e -it "Reload to list existing render passes. Render will save RIB from active passes and lauch a render job on them." $scroll;
-
+scrollField -e -it "Mult Frame will trigger render animation from start to end. Immediate Render means proceed rendering within Maya. Won't respond until render is finished. " $scroll;
 	
 //row begin
 button -l "Close"-c "deleteUI anm_renderStrategyHelpWin" -p $row;

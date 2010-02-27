@@ -74,12 +74,6 @@
 			PBXPerProjectTemplateStateSaveDate = 288832716;
 			PBXWorkspaceStateSaveDate = 288832716;
 		};
-		perUserProjectItems = {
-			7F182EBD11373FD400B84D78 /* PBXTextBookmark */ = 7F182EBD11373FD400B84D78 /* PBXTextBookmark */;
-			7F182EBE11373FD400B84D78 /* PBXTextBookmark */ = 7F182EBE11373FD400B84D78 /* PBXTextBookmark */;
-			7F182EC111373FF400B84D78 /* PBXTextBookmark */ = 7F182EC111373FF400B84D78 /* PBXTextBookmark */;
-			7F182EC211373FF400B84D78 /* PBXTextBookmark */ = 7F182EC211373FF400B84D78 /* PBXTextBookmark */;
-		};
 		sourceControlManager = 7FE58B990FB61EA800187112 /* Source Control */;
 		userBookmarkGroup = 7F4737F01118B14700D04B77 /* PBXBookmarkGroup */;
 		userBuildSettings = {
@@ -100,42 +94,6 @@
 			sepNavVisRange = "{0, 481}";
 			sepNavWindowFrame = "{{15, 123}, {600, 650}}";
 		};
-	};
-	7F182EBD11373FD400B84D78 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: 'fnode' was not declared in this scope";
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-		rLen = 1;
-		rLoc = 250;
-		rType = 1;
-	};
-	7F182EBE11373FD400B84D78 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-		name = "ParseACacheCmd.cpp: 251";
-		rLen = 59;
-		rLoc = 7963;
-		rType = 0;
-		vrLen = 510;
-		vrLoc = 7515;
-	};
-	7F182EC111373FF400B84D78 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: 'slfc_str' was not declared in this scope";
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-		rLen = 1;
-		rLoc = 250;
-		rType = 1;
-	};
-	7F182EC211373FF400B84D78 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */;
-		name = "ParseACacheCmd.cpp: 251";
-		rLen = 56;
-		rLoc = 7963;
-		rType = 0;
-		vrLen = 321;
-		vrLoc = 7732;
 	};
 	7F4737F01118B14700D04B77 /* PBXBookmarkGroup */ = {
 		isa = PBXBookmarkGroup;
@@ -456,9 +414,9 @@
 	};
 	7FCD1DDC11172FE90036E3C6 /* ParseACacheCmd.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {830, 12684}}";
-			sepNavSelRange = "{7963, 56}";
-			sepNavVisRange = "{7732, 380}";
+			sepNavIntBoundsRect = "{{0, 0}, {830, 12670}}";
+			sepNavSelRange = "{8020, 0}";
+			sepNavVisRange = "{7800, 373}";
 			sepNavWindowFrame = "{{450, 102}, {636, 651}}";
 		};
 	};

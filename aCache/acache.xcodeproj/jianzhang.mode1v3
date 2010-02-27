@@ -304,7 +304,7 @@
 							<real>267</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>145 359 683 298 0 0 1280 778 </string>
+						<string>152 340 683 298 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -341,7 +341,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {394, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>145 359 683 298 0 0 1280 778 </string>
+								<string>152 340 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -361,7 +361,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {394, 252}}</string>
 								<key>RubberWindowFrame</key>
-								<string>145 359 683 298 0 0 1280 778 </string>
+								<string>152 340 683 298 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -521,11 +521,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 		<string>7FE58BA50FB61F9000187112</string>
+		<string>/Users/jianzhang/Documents/anemone/aCache/acache.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>145 359 683 298 0 0 1280 778 </string>
+	<string>152 340 683 298 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

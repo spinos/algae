@@ -1927,7 +1927,7 @@ global proc anm_openAShaderManWin()
  if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;
  
 //Create the window.
- window -title "anemone 4.1 - Shader Management" -wh 400 300  -mb false anm_AShaderManWin;
+ window -title "anemone 4.3 - Shader Management" -wh 400 300  -mb false anm_AShaderManWin;
 
 //Layout
 string $form = `formLayout -numberOfDivisions 100`;
