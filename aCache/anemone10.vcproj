@@ -330,7 +330,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="1"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -349,6 +351,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/GR /GS /EHsc"
+				Optimization="2"
+				AdditionalIncludeDirectories="D:\local\libxml2x86\include;D:\Maya2010x86\include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;NT_PLUGIN;REQUIRE_IOSTREAM"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				WarningLevel="3"
+				CompileAs="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -361,8 +372,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/export:initializePlugin /export:uninitializePlugin "
+				AdditionalDependencies="odbc32.lib odbccp32.lib OpenMaya.lib Foundation.lib OpenMayaFX.lib OpenMayaAnim.lib OpenMayaUI.lib libxml2.lib"
+				OutputFile="..\module\plug-ins\aCache2010x86.mll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="D:\local\Cg\lib;D:\local\libxml2x86\lib;D:\Maya2010x86\lib"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"

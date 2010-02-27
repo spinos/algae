@@ -18,6 +18,7 @@ public:
 	static  MObject		adisplacement;
 	static  MObject		aribbox;
 	static  MObject		aoperation;
+	static MObject atracebias;
 	static  MObject		output;        // The output value.
 	static	MTypeId		id;
 };

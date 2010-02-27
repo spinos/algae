@@ -1,78 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="Harmony" type="surface">
 	<icon>anm_Harmony.xpm</icon>
+	<description>Compose shader.</description>
 	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_0" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_0" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_1" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_1" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_2" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_2" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_3" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_3" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_4" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_4" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_5" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_5" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_6" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_6" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_7" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_7" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_8" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_8" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_9" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_9" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_10" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_10" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_11" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_11" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_12" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_12" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_13" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_13" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_14" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_14" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_15" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
 	<parameter name="channel_15" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="k_16" type="float" value="1.000000">
+		<detail value="simple"/>
 	</parameter>
 	<parameter name="channel_16" type="color" value="0.000000 0.000000 0.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="k_17" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="channel_17" type="color" value="0.000000 0.000000 0.000000">
+		<detail value="connection"/>
+	</parameter>
 	<source>
-	color ham = channel_0 * surfaceColor;
-	ham += channel_1 * surfaceColor;
-	ham += channel_2 * surfaceColor;
-	ham += channel_3 * surfaceColor;
-	ham += channel_4 * surfaceColor;
-	ham += channel_5 * surfaceColor;
-	ham += channel_6 * surfaceColor;
-	ham += channel_7 * surfaceColor;
-	ham += channel_8 * surfaceColor;
-	ham += channel_9 * surfaceColor;
-	ham += channel_10 * surfaceColor;
-	ham += channel_11 * surfaceColor;
-	ham += channel_12 * surfaceColor;
-	ham += channel_13 * surfaceColor;
-	ham += channel_14 * surfaceColor;
-	ham += channel_15 * surfaceColor;
-	ham += channel_16 * surfaceColor;
+	color ham = channel_0 * k_0 * surfaceColor;
+	ham += channel_1 * k_1 * surfaceColor;
+	ham += channel_2 * k_2 * surfaceColor;
+	ham += channel_3 * k_3 * surfaceColor;
+	ham += channel_4 * k_4 * surfaceColor;
+	ham += channel_5 * k_5 * surfaceColor;
+	ham += channel_6 * k_6 * surfaceColor;
+	ham += channel_7 * k_7 * surfaceColor;
+	ham += channel_8 * k_8 * surfaceColor;
+	ham += channel_9 * k_9 * surfaceColor;
+	ham += channel_10 * k_10 * surfaceColor;
+	ham += channel_11 * k_11 * surfaceColor;
+	ham += channel_12 * k_12 * surfaceColor;
+	ham += channel_13 * k_13 * surfaceColor;
+	ham += channel_14 * k_14 * surfaceColor;
+	ham += channel_15 * k_15 * surfaceColor;
+	ham += channel_16 * k_16 * surfaceColor;
+	ham += channel_17 * k_17 * surfaceColor;
 	Oi = Os;
 	Ci = Oi * ham;
 	</source>
