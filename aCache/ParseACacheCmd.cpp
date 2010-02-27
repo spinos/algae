@@ -230,6 +230,30 @@ MStatus ParseACache::doIt( const MArgList& args )
 			}
 		}
 	}
+	else if(argData.isFlagSet("-f")) {
+// shader and scene path
+		MString proj;
+		MGlobal::executeCommand( MString ("string $p = `workspace -q -fn`"), proj );
+		MString scn;
+		MGlobal::executeCommand( MString ("string $p = `file -q -sceneName`"), scn );
+		if(scn.length() < 1) scn = "untitled";
+		string sscn = scn.asChar();
+		SHelper::filenameWithoutPath(sscn);
+		MString shader_path = proj+"/rmanshaders/"+sscn.c_str()+"/";
+//getFileList -folder `internalVar -userScriptDir` -filespec "*.sl";
+		
+		MStringArray slfiles;
+		MGlobal::executeCommand (MString("getFileList -folder \"") + shader_path + "\" -filespec \"*.sl\"", slfiles);
+// compile sl
+		MString slog; 
+		for(unsigned i = 0; i< slfiles.length(); i++) {
+			string slf = slfiles[i].asChar();
+			SHelper::cutByLastDot(slf);
+			slog = MString("system(\"shaderdl -o "+ shader_path + "/" + slf.c_str() + ".sdl "+shader_path + "/" + slf.c_str() +".sl\")");
+			MGlobal::executeCommand(slog);
+			MGlobal::displayInfo(MString("compile ")+slf.c_str());
+		}
+	}
 
  return MS::kSuccess;
  }
@@ -457,11 +481,6 @@ void ParseACache::injectShaderStatement(MObject& node, MString& objname, MString
 			}
 			//MGlobal::displayInfo(paramlist);
 			slog = slog + paramlist + "\\n\"";
-			MGlobal::executeCommand(slog);
-
-// compile sl
-			slog = MString("system(\"shaderdl -o "+ shader_path + "/" + fnode.name() + ".sdl "+shader_path + "/" + fnode.name() +".sl\")");
-			MGlobal::displayInfo(MString("compile ")+fnode.name());
 			MGlobal::executeCommand(slog);
 		}
 	}
