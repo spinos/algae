@@ -4,8 +4,8 @@ init set
 
 global proc string anm_getMasterPath()
 {
-	//return "D:/anemone/module/xrsl";
-	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+	return "D:/anemone/module/xrsl";
+	//return "/Users/jianzhang/Documents/anemone/module/xrsl";
 }
 
 global proc string[] anm_getSurfaceFiles()
@@ -24,9 +24,10 @@ global proc string[] anm_getColorFiles()
 {
 	string $res[];
 	$res[0] = "SCGlobalDiffuse"; $res[1] = "anm_SCIndirect.xpm";
-	$res[2] = "SCDirect"; $res[3] = "anm_SCDirect.xpm";
-	$res[4] = "CImageFile"; $res[5] = "anm_CImageFile.xpm";
-	$res[6] = "CImageFileST"; $res[7] = "anm_CImageFileST.xpm";
+	$res[2] = "SCDiffuse"; $res[3] = "anm_Matte.xpm";
+	$res[4] = "SCSpecular"; $res[5] = "anm_SCSpecular.xpm";
+	$res[6] = "CImageFile"; $res[7] = "anm_CImageFile.xpm";
+	$res[8] = "CImageFileST"; $res[9] = "anm_CImageFileST.xpm";
 	return $res;
 }
 
