@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="CImageFileST" type="float">
+	<icon>anm_FImageFileST.xpm</icon>
+	<parameter name="filename" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="coord_s" type="float" value="0.0">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="coord_t" type="float" value="0.0">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	float res = float texture( filename[0], coord_s, coord_t, "filter", "lagrangian" );
+	return res;
+	</source>
+</rsl>

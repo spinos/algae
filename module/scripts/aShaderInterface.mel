@@ -4,8 +4,8 @@ init set
 
 global proc string anm_getMasterPath()
 {
-	return "D:/anemone/module/xrsl";
-	//return "/Users/jianzhang/Documents/anemone/module/xrsl";
+	//return "D:/anemone/module/xrsl";
+	return "/Users/jianzhang/Documents/anemone/module/xrsl";
 }
 
 global proc string[] anm_getSurfaceFiles()
@@ -15,8 +15,13 @@ global proc string[] anm_getSurfaceFiles()
 	$res[2] = "GlobalDiffuse"; $res[3] = "anm_GlobalDiffuse.xpm";
 	$res[4] = "Harmony"; $res[5] = "anm_Harmony.xpm";
 	$res[6] = "Constant"; $res[7] = "anm_Constant.xpm";
-	//$res[8] = "ImageFile"; $res[9] = "anm_SImageFile.xpm";
-	//$res[10] = "ImageFileST"; $res[11] = "anm_SImageFile.xpm";
+	return $res;
+}
+
+global proc string[] anm_getDisplacementFiles()
+{
+	string $res[];
+	$res[0] = "TwoLayerDisplacement"; $res[1] = "anm_TwoLayerDisplacement.xpm";
 	return $res;
 }
 
@@ -28,6 +33,14 @@ global proc string[] anm_getColorFiles()
 	$res[4] = "SCSpecular"; $res[5] = "anm_SCSpecular.xpm";
 	$res[6] = "CImageFile"; $res[7] = "anm_CImageFile.xpm";
 	$res[8] = "CImageFileST"; $res[9] = "anm_CImageFileST.xpm";
+	return $res;
+}
+
+global proc string[] anm_getFloatFiles()
+{
+	string $res[];
+	$res[0] = "FImageFile"; $res[1] = "anm_FImageFile.xpm";
+	$res[2] = "FImageFileST"; $res[3] = "anm_FImageFileST.xpm";
 	return $res;
 }
 
@@ -2000,7 +2013,18 @@ string $row = `rowColumnLayout -numberOfColumns 5
                 
         columnLayout;
         
-        
+        	string $disps[] = `anm_getDisplacementFiles`;
+                int $dispit;
+                string $dispimg;
+		for($surfit = 0; $dispit<size($disps); $dispit += 2) {
+			$dispimg = "anm_displacement.xpm";
+			if($disps[$surfit+1] != "") $dispimg = $disps[$dispit+1];
+			iconTextButton -width 150 -height 36
+				-style "iconAndTextHorizontal" 
+				-image1 $dispimg
+				-l $disps[$dispit] 
+				-c ("anm_createPiece(\""+$disps[$dispit]+"\")");
+		}
         	setParent..;
         setParent..;
         
@@ -2058,6 +2082,20 @@ string $row = `rowColumnLayout -numberOfColumns 5
                 -borderStyle "in" -collapsable 1 ;
                 
         columnLayout;
+        
+        string $flots[] = `anm_getFloatFiles`;
+
+		int $flotit;
+                string $flotimg;
+		for($flotit = 0; $flotit<size($flots); $flotit += 2) {
+			$flotimg = "anm_float.xpm";
+			if($flots[$flotit+1] != "") $flotimg = $flots[$flotit+1];
+			iconTextButton -width 150 -height 36
+				-style "iconAndTextHorizontal" 
+				-image1 $flotimg
+				-l $flots[$flotit] 
+				-c ("anm_createPiece(\""+$flots[$flotit]+"\")");
+		}
         
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_variableF.xpm" 

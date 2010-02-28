@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="FImageFile" type="float">
+	<icon>anm_FImageFile.xpm</icon>
+	<parameter name="filename" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	float res = float texture( filename[0], "filter", "lagrangian" );
+	return res;
+	</source>
+</rsl>
