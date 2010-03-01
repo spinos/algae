@@ -1236,6 +1236,9 @@ proc anm_listEnsembleAttrib(string $name)
 		
 		string $attrtbs = $name+".tbs";
 		attrControlGrp -attribute $attrtbs;
+		
+		string $attrdpb = $name+".dpb";
+		attrControlGrp -attribute $attrdpb;
 		setParent..;
 		
 	setParent..;
@@ -1712,7 +1715,7 @@ global proc anm_updateExisting()
 // find pieces
 	
 	if($flt == 1) {	
-		text -p anm_existingclm -l "Existing Items";
+
 	$node = `ls -type aShaderAdaptEnsemble`;
 	
 	for($an in $node) {
@@ -2138,7 +2141,7 @@ string $row = `rowColumnLayout -numberOfColumns 5
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 
         		-image1 "anm_sfile.xpm" 
         		-height 36 
-        		-l "Texture File"
+        		-l "Texture"
         		-c "anm_createVariable(\"string\",\"uniform\",\"texture\",\"anm_sfile.xpm\")";
         		
         	iconTextButton -width 100  -style "iconAndTextHorizontal" 

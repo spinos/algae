@@ -12,6 +12,7 @@ MObject		EnsembleAShaderNode::adisplacement;
 MObject		EnsembleAShaderNode::aribbox;
 MObject		EnsembleAShaderNode::aoperation;
 MObject EnsembleAShaderNode::atracebias;
+MObject EnsembleAShaderNode::adisplacementbound;
 MObject     EnsembleAShaderNode::output;       
 
 EnsembleAShaderNode::EnsembleAShaderNode() {}
@@ -71,6 +72,11 @@ MStatus EnsembleAShaderNode::initialize()
 	numAttr.setKeyable(true);
 	addAttribute( atracebias );
 	
+	adisplacementbound = numAttr.create( "displacementBound", "dpb", MFnNumericData::kFloat, 1.0 );
+	numAttr.setStorable(true);
+	numAttr.setKeyable(true);
+	addAttribute( adisplacementbound );
+	
 	output = numAttr.create( "output", "out", MFnNumericData::kFloat, 0.0 );
 	numAttr.setWritable(false);
 	numAttr.setStorable(false);
@@ -82,6 +88,7 @@ MStatus EnsembleAShaderNode::initialize()
 	attributeAffects( aribbox, output );
 	attributeAffects( aoperation, output );
 	attributeAffects( atracebias, output );
+	attributeAffects( adisplacementbound, output );
 
 	return MS::kSuccess;
 }

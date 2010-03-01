@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="TwoLayer" type="displacement">
 	<icon>anm_TwoLayerDisplacement.xpm</icon>
-	<description>Displacement with two inputs</description>
-	<parameter name="K_0" type="float" value="1.000000">
+	<description>Displacement with two inputs: displacement input will move point, bump input will not.</description>
+	<parameter name="K_displacement" type="float" value="1.000000">
 		<detail value="simple"/>
 	</parameter>
-	<parameter name="Displacement_0" type="float" value="0.000000">
+	<parameter name="input_displacement" type="float" value="0.000000">
 		<detail value="connection"/>
 	</parameter>
-	<parameter name="K_1" type="float" value="1.000000">
+	<parameter name="K_bump" type="float" value="1.000000">
 		<detail value="simple"/>
 	</parameter>
-	<parameter name="Displacement_1" type="float" value="0.000000">
+	<parameter name="input_bump" type="float" value="0.000000">
 		<detail value="connection"/>
 	</parameter>
 	<source>
-	float a = K_0 * Displacement_0;
+	float a = K_displacement * input_displacement;
 	if(a > 0.0) {
 		P = transform("object", P);
 		N = transform("object", N + point "object" (0,0,0));
@@ -25,15 +25,15 @@
 		P = transform("object", "current", P);
 		N = calculatenormal(P);
 	}
-	a = K_1 * Displacement_1;
+	a = K_bump * input_bump;
 	if(a > 0.0) {
-		P = transform("object", P);
+		point Q = transform("object", P);
 		N = transform("object", N + point "object" (0,0,0));
 		
-		P += normalize(N) * a;
+		Q += normalize(N) * a;
 		
-		P = transform("object", "current", P);
-		N = calculatenormal(P);
+		Q = transform("object", "current", Q);
+		N = calculatenormal(Q);
 	}
 	</source>
 </rsl>

@@ -155,6 +155,12 @@ MStatus ParseACache::doIt( const MArgList& args )
 				
 				float ftracebias = fens.findPlug("traceBias").asFloat();
 				defTraceBias(ftracebias);
+				
+// if any displacement connected needs bound
+				if(odisp != MObject::kNullObj) {
+					float fdispbound = fens.findPlug("dpb").asFloat();
+					defDisplaceBound(fdispbound);
+				}
 
 				MString sproc, scmd, ptcname, bkmname;
 				char argbuf[1024];
@@ -164,15 +170,12 @@ MStatus ParseACache::doIt( const MArgList& args )
 				switch(ioperation) {
 					case 0:
 // default rib
-						//defRIBStat();				
-
 						injectRIBStatement(orbx);
 
 						injectShaderStatement(osurf, ssname, spass, 0);
 
 						injectShaderStatement(odisp, ssname, spass, 1);
-					
-						
+
 						sprintf(argbuf, "%s %s %d %f %f 0",
 										scache.asChar(), smesh.asChar(), 
 										(int)fframe, fshutteropen, fshutterclose);
@@ -329,6 +332,13 @@ void ParseACache::defTraceBias(float val)
 {
 //Attribute "trace" "float bias" [ 0.1 ] 
 MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"trace\\\" \\\"float bias\\\" [ ")+val+" ]\\n\"";
+	MGlobal::executeCommand(slog);
+}
+
+void ParseACache::defDisplaceBound(float val)
+{
+//Attribute "displacementbound" "float sphere" [ 1 ] "string coordinatesystem" [ "shader" ] 
+MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"Attribute \\\"displacementbound\\\" \\\"float sphere\\\" [ ")+val+" ] \\\"string coordinatesystem\\\" [ \\\"shader\\\" ]\\n\"";
 	MGlobal::executeCommand(slog);
 }
 
