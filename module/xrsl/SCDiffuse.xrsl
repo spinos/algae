@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="SCGlobalDiffuse" type="color">
+	<icon>anm_Matte.xpm</icon>
+	<description>Simple diffuse(). output color _diffuse.</description>
+	<parameter name="_diffuse" type="color" value="0.000000 0.000000 0.000000">
+		<access value="output"/>
+	</parameter>
+	<source>
+	extern point P;
+	extern normal N;
+	normal Nn = normalize(N);
+	
+	_diffuse = diffuse(Nn);
+	return _diffuse;
+	</source>
+</rsl>
