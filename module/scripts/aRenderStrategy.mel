@@ -296,8 +296,12 @@ global proc anm_renderStrategy()
 		system("python "+anm_stg_getPythonScriptPath()+"/anemone.py --file "+$job_path+"jobspool.txt");
 		print("render finished!\n");
 	}
-	else 
+	else {
+		int $batfile =`fopen ($job_path+"startjob.bat") "w"`;
+		fprint $batfile ("python "+anm_stg_getPythonScriptPath()+"/anemone.py --file "+$job_path+"jobspool.txt");
+		fclose $batfile;
 		print("no render, start job outside maya.");
+	}
 }
 
 /*
@@ -395,10 +399,11 @@ string $form = `formLayout -numberOfDivisions 100`;
 string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 120 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
 string $scroll = `scrollField -p $form -wordWrap true -ed off`;
 
-scrollField -e -text "Create Strategy to create render passes for specific purposes. Resulting passes will show up below for more tweak. " $scroll;
-scrollField -e -it "Reload to list existing render passes. Render will save RIB from active passes and lauch a render job on them." $scroll;
-scrollField -e -it "Mult Frame will trigger render animation from start to end. Immediate Render means proceed rendering within Maya. Won't respond until render is finished. " $scroll;
-	
+scrollField -e -text "*Create* Strategy to create render passes for specific purposes. Resulting passes will show up below for more tweak. " $scroll;
+scrollField -e -it "\n*Reload* to list existing strategy render passes.\n*Render* will save RIB from active passes and a job spool file on them." $scroll;
+scrollField -e -it "\n*Mult Frame* will trigger render animation from start to end. Output RIB will be per-frame-per-pass.\n*Immediate Render* means proceed rendering within Maya. Won't respond until render is finished. " $scroll;
+scrollField -e -it " Alternatively not choose immediate render, startjob.bat will be saved with job spool file. Double-click it to launch render outside Maya later." $scroll;
+
 //row begin
 button -l "Close"-c "deleteUI anm_renderStrategyHelpWin" -p $row;
 text -l " " -p $row;
