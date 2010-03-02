@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rsl name="CImageFileST" type="float">
+<rsl name="FImageFileST" type="float">
 	<icon>anm_FImageFileST.xpm</icon>
+	<description>Float from R channel of a texture file. *remap* to [-1,1].</description>
 	<parameter name="filename" type="string" value="nil">
 		<detail value="connection"/>
+	</parameter>
+	<parameter name="remap" type="float" value="0.0">
+		<detail value="switch"/>
 	</parameter>
 	<parameter name="coord_s" type="float" value="0.0">
 		<detail value="connection"/>
@@ -11,7 +15,8 @@
 		<detail value="connection"/>
 	</parameter>
 	<source>
-	float res = float texture( filename[0], coord_s, coord_t, "filter", "lagrangian" );
+	float res = float texture( filename[0], coord_s, coord_t, "filter", "radial-bspline", "lerp", 1.0 );
+	if(remap == 1.0) res = (res - 0.5) * 2.0;
 	return res;
 	</source>
 </rsl>

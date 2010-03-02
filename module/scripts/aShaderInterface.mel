@@ -52,6 +52,8 @@ global string $ANM_ShoFilterMenu = "";
 global int $ANM_NUMItem = 0;
 global int $ANM_CURItem = 0;
 global string $ANM_PreservedItems[];
+global string $ANM_ShaderPath;
+global string $ANM_TmpPath;
 
 /*
 get dowstream connect attrs
@@ -1938,6 +1940,12 @@ global proc anm_openAShaderManWin()
 		$numTokens = `tokenize $scnname "." $buffer`;
 		$scnname = $buffer[0];
 	}
+	
+	global string $ANM_ShaderPath;
+	global string $ANM_TmpPath; 
+	
+	$ANM_ShaderPath = $shader_path + "/" + $scnname;
+	$ANM_TmpPath = $tmp_path + "/" + $scnname;
 
 // shader and tmp per scene
 	system("mkdir \""+$tmp_path + "/" + $scnname + "\"");
@@ -1947,7 +1955,10 @@ global proc anm_openAShaderManWin()
  if ( (`window -exists anm_AShaderManWin`) == true ) deleteUI anm_AShaderManWin;
  
 //Create the window.
- window -title "anemone 4.3 - Shader Management" -wh 400 300  -mb false anm_AShaderManWin;
+ window -title "anemone 4.3 - Shader Management" -wh 400 300  -mb on anm_AShaderManWin;
+ 
+ menu -label "Show" -tearOff false;
+ 	menuItem -label "Workspace" -c "anm_openShowWorkSpaceWin";
 
 //Layout
 string $form = `formLayout -numberOfDivisions 100`;
@@ -2248,4 +2259,47 @@ formLayout -edit
     $form;
 
 showWindow anm_AShaderManWin;
+}
+
+/* check path of workspace */
+
+global proc anm_openShowWorkSpaceWin()
+{
+//If such a window already exists, destory it.
+ if ( (`window -exists anm_showWorkspacePathWin`) == true ) deleteUI anm_showWorkspacePathWin;
+
+//Create the window.
+ window -title "Anemone 4.3 - Workspace Path" -wh 400 300  -mb off anm_showWorkspacePathWin;
+
+//Layout
+string $form = `formLayout -numberOfDivisions 100`;
+string $row = `rowLayout -numberOfColumns 3 -columnWidth3 120 120 120 -columnAttach 1 "both" 0 -columnAttach 2 "both" 0 -columnAttach 3 "both" 0`;
+string $scroll = `scrollLayout -p $form`;
+
+columnLayout -adjustableColumn true;
+
+global string $ANM_ShaderPath;
+global string $ANM_TmpPath; 
+
+textFieldGrp -cw2 48 300 -label "Shader" -text $ANM_ShaderPath;
+textFieldGrp -cw2 48 300 -label "Tmp" -text $ANM_TmpPath;
+
+//row begin
+button -l "Close"-c "deleteUI anm_showWorkspacePathWin" -p $row;
+text -l " " -p $row;
+text -l " " -p $row;
+
+formLayout -edit
+        -attachNone     $row     "top"
+        -attachForm     $row     "left"   2
+        -attachForm	$row     "bottom" 2
+        -attachForm 	$row     "right"  2
+
+        -attachForm     $scroll "top"    2
+        -attachForm	$scroll "left"   2
+        -attachControl	$scroll "bottom" 2 $row
+        -attachForm     $scroll "right"  2
+    $form;
+
+showWindow anm_showWorkspacePathWin;
 }

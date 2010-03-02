@@ -17,8 +17,8 @@
 	<source>
 	float a = K_displacement * input_displacement;
 	if(a > 0.0) {
-		P = transform("object", P);
-		N = transform("object", N + point "object" (0,0,0));
+		P = transform("shader", P);
+		N = ntransform("shader", N);
 		
 		P += normalize(N) * a;
 		
@@ -27,13 +27,16 @@
 	}
 	a = K_bump * input_bump;
 	if(a > 0.0) {
-		point Q = transform("object", P);
-		N = transform("object", N + point "object" (0,0,0));
+		point Q = P;
+		P = transform("object", P);
+		N = ntransform("shader", N);
 		
-		Q += normalize(N) * a;
+		P += normalize(N) * a;
 		
-		Q = transform("object", "current", Q);
-		N = calculatenormal(Q);
+		P = transform("shader", "current", P);
+		N = calculatenormal(P);
+		
+		P = Q;
 	}
 	</source>
 </rsl>
