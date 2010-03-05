@@ -2,7 +2,7 @@
 <rsl name="SCGlobalDiffuse" type="color">
 	<icon>anm_GlobalDiffuse.xpm</icon>
 	<description>Final Gathering color by point-based indirectdiffuse(). 
-	output color _indirect, float _occlusion .</description>
+	output color _indirect, output float _occlusion</description>
 	<parameter name="irradianceFile" type="string" value="nil">
 		<detail value="connection"/>
 	</parameter>

@@ -1,7 +1,7 @@
 global proc string anm_stg_getPythonScriptPath()
 {
-	return "D:/anemone/module/python";
-	//return "/Users/jianzhang/Documents/anemone/module/python";
+	//return "D:/anemone/module/python";
+	return "/Users/jianzhang/Documents/anemone/module/python";
 }
 
 /*
@@ -31,6 +31,12 @@ global proc anm_chooseStrategy(int $stg)
 		$ANM_StrategyPasses[0] = "estimateRadiosity";
 		$ANM_StrategyPasses[1] = "renderFinale";
 		$ANM_NumStrategyPasses = 2;
+	}
+	else if($stg== 2) {
+		$ANM_StrategyPasses[0] = "estimateRadiosity";
+		$ANM_StrategyPasses[1] = "approxGlobalDiffuse";
+		$ANM_StrategyPasses[2] = "renderFinale";
+		$ANM_NumStrategyPasses = 3;
 	}
 	
 	anm_createStrategy;
@@ -342,7 +348,8 @@ global proc anm_openRenderStrategyWin()
  
  menu -label "Create Strategy" -tearOff false;
     menuItem -label "Global Illumination Simple" -c "anm_chooseStrategy(1)";
-    menuItem -label "Global Illumination" -c "anm_chooseStrategy(0)";
+    menuItem -label "Global Illumination with Bake" -c "anm_chooseStrategy(2)";
+    //menuItem -label "Global Illumination" -c "anm_chooseStrategy(0)";
     //menuItem -divider true;
     //menuItem -label "Quit";
 menu -label "Help" -helpMenu true;

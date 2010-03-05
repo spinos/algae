@@ -360,11 +360,15 @@ void ParseACache::injectRIBStatement(MObject& node)
 		int end = SHelper::findPartBeforeChar(srib, sline, start, '\r');
 #endif
 		while(end > 0) {
-		
+			
+			SHelper::endNoReturn(sline);
 			SHelper::protectCommaFree(sline);
-			//SHelper::endNoReturn(sline);
-			MString slog = MString("RiArchiveRecord -m \"verbatim\" -t \"") + sline.c_str() + "\\n\"";
+			
+			//MGlobal::displayInfo(MString("open ")+sline.c_str());
+			
+			MString slog = MString(" RiArchiveRecord -m \"verbatim\" -t \"") + sline.c_str() + "\\n\"";
 			MGlobal::executeCommand(slog);
+			
 			//MGlobal::displayInfo(slog);
 
 			start = end+1;
