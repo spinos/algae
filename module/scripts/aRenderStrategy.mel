@@ -1,7 +1,7 @@
 global proc string anm_stg_getPythonScriptPath()
 {
-	//return "D:/anemone/module/python";
-	return "/Users/jianzhang/Documents/anemone/module/python";
+	return "D:/anemone/module/python";
+	//return "/Users/jianzhang/Documents/anemone/module/python";
 }
 
 /*
