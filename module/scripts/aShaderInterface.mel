@@ -15,6 +15,7 @@ global proc string[] anm_getSurfaceFiles()
 	$res[2] = "GlobalDiffuse"; $res[3] = "anm_GlobalDiffuse.xpm";
 	$res[4] = "Harmony"; $res[5] = "anm_Harmony.xpm";
 	$res[6] = "Constant"; $res[7] = "anm_Constant.xpm";
+	$res[8] = "Fluorescent"; $res[9] = "anm_Fluorescent.xpm";
 	return $res;
 }
 

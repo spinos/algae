@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="Fluorescent" type="surface">
+	<icon>anm_Fluorescent.xpm</icon>
+	<description>Bake radiosity to point cloud. Radiosity will simply be intensity * surfaceColor. Set negative bias to shrink the bake a bit. BakeToFile should be point cloud per scene.</description>
+	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="intensity" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="bakeToFile" type="string" value="nil">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="bias" type="float" value="-0.01">
+		<detail value="simple"/>
+	</parameter>
+	<source>
+	float a = area(P, "dicing");
+	normal Nn = normalize(N);
+	color irrad = intensity * surfaceColor;
+	
+	Oi = Os;
+	Ci = Oi * irrad;
+	
+	if(bakeToFile != "nil") {
+		bake3d(bakeToFile, "area,_radiosity,Cs", P + Nn * bias, Nn, "interpolate", 1,
+             "_area", a, "_radiosity", irrad, "Cs", surfaceColor);
+	}
+	</source>
+</rsl>

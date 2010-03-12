@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="SCReflection" type="color">
+	<icon>anm_SCReflection.xpm</icon>
+	<description>Reflection shading model. output color _reflect.</description>
+	<parameter name="_reflect" type="color" value="0.000000 0.000000 0.000000">
+		<access value="output"/>
+	</parameter>
+	<source>
+	extern point P;
+	extern normal N;
+	extern vector I;
+	normal Nn = normalize(N);
+	vector In = normalize(I);
+	vector Vn = normalize(-I);
+	float samples = 16;
+	float blur = radians(5);
+	_reflect = 0;
+	if( Nn.In < 0 ){
+    		vector dir = reflect(In,Nn);
+    		color hitcolor = 0;
+    		gather("", P, dir, blur, samples, "surface:Ci", hitcolor) {
+    			_reflect += hitcolor;
+    		}
+    		_reflect = _reflect / samples;
+    	}
+	return _reflect;
+	</source>
+</rsl>

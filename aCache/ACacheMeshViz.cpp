@@ -201,6 +201,8 @@ MStatus ACacheMeshViz::initialize()
 	asurfacecolor = numAttr.createColor( "surfaceColor", "cs" );
 	numAttr.setStorable(true);
 	numAttr.setKeyable(true);
+	numAttr.setMin(0.f, 0.f, 0.f);
+	numAttr.setMax(1.f, 1.f, 1.f);
 	numAttr.setDefault(1.f, 1.f, 1.f);
 	addAttribute( asurfacecolor );
 	

@@ -2,9 +2,6 @@
 <rsl name="SCSpecular" type="color">
 	<icon>anm_SCSpecular.xpm</icon>
 	<description>Cook-Torrance shading model. output color _specular.</description>
-	<parameter name="specularColor" type="color" value="1.000000 1.000000 1.000000">
-		<detail value="connection"/>
-	</parameter>
 	<parameter name="IOR" type="float" value="1.4">
 		<access value="simple"/>
 	</parameter>
