@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl name="SimpleParticle" type="surface">
+	<icon>anm_SimpleParticle.xpm</icon>
+	<description>Surface surface for point without normal. Connect some color here.</description>
+	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="surfaceOpacity" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
+	<parameter name="Kd" type="float" value="1.000000">
+		<detail value="simple"/>
+	</parameter>
+	<parameter name="baseColor" type="color" value="0.1 0.1 0.1">
+		<detail value="connection"/>
+	</parameter>
+	<source>
+	color cdiff = 0.0;
+	illuminance( "-environment", P ) {
+		 cdiff += Cs * Cl;
+	}
+	Oi = Os * surfaceOpacity;
+	Ci = Oi * ( surfaceColor * cdiff + baseColor );
+	</source>
+</rsl>
