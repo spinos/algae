@@ -24,11 +24,12 @@
 #include "AdaptVariableAShader.h"
 #include "ParseACacheCmd.h"
 #include "TranslateAShaderCmd.h"
+#include "ParsePCacheCmd.h"
  
 MStatus initializePlugin( MObject obj ) 
 {
 MStatus status;
-MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.3.0 Fri Feb 26 2010", "Any" );
+MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.3.1 Thu April 29 2010", "Any" );
 
 /*
 	
@@ -140,6 +141,12 @@ MFnPlugin plugin( obj, "ZHANG JIAN", "build 4.3.0 Fri Feb 26 2010", "Any" );
 			return status;
 		}
 		
+	status = plugin.registerCommand( "particleVizCacheGeo", ParsePCache::creator, ParsePCache::newSyntax);
+		if (!status) {
+			status.perror("registerCommand");
+			return status;
+		}
+		
 	status = plugin.registerCommand( "translateAShader", TranslateAShader::creator, TranslateAShader::newSyntax);
 		if (!status) {
 			status.perror("registerCommand");
@@ -241,6 +248,12 @@ MFnPlugin plugin( obj );
 		}
 	
 	status = plugin.deregisterCommand( "aCacheMeshCacheGeo" );
+		if (!status) {
+		      status.perror("deregisterCommand");
+		      return status;
+		}
+		
+	status = plugin.deregisterCommand( "particleVizCacheGeo" );
 		if (!status) {
 		      status.perror("deregisterCommand");
 		      return status;
