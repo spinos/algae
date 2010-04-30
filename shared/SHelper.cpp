@@ -340,7 +340,9 @@ int SHelper::findPartBeforeChar(std::string& full, std::string& frag, int start,
 {
 	int found = full.find(sep, start);
 	if(found < 0  ) frag = full;
-	else if(found == full.size() - 1)  frag = full.substr(start, full.size() - start);
+#ifndef WIN32
+	else if(found == full.size() - 1) frag = full.substr(start, full.size() - start);
+#endif
 	else frag = full.substr(start, found - start -1);
 	return found;
 }

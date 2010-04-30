@@ -4,8 +4,8 @@ init set
 
 global proc string anm_getMasterPath()
 {
-	//return "D:/anemone/module/xrsl";
-	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+	return "D:/anemone/module/xrsl";
+	//return "/Users/jianzhang/Documents/anemone/module/xrsl";
 }
 
 global proc string[] anm_getSurfaceFiles()
