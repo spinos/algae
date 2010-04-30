@@ -16,6 +16,7 @@ global proc string[] anm_getSurfaceFiles()
 	$res[4] = "Harmony"; $res[5] = "anm_Harmony.xpm";
 	$res[6] = "Constant"; $res[7] = "anm_Constant.xpm";
 	$res[8] = "Fluorescent"; $res[9] = "anm_Fluorescent.xpm";
+	$res[10] = "SimpleParticle"; $res[11] = "anm_SimpleParticle.xpm";
 	return $res;
 }
 
@@ -33,8 +34,9 @@ global proc string[] anm_getColorFiles()
 	$res[2] = "SCBakedGlobalDiffuse"; $res[3] = "anm_SCBakedIndirect.xpm";
 	$res[4] = "SCDiffuse"; $res[5] = "anm_Matte.xpm";
 	$res[6] = "SCSpecular"; $res[7] = "anm_SCSpecular.xpm";
-	$res[8] = "CImageFile"; $res[9] = "anm_CImageFile.xpm";
-	$res[10] = "CImageFileST"; $res[11] = "anm_CImageFileST.xpm";
+	$res[8] = "SCReflection"; $res[9] = "anm_SCReflection.xpm";
+	$res[10] = "CImageFile"; $res[11] = "anm_CImageFile.xpm";
+	$res[12] = "CImageFileST"; $res[13] = "anm_CImageFileST.xpm";
 	return $res;
 }
 
@@ -722,7 +724,13 @@ global proc anm_attachEnsemble(string $node)
 			connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
 			print("attached " + $node+ " to "+$shape[0]);
 		}
-		else print("\nonly mesh cache can be attached");
+// support particleViz
+		else if(`nodeType $shape[0]`=="particleViz") {
+			if(!`attributeExists "aensembleMsg" $shape[0]`) addAttr -ln "aensembleMsg" -attributeType "float"  $shape[0];
+			connectAttr -f ($node + ".output") ($shape[0]+".aensembleMsg");
+			print("attached " + $node+ " to "+$shape[0]);
+		}
+		else print("\nonly mesh or particle cache can be attached");
 	}
 // restore selection
 	for($i=0; $i<size($sel); $i++) {

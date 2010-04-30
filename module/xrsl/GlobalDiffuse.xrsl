@@ -12,6 +12,9 @@
 	<parameter name="bakeToFile" type="string" value="nil">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="maxError" type="float" value="0.04">
+		<detail value="simple"/>
+	</parameter>
 	<source>
 	normal Nn = normalize(N);
 	color irr = 0;
@@ -24,14 +27,14 @@
                             "maxdist", 1e15, "falloff", 0,
                             "falloffmode", 0,
                             "samplebase", 0, "bias", 0,
-                            "maxsolidangle", 0.05);
+                            "maxsolidangle", maxError);
                 occ = occlusion(P+ Nn * bias, Nn, 0, "pointbased", 1, "filename", irradianceFile,
                       "hitsides", "front",
                       "clamp", 1,
                       "maxdist", 1e15, "falloff", 0,
                       "falloffmode", 0,
                       "samplebase", 0, "bias", 0,
-                      "maxsolidangle", 0.05);
+                      "maxsolidangle", maxError);
 
 	}
 

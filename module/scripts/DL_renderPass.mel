@@ -7374,6 +7374,7 @@ outputGeometryAndCSG(
   int $is_shadow_render,
   int $progress_range )
 {
+
   // outputIlluminate calls expect the lights to have their short names
   string $visible_lights_short_names[] = `ls $visible_lights`;
   
@@ -11416,6 +11417,22 @@ global float $ZHANG_shutterClose;
                   getShadowCastingGeometry($curr_light, 
                                            $visible_geometry, 
                                            $shader_collection);
+                  
+/*
+//  tampered by zhang begin
+//  append aCacheMesh and particleViz to $curr_shadow_objects
+*/
+		string $anm_mesh[] = `ls -l -type aCacheMesh`;
+		int $anm_n_mesh = size($anm_mesh);
+		if( $anm_n_mesh > 0 )
+			appendStringArray( $curr_shadow_objects, $anm_mesh, $anm_n_mesh );
+		string $anm_particle[] = `ls -l -type particleViz`;
+		int $anm_n_particle = size($anm_particle);
+		if( $anm_n_particle > 0 )
+			appendStringArray( $curr_shadow_objects, $anm_particle, $anm_n_particle );
+/*
+//  tampered by zhang end
+*/
 
                 $curr_shadow_instancers = 
                   getShadowCastingInstancers($curr_light, 
@@ -11582,6 +11599,7 @@ global float $ZHANG_shutterClose;
 /* tampered by zhang */
 // update current camera
 global string $ZHANG_curcamera;
+
 $ZHANG_curcamera = $shadow_camera;
                       outputGeometryAndCSG(
                         $render_pass,
@@ -11742,6 +11760,7 @@ $ZHANG_curcamera = $shadow_camera;
 /* tampered by zhang */
 // update current camera
 global string $ZHANG_curcamera;
+
 $ZHANG_curcamera = $render_camera;
               outputGeometryAndCSG(
                 $render_pass,

@@ -5,8 +5,11 @@
 	<parameter name="surfaceColor" type="color" value="1.000000 1.000000 1.000000">
 		<detail value="connection"/>
 	</parameter>
+	<parameter name="surfaceOpacity" type="color" value="1.000000 1.000000 1.000000">
+		<detail value="connection"/>
+	</parameter>
 	<source>
-	Oi = Os;
+	Oi = Os * surfaceOpacity;
 	Ci = Oi * surfaceColor;
 	</source>
 </rsl>

@@ -11,6 +11,7 @@
 		7F16D5F21110B862006694FA /* EnsembleAShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F16D5F01110B862006694FA /* EnsembleAShader.h */; };
 		7F4738821118E7D700D04B77 /* SLDoc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F4738801118E7D700D04B77 /* SLDoc.h */; };
 		7F4738831118E7D700D04B77 /* SLDoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F4738811118E7D700D04B77 /* SLDoc.cpp */; };
+		7F7B043C1189764F000EF21D /* ParsePCacheCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F7B043B1189764F000EF21D /* ParsePCacheCmd.cpp */; };
 		7F7F905D11158E9000E1A2F9 /* VariableAShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F905B11158E9000E1A2F9 /* VariableAShader.cpp */; };
 		7F7F905E11158E9000E1A2F9 /* VariableAShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7F905C11158E9000E1A2F9 /* VariableAShader.h */; };
 		7F7F907A1116036F00E1A2F9 /* AdaptVariableAShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F90781116036F00E1A2F9 /* AdaptVariableAShader.cpp */; };
@@ -103,6 +104,7 @@
 		7F16D5F01110B862006694FA /* EnsembleAShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnsembleAShader.h; sourceTree = "<group>"; };
 		7F4738801118E7D700D04B77 /* SLDoc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLDoc.h; sourceTree = "<group>"; };
 		7F4738811118E7D700D04B77 /* SLDoc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLDoc.cpp; sourceTree = "<group>"; };
+		7F7B043B1189764F000EF21D /* ParsePCacheCmd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParsePCacheCmd.cpp; sourceTree = "<group>"; };
 		7F7F905B11158E9000E1A2F9 /* VariableAShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VariableAShader.cpp; sourceTree = "<group>"; };
 		7F7F905C11158E9000E1A2F9 /* VariableAShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableAShader.h; sourceTree = "<group>"; };
 		7F7F90781116036F00E1A2F9 /* AdaptVariableAShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptVariableAShader.cpp; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7F7B043B1189764F000EF21D /* ParsePCacheCmd.cpp */,
 				7F80AD31112049F0008B479A /* TranslateAShaderCmd.cpp */,
 				7F80AD32112049F0008B479A /* TranslateAShaderCmd.h */,
 				7F4738801118E7D700D04B77 /* SLDoc.h */,
@@ -378,6 +381,7 @@
 				7FCD1DDE11172FE90036E3C6 /* ParseACacheCmd.cpp in Sources */,
 				7F4738831118E7D700D04B77 /* SLDoc.cpp in Sources */,
 				7F80AD33112049F0008B479A /* TranslateAShaderCmd.cpp in Sources */,
+				7F7B043C1189764F000EF21D /* ParsePCacheCmd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
