@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rsl name="SCBakedGlobalDiffuse" type="color">
-	<icon>anm_BakedGlobalDiffuse.xpm</icon>
+	<icon>anm_SCBakedIndirect.xpm</icon>
 	<description>Read baked values from GlobalDiffuse. Pointcloud should be per-object.
 	output color _indirect, output float _occlusion</description>
 	<parameter name="bakedFile" type="string" value="nil">
