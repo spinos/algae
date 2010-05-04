@@ -20,6 +20,6 @@
 		 cdiff += Cs * Cl;
 	}
 	Oi = Os * surfaceOpacity;
-	Ci = Oi * ( surfaceColor * cdiff + baseColor );
+	Ci = Oi * ( surfaceColor * cdiff + baseColor * Cs );
 	</source>
 </rsl>
