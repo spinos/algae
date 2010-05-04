@@ -610,7 +610,7 @@
 				AdditionalOptions="/GR /GS /EHsc"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="D:\local\openexr\include\OpenEXR;&quot;$(MAYA_LOCATION_2010)/include&quot;;D:\opt\include;&quot;$(CG_INC_PATH)&quot;"
+				AdditionalIncludeDirectories="&quot;$(EXR_INC64_PATH)&quot;;&quot;$(MAYA_LOCATION_2009X64)/include&quot;;&quot;$(LIBXML_INC64_PATH)&quot;;&quot;$(CG_INC_PATH)&quot;"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;NT_PLUGIN;REQUIRE_IOSTREAM;Bits64_"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -637,10 +637,10 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/export:initializePlugin /export:uninitializePlugin "
 				AdditionalDependencies="odbc32.lib odbccp32.lib OpenMaya.lib Foundation.lib OpenMayaFX.lib OpenMayaAnim.lib OpenMayaUI.lib cg.lib cgGL.lib half.lib ilmimf.lib ilmthread.lib iex.lib zlib.lib libxml2.lib"
-				OutputFile="..\module\plug-ins\aCache2010x64.mll"
+				OutputFile="..\module\plug-ins\aCache2009x64.mll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="D:\opt\lib;&quot;$(MAYA_LOCATION_2010)/lib&quot;;D:\local\openexr\libx64;&quot;$(CG_LIB64_PATH)&quot;"
+				AdditionalLibraryDirectories="&quot;$(LIBXML_LIB64_PATH)&quot;;&quot;$(MAYA_LOCATION_2009X64)/lib&quot;;&quot;$(EXR_LIB64_PATH)&quot;;&quot;$(CG_LIB64_PATH)&quot;"
 				ProgramDatabaseFile=".\Release/helloCmd.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -803,6 +803,10 @@
 			</File>
 			<File
 				RelativePath="..\shared\GHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParsePCacheCmd.cpp"
 				>
 			</File>
 			<File

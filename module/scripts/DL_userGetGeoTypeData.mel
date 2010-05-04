@@ -9,12 +9,12 @@ global proc DL_userGetGeoTypeData( string $types[],
 	clear($output_commands);
 
 	$types[0] = "aCacheMesh";
-	$plugin_requirements[0] = "aCache";
+	$plugin_requirements[0] = "aCache2009x64";
 	$cache_commands[0] = "aCacheMeshCacheGeo";
 	$output_commands[0] = "nil";
 	
 	$types[1] = "particleViz";
-	$plugin_requirements[1] = "aCache";
+	$plugin_requirements[1] = "aCache2009x64";
 	$cache_commands[1] = "particleVizCacheGeo";
 	$output_commands[1] = "nil";
 }
