@@ -7,14 +7,27 @@ global proc DL_userGetGeoTypeData( string $types[],
 	clear($plugin_requirements);
 	clear($cache_commands);
 	clear($output_commands);
+	
+// diagnose version and architecture
+	string $version = `about -v`;
+	string $buffer[];
+	$numTokens = `tokenize $version " " $buffer`;
+	$version = $buffer[0];
+	
+	string $anmmodule = "aCache" + $version;
+	
+	if(`about -is64`)
+		$anmmodule = $anmmodule + "x64";
+	else
+		$anmmodule = $anmmodule + "x86";
 
 	$types[0] = "aCacheMesh";
-	$plugin_requirements[0] = "aCache2009x64";
+	$plugin_requirements[0] = $anmmodule;
 	$cache_commands[0] = "aCacheMeshCacheGeo";
 	$output_commands[0] = "nil";
 	
 	$types[1] = "particleViz";
-	$plugin_requirements[1] = "aCache2009x64";
+	$plugin_requirements[1] = $anmmodule;
 	$cache_commands[1] = "particleVizCacheGeo";
 	$output_commands[1] = "nil";
 }

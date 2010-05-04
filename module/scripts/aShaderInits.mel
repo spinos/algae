@@ -1,0 +1,49 @@
+/*
+init set
+*/
+
+global proc string anm_getMasterPath()
+{
+	//return "D:/algae/module/xrsl";
+	return "/Users/jianzhang/Documents/anemone/module/xrsl";
+}
+
+global proc string[] anm_getSurfaceFiles()
+{
+	string $res[];
+	$res[0] = "Matte"; $res[1] = "anm_Matte.xpm";
+	$res[2] = "GlobalDiffuse"; $res[3] = "anm_GlobalDiffuse.xpm";
+	$res[4] = "Harmony"; $res[5] = "anm_Harmony.xpm";
+	$res[6] = "Constant"; $res[7] = "anm_Constant.xpm";
+	$res[8] = "Fluorescent"; $res[9] = "anm_Fluorescent.xpm";
+	$res[10] = "SimpleParticle"; $res[11] = "anm_SimpleParticle.xpm";
+	return $res;
+}
+
+global proc string[] anm_getDisplacementFiles()
+{
+	string $res[];
+	$res[0] = "TwoLayerDisplacement"; $res[1] = "anm_TwoLayerDisplacement.xpm";
+	return $res;
+}
+
+global proc string[] anm_getColorFiles()
+{
+	string $res[];
+	$res[0] = "SCGlobalDiffuse"; $res[1] = "anm_SCIndirect.xpm";
+	$res[2] = "SCBakedGlobalDiffuse"; $res[3] = "anm_SCBakedIndirect.xpm";
+	$res[4] = "SCDiffuse"; $res[5] = "anm_Matte.xpm";
+	$res[6] = "SCSpecular"; $res[7] = "anm_SCSpecular.xpm";
+	$res[8] = "SCReflection"; $res[9] = "anm_SCReflection.xpm";
+	$res[10] = "CImageFile"; $res[11] = "anm_CImageFile.xpm";
+	$res[12] = "CImageFileST"; $res[13] = "anm_CImageFileST.xpm";
+	return $res;
+}
+
+global proc string[] anm_getFloatFiles()
+{
+	string $res[];
+	$res[0] = "FImageFile"; $res[1] = "anm_FImageFile.xpm";
+	$res[2] = "FImageFileST"; $res[3] = "anm_FImageFileST.xpm";
+	return $res;
+}

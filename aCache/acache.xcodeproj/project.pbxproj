@@ -151,7 +151,7 @@
 		7FEA3A91110B28350061D5DF /* FFloatSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FFloatSet.cpp; path = ../shared/FFloatSet.cpp; sourceTree = SOURCE_ROOT; };
 		7FEA3A92110B28350061D5DF /* FUVSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FUVSet.cpp; path = ../shared/FUVSet.cpp; sourceTree = SOURCE_ROOT; };
 		7FEA3AB7110B29B00061D5DF /* XMLUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XMLUtil.cpp; path = ../shared/XMLUtil.cpp; sourceTree = SOURCE_ROOT; };
-		D2AAC0630554660B00DB518D /* aCache.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = aCache.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC0630554660B00DB518D /* aCache2008x86.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = aCache2008x86.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,7 +229,7 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC0630554660B00DB518D /* aCache.bundle */,
+				D2AAC0630554660B00DB518D /* aCache2008x86.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -296,9 +296,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		D2AAC0620554660B00DB518D /* aCache */ = {
+		D2AAC0620554660B00DB518D /* aCache2008 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache" */;
+			buildConfigurationList = 8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache2008" */;
 			buildPhases = (
 				D2AAC0600554660B00DB518D /* Headers */,
 				D2AAC0610554660B00DB518D /* Sources */,
@@ -313,9 +313,9 @@
 			);
 			dependencies = (
 			);
-			name = aCache;
+			name = aCache2008;
 			productName = footPrintNodePlugin;
-			productReference = D2AAC0630554660B00DB518D /* aCache.bundle */;
+			productReference = D2AAC0630554660B00DB518D /* aCache2008x86.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -330,7 +330,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2AAC0620554660B00DB518D /* aCache */,
+				D2AAC0620554660B00DB518D /* aCache2008 */,
 			);
 		};
 /* End PBXProject section */
@@ -435,7 +435,7 @@
 				MACH_O_TYPE = mh_bundle;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = aCache;
+				PRODUCT_NAME = aCache2008x86;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -552,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache" */ = {
+		8A7F05ED086863A70064D097 /* Build configuration list for PBXNativeTarget "aCache2008" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8A7F05EE086863A70064D097 /* Debug */,

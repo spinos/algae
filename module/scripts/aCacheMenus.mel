@@ -57,6 +57,7 @@ global proc anemoneMakeMenus()
  
 global proc anemoneAppendMenuItems()
 {
+	source aShaderInits.mel;
 	// append menu items
 	menuItem -p zTools -l "Anemone" -subMenu true anemoneItems;
 	//menuItem -l "Mesh Cache Parameters" -subMenu true;
@@ -64,7 +65,6 @@ global proc anemoneAppendMenuItems()
 	//	menuItem -l (`workspace -q -fn`+"/data/")  mcf_sf_path;
 	//	menuItem -l "world space" -cb 1 mcf_sf_ws;
 	//setParent -menu ..;
-	//menuItem -divider true;
 	//menuItem -l "Save Model" -c "vxCache -w 0 -sg 1";
 	//menuItem -l "Load Model" -c "mshc_loadsingle";
 	//menuItem -divider true;
@@ -74,6 +74,25 @@ global proc anemoneAppendMenuItems()
 	//menuItem -l "Load MCF Mesh Cache" -c "openImportanemoneWin";
 	//menuItem -l "Add Cache Deformer" -c "openAddCacheDeformerWin";
 	//menuItem -l "Snap To Second" -c "mfc_UtilSnap";
+	menuItem -l "Master Path" -subMenu true;
+		menuItem -l `anm_getMasterPath`;
+		setParent -menu ..;
+	menuItem -l "Custum Geo" -subMenu true;
+	
+		string $types[];
+		string $plugin_requirements[];
+		string $cache_commands[];
+		string $output_commands[];
+		
+		DL_userGetGeoTypeData( $types, $plugin_requirements, $cache_commands, $output_commands );
+		
+		int $typi;
+		for( $typi = 0; $typi < size($types); $typi++ ) {
+			menuItem -l ( $plugin_requirements[$typi] + " : " + $types[$typi] );
+		}
+		
+		setParent -menu ..;
+	menuItem -divider true;
 	menuItem -l "Shader Management" -c "source aShaderInterface.mel;anm_openAShaderManWin";
 	menuItem -l "Render Strategy" -c "source aRenderStrategy.mel;anm_openRenderStrategyWin";
 	menuItem -divider true;
