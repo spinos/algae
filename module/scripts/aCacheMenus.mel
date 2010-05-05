@@ -77,7 +77,7 @@ global proc anemoneAppendMenuItems()
 	menuItem -l "Master Path" -subMenu true;
 		menuItem -l `anm_getMasterPath`;
 		setParent -menu ..;
-	menuItem -l "Custum Geo" -subMenu true;
+	menuItem -l "Custom Geo" -subMenu true;
 	
 		string $types[];
 		string $plugin_requirements[];
